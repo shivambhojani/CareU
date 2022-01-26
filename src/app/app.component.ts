@@ -12,7 +12,12 @@ export class AppComponent implements OnInit {
   constructor(private httpClient: HttpClient) {
   }
   ngOnInit() {
-    this.httpClient.get(`https://sample-node-serve.herokuapp.com/api/hello`).pipe(
+    this.getAllInstitute().subscribe(res => {
+      console.log(res);
+    });
+  }
+  getAllInstitute() {
+    return this.httpClient.get("https://sample-node-serve.herokuapp.com/api/hello").pipe(
       map((response: any) => {
         debugger;
         return response;
@@ -20,3 +25,4 @@ export class AppComponent implements OnInit {
     );
   }
 }
+
