@@ -37,7 +37,7 @@ deploy_heroku:
   image: node:latest
   stage: deploy
   script:
-    - git push https://$HEROKU_USER:$HEROKU_API_KEY@git.heroku.com/app-careu.git HEAD:master
+    - git push -f https://$HEROKU_USER:$HEROKU_API_KEY@git.heroku.com/app-careu.git HEAD:master
     - echo "Deployed to heroku server"
   environment:
     name: production
