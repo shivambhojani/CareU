@@ -41,7 +41,7 @@ deploy_heroku:
     - echo "Deployed to heroku server"
   environment:
     name: production
-    url: https://test-app-careu.herokuapp.com/
+    url: https://app-careu.herokuapp.com/
   only:
     - develop
 
