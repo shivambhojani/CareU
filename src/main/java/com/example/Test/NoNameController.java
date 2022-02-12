@@ -10,6 +10,6 @@ public class NoNameController {
         @RequestMapping(path = "welcome")
         public String getMessage() {
                 System.out.println("entered");
-                return "Hi Team";
+                return "App Deployed";
         }
 }
