@@ -43,7 +43,7 @@ deploy_heroku:
     name: production
     url: https://app-careu.herokuapp.com/
   only:
-    - develop
+    - master
 
 #deploy_develop:
 #  stage: deploy
