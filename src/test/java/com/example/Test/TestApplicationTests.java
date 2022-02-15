@@ -15,7 +15,7 @@ class TestApplicationTests {
 	@Test
 	void contextLoads() {
 		String val = nNcontroller.getMessage();
-		String expected = "App Deployed";
+		String expected = "Deployed from Master";
 		Assertions.assertEquals(val, expected);
 	}
 
