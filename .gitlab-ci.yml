@@ -5,6 +5,7 @@ variables:
   GET_STRATEGY: clone
 
 before_script:
+  - ln -snf /usr/share/zoneinfo/$CONTAINER_TIMEZONE /etc/localtime && echo $CONTAINER_TIMEZONE > /etc/timezone
   - apt-get update
   - apt-get --yes --force-yes install wget curl gradle git
   - chmod +x ./gradlew
