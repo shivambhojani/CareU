@@ -51,7 +51,7 @@ deploy_heroku_master:
     - master
 
 
-  deploy_heroku_develop:
+deploy_heroku_develop:
     image: node:latest
     stage: deploy_develop
     script:
