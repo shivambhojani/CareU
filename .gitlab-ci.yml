@@ -15,7 +15,9 @@ stages:
   - build
   - test
   - code_quality
-  - deploy
+  - deploy_master
+  - deploy_develop
+  - deploy_test
 
 build:
   stage: build
@@ -37,9 +39,9 @@ test:
     reports:
       junit: build/test-results/test/**/TEST-*.xml
 
-deploy_heroku:
+deploy_heroku_master:
   image: node:latest
-  stage: deploy
+  stage: deploy_master
   script:
     - git push -f https://$HEROKU_USER:$HEROKU_API_KEY@git.heroku.com/app-careu.git HEAD:master
     - echo "Deployed to heroku server"
@@ -48,6 +50,32 @@ deploy_heroku:
     url: https://app-careu.herokuapp.com/
   only:
     - master
+
+
+deploy_heroku_develop:
+    image: node:latest
+    stage: deploy_develop
+    script:
+      - git push -f https://$HEROKU_USER:$HEROKU_API_KEY@git.heroku.com/develop-app-careu.git HEAD:master
+      - echo "Deployed to heroku server"
+    environment:
+      name: development
+      url: $DEV_URL_HEROKU
+    only:
+      - develop
+
+deploy_heroku_test:
+    image: node:latest
+    stage: deploy_develop
+    script:
+      - git push -f https://$HEROKU_USER:$HEROKU_API_KEY@git.heroku.com/staging-app-careu.git HEAD:master
+      - echo "Deployed to heroku server"
+    environment:
+      name: staging
+      url: $TEST_URL_HEROKU
+    only:
+      - test
+
 
 code_quality:
   stage: code_quality
