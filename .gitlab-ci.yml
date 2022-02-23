@@ -1,17 +1,23 @@
-image: gradle:alpine
+image: ubuntu:latest
 
 variables:
   GRADLE_OPTS: "-Dorg.gradle.daemon=false"
   GET_STRATEGY: clone
 
 before_script:
+  - ln -snf /usr/share/zoneinfo/$CONTAINER_TIMEZONE /etc/localtime && echo $CONTAINER_TIMEZONE > /etc/timezone
+  - apt-get update
+  - apt-get --yes --force-yes install wget curl gradle git
   - chmod +x ./gradlew
   - export GRADLE_USER_HOME='pwd'/.gradle
 
 stages:
   - build
   - test
-  - deploy
+  - code_quality
+  - deploy_master
+  - deploy_develop
+  - deploy_test
 
 build:
   stage: build
@@ -33,9 +39,9 @@ test:
     reports:
       junit: build/test-results/test/**/TEST-*.xml
 
-deploy_heroku:
+deploy_heroku_master:
   image: node:latest
-  stage: deploy
+  stage: deploy_master
   script:
     - git push -f https://$HEROKU_USER:$HEROKU_API_KEY@git.heroku.com/app-careu.git HEAD:master
     - echo "Deployed to heroku server"
@@ -44,6 +50,47 @@ deploy_heroku:
     url: https://app-careu.herokuapp.com/
   only:
     - master
+
+
+deploy_heroku_develop:
+    image: node:latest
+    stage: deploy_develop
+    script:
+      - git push -f https://$HEROKU_USER:$HEROKU_API_KEY@git.heroku.com/develop-app-careu.git HEAD:master
+      - echo "Deployed to heroku server"
+    environment:
+      name: development
+      url: $DEV_URL_HEROKU
+    only:
+      - develop
+
+deploy_heroku_test:
+    image: node:latest
+    stage: deploy_develop
+    script:
+      - git push -f https://$HEROKU_USER:$HEROKU_API_KEY@git.heroku.com/staging-app-careu.git HEAD:master
+      - echo "Deployed to heroku server"
+    environment:
+      name: staging
+      url: $TEST_URL_HEROKU
+    only:
+      - test
+
+
+code_quality:
+  stage: code_quality
+  tags:
+    - dalfcs_docker_autoscale
+  variables:
+    UPLOAD_QUALITY_REPORT: 'curl -X PUT -H "Authorization: Token $QSCORED_API_KEY" -H "repository-link: $CI_PROJECT_URL"+ -H "username:pavan.srivathsav@gmail.com" -H "Content-Type: multipart/form-data" --url "https://qscored.com/api/upload/file.xml?is_open_access=off&version=$CI_PIPELINE_IID&project_name=careu" -F "file=@Designite_output/DesigniteAnalysis.xml"'
+
+  script:
+    - wget -O DesigniteJava.jar https://www.dropbox.com/s/hrfuiesdb9o6cg5/DesigniteJava.jar?dl=1
+    - java -jar DesigniteJava.jar -ci -repo $CI_PROJECT_PATH -pat $PAT -host "https://git.cs.dal.ca/"
+    - eval "$UPLOAD_QUALITY_REPORT"
+  only:
+    - develop
+
 
 #deploy_develop:
 #  stage: deploy
