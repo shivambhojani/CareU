@@ -1,136 +1,133 @@
 image: ubuntu:latest
 
-variables:
-  GRADLE_OPTS: "-Dorg.gradle.daemon=false"
-  GET_STRATEGY: clone
+cache:
+  paths:
+    - .m2/repository/
+    - target/
 
 before_script:
   - ln -snf /usr/share/zoneinfo/$CONTAINER_TIMEZONE /etc/localtime && echo $CONTAINER_TIMEZONE > /etc/timezone
   - apt-get update
-  - apt-get --yes --force-yes install wget curl gradle git
-  - chmod +x ./gradlew
-  - export GRADLE_USER_HOME='pwd'/.gradle
+  - apt-get --yes --force-yes install wget curl maven git
 
 stages:
   - build
   - test
   - code_quality
-  - deploy_master
-  - deploy_develop
-  - deploy_test
+  - deploy-staging
+  - deploy-production
 
-build:
+# test stage will compile the code and run all the unit tests present in the
+# test folder.
+Test:
+  stage: test
+  tags:
+    - dalfcs_docker_autoscale
+  script:
+    - mvn clean verify
+  artifacts:
+    when: always
+    reports:
+      junit:
+        - target/surefire-reports/TEST-*.xml
+        - target/failsafe-reports/TEST-*.xml
+
+# build stage will just build the codebase without running
+# any tests or creating any jar file.
+Build Dev:
   stage: build
   tags:
     - dalfcs_docker_autoscale
   script:
-    - ./gradlew --build-cache assemble
+    - mvn clean install -DskipTests=true
   artifacts:
     paths:
-      - build/libs/*.jar
+      - target/*.jar
+  only:
+    - develop
 
-test:
-  stage: test
-  script:
-    - ./gradlew check
+Build Test:
+  stage: build
   tags:
     - dalfcs_docker_autoscale
-  artifacts:
-    reports:
-      junit: build/test-results/test/**/TEST-*.xml
-
-deploy_heroku_master:
-  image: node:latest
-  stage: deploy_master
   script:
-    - git push -f https://$HEROKU_USER:$HEROKU_API_KEY@git.heroku.com/app-careu.git HEAD:master
-    - echo "Deployed to heroku server"
-  environment:
-    name: production
-    url: https://app-careu.herokuapp.com/
+    - mvn clean install -DskipTests=true -Ptest
+  artifacts:
+    paths:
+      - target/*.jar
+  only:
+    - test
+
+Build Prod:
+  stage: build
+  tags:
+    - dalfcs_docker_autoscale
+  script:
+    - mvn clean install -DskipTests=true -Pprod
+  artifacts:
+    paths:
+      - target/*.jar
   only:
     - master
-
-
-deploy_heroku_develop:
-    image: node:latest
-    stage: deploy_develop
-    script:
-      - git push -f https://$HEROKU_USER:$HEROKU_API_KEY@git.heroku.com/develop-app-careu.git HEAD:master
-      - echo "Deployed to heroku server"
-    environment:
-      name: development
-      url: $DEV_URL_HEROKU
-    only:
-      - develop
-
-deploy_heroku_test:
-    image: node:latest
-    stage: deploy_develop
-    script:
-      - git push -f https://$HEROKU_USER:$HEROKU_API_KEY@git.heroku.com/staging-app-careu.git HEAD:master
-      - echo "Deployed to heroku server"
-    environment:
-      name: staging
-      url: $TEST_URL_HEROKU
-    only:
-      - test
-
 
 code_quality:
   stage: code_quality
   tags:
     - dalfcs_docker_autoscale
   variables:
-    UPLOAD_QUALITY_REPORT: 'curl -X PUT -H "Authorization: Token $QSCORED_API_KEY" -H "repository-link: $CI_PROJECT_URL"+ -H "username:pavan.srivathsav@gmail.com" -H "Content-Type: multipart/form-data" --url "https://qscored.com/api/upload/file.xml?is_open_access=off&version=$CI_PIPELINE_IID&project_name=careu" -F "file=@Designite_output/DesigniteAnalysis.xml"'
+    UPLOAD_QUALITY_REPORT: 'curl -X PUT -H "Authorization: Token $QSCORED_API_KEY" -H "repository-link: $CI_PROJECT_URL"+ -H "username:pavan.srivathsav@gmail.com" -H "Content-Type: multipart/form-data" --url "https://qscored.com/api/upload/file.xml?is_open_access=off&version=$CI_PIPELINE_IID&project_name=careu-sample" -F "file=@Designite_output/DesigniteAnalysis.xml"'
 
   script:
     - wget -O DesigniteJava.jar https://www.dropbox.com/s/hrfuiesdb9o6cg5/DesigniteJava.jar?dl=1
     - java -jar DesigniteJava.jar -ci -repo $CI_PROJECT_PATH -pat $PAT -host "https://git.cs.dal.ca/"
     - eval "$UPLOAD_QUALITY_REPORT"
+
   only:
     - develop
 
 
-#deploy_develop:
-#  stage: deploy
-#  image: ruby:latest
-#  tags:
-#    - ugrad
-#  before_script:
-#    - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
-#    - eval $(ssh-agent -s)
-#    - echo "$DEPLOY_SSH_KEY" | tr -d '\r' | ssh-add -
-#  script:
-#    - echo "dbURL=$DATABASE_TEST_URL" > config.properties
-#    - echo "dbUserName=$DATABASE_TEST_USERNAME" >> config.properties
-#    - echo "dbPassword=$DATABASE_TEST_PASSWORD" >> config.properties
-#    - echo "dbDriver=$DATABASE_DRIVER" >> config.properties
-#    - echo "$CI_COMMIT_REF_NAME"
-#    - zip -r ${CI_COMMIT_REF_NAME}_${CI_COMMIT_SHORT_SHA}.zip . -i /build/libs/*.jar
-#    - scp -r -o StrictHostKeyChecking=no ${CI_COMMIT_REF_NAME}_${CI_COMMIT_SHORT_SHA}.zip "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_DIR}/${CI_COMMIT_REF_NAME}_${CI_COMMIT_SHORT_SHA}.zip"
-#    - scp -r -o StrictHostKeyChecking=no config.properties "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_DIR}/config.properties"
-#  only:
-#    - develop
 
-#deploy_master:
-#  stage: deploy
+## deploy stage will create package the jar and keep it in the target folder.
+## The success of deploy stage will mark the pipeline as passed.
+#Deploy Staging Client:
+#  stage: deploy-staging
 #  image: ruby:latest
 #  tags:
-#    - ugrad
+#    - dalfcs_docker_autoscale
 #  before_script:
-#    - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
-#    - eval $(ssh-agent -s)
-#    - echo "$DEPLOY_SSH_KEY_PRODUCTION" | tr -d '\r' | ssh-add -
+#    - apt-get update -qy
+#    - apt-get install -y ruby-dev
+#    - gem install dpl
 #  script:
-#    - echo "dbURL=$DATABASE_PROD_URL" > config.properties
-#    - echo "dbUserName=$DATABASE_PROD_USERNAME" >> config.properties
-#    - echo "dbPassword=$DATABASE_PROD_PASSWORD" >> config.properties
-#    - echo "dbDriver=$DATABASE_DRIVER" >> config.properties
-#    - echo "CI_COMMIT_REF_NAME"
-#    - echo "CI_COMMIT_REF_NAME"
-#    - zip -r ${CI_COMMIT_REF_NAME}_${CI_COMMIT_SHORT_SHA}.zip . -i /build/libs/*.jar
-#    - scp -r -o StrictHostKeyChecking=no ${CI_COMMIT_REF_NAME}_${CI_COMMIT_SHORT_SHA}.zip "${DEPLOY_PRODUCTION_USER}@${DEPLOY_HOST}:${DEPLOY_DIR}/${CI_COMMIT_REF_NAME}_${CI_COMMIT_SHORT_SHA}.zip"
-#    - scp -r -o StrictHostKeyChecking=no config.properties "${DEPLOY_PRODUCTION_USER}@${DEPLOY_HOST}:${DEPLOY_DIR}/config.properties"
+#    - cd client
+#    - dpl --provider=heroku --app=$STAGING_CLIENT_HEROKU_APP_NAME --api-key=$HARSH_HEROKU_API_KEY --cleanup
 #  only:
-#    - releaseN
+#    - /^feature-.*/
+
+Deploy Staging Server:
+  stage: deploy-staging
+  image: ruby:latest
+  tags:
+    - dalfcs_docker_autoscale
+  before_script:
+    - apt-get update -qy
+    - apt-get install -y ruby-dev
+    - gem install dpl
+  script:
+    - dpl --provider=heroku --app=$STAGING_SERVER_HEROKU_APP_NAME --api-key=$HEROKU_API_KEY --cleanup
+  only:
+    - test
+
+Deploy Production Server:
+  stage: deploy-production
+  image: ruby:latest
+  tags:
+    - dalfcs_docker_autoscale
+  before_script:
+    - apt-get update -qy
+    - apt-get install -y ruby-dev
+    - gem install dpl
+  script:
+    - dpl --provider=heroku --app=$PRODUCTION_HEROKU_APP_NAME --api-key=$HEROKU_API_KEY --cleanup
+  only:
+    - master
