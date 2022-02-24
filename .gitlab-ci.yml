@@ -44,7 +44,7 @@ Build Dev:
     paths:
       - target/*.jar
   only:
-    - master
+    - develop
 
 Build Test:
   stage: build
@@ -68,7 +68,7 @@ Build Prod:
     paths:
       - target/*.jar
   only:
-    - prod
+    - master
 
 code_quality:
   stage: code_quality
@@ -83,7 +83,7 @@ code_quality:
     - eval "$UPLOAD_QUALITY_REPORT"
 
   only:
-    - master
+    - develop
 
 
 
@@ -130,4 +130,4 @@ Deploy Production Server:
   script:
     - dpl --provider=heroku --app=$PRODUCTION_HEROKU_APP_NAME --api-key=$HEROKU_API_KEY --cleanup
   only:
-    - prod
+    - master
