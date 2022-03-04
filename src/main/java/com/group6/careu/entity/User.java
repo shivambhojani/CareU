@@ -3,6 +3,8 @@ package com.group6.careu.entity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 
@@ -33,6 +35,25 @@ public class User {
     private String password;
     private boolean enabled;
     private String role;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="doctor_id")
+    @Fetch(FetchMode.JOIN)
+    Doctor doctor;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="patient_id")
+    @Fetch(FetchMode.JOIN)
+    Patient patient;
+
+    public void setRole(String role) {
+        this.role = role;
+        if(this.role.equalsIgnoreCase("doctor")){
+            this.doctor = new Doctor();
+        } else{
+            this.patient = new Patient();
+        }
+    }
 
     public User(String firstName, String lastName, String gender, String phone, String email, String password, boolean enabled, String role) {
         this.firstName = firstName;
