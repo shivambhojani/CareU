@@ -1,14 +1,79 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0">
 
-    <title>Login</title>
+    <title>Doctor</title>
 
-    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/fontawesome/all.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}"/>
+    <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
 </head>
 <body>
-<h1>Doctor Page</h1>
+<div class="container-fluid">
+
+    <form th:action="@{/logout}" method="post" th:hidden="true" name="logoutForm">
+        <input type="submit"/>
+    </form>
+    <div>
+        <nav class="navbar navbar-expand-lg bg-dark navbar-dark ">
+            <a class="navbar-brand" th:href="@{/}">
+                <h1>CareU</h1>
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="topNavbar">
+                <ul class="navbar-nav ml-auto">
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown"
+                           th:href="@{/profile}"
+                           sec:authentication="principal.fullname"></a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" id="logoutLink" href="">Logout</a>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+
+        </nav>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+	$(document).ready(function() {
+	$("#logoutLink").on("click", function(e) {
+		e.preventDefault();
+		document.logoutForm.submit();
+	});
+
+	customizeDropDownMenu();
+});
+
+function customizeDropDownMenu() {
+	$(".navbar .dropdown").hover(
+		function() {
+			$(this).find('.dropdown-menu').first().stop(true, true).delay(250).slideDown();
+		},
+		function() {
+			$(this).find('.dropdown-menu').first().stop(true, true).delay(100).slideUp();
+		}
+	);
+
+	$(".dropdown > a").click(function() {
+		location.href = this.href;
+	});
+}
+
+
+
+</script>
 </body>
 </html>

@@ -12,7 +12,7 @@ import java.util.List;
 
 @Service
 @Transactional
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
@@ -26,9 +26,10 @@ public class UserServiceImpl implements UserService{
         encodePassword(user);
         userRepository.save(user);
     }
+
     @Override
-    public List<User> listAll(){
-        return(List<User>) userRepository.findAll();
+    public List<User> listAll() {
+        return (List<User>) userRepository.findAll();
     }
 
     @Override
@@ -43,6 +44,7 @@ public class UserServiceImpl implements UserService{
 
         return userByEmail == null;
     }
+
     @Override
     public void updateUserEnabledStatus(Integer id, boolean enabled) {
         userRepository.updateEnabledStatus(id, enabled);
@@ -56,5 +58,10 @@ public class UserServiceImpl implements UserService{
         }
 
         userRepository.deleteById(id);
+    }
+
+    @Override
+    public User getByEmail(String email) {
+        return userRepository.getUserByEmail(email);
     }
 }

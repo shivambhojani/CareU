@@ -14,6 +14,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
+/**
+ * Created by Bijitashya on 03, 2022
+ */
 @Controller
 public class AuthController {
     @Autowired
@@ -61,39 +64,7 @@ public class AuthController {
         return "patient";
     }
 
-    @GetMapping("/admin")
-    public String redirectToAdmin(Model model) {
 
-        List<User> listUsers = userServiceImpl.listAll();
-        model.addAttribute("listUsers",listUsers);
-        return "admin";
-    }
-
-    @GetMapping("/users/{id}/enabled/{status}")
-    public String updateUserEnabledStatus(@PathVariable("id") Integer id,
-                                          @PathVariable("status") boolean enabled, RedirectAttributes redirectAttributes) {
-        userServiceImpl.updateUserEnabledStatus(id, enabled);
-        String status = enabled ? "enabled" : "disabled";
-        String message = "The user ID " + id + " has been " + status;
-        redirectAttributes.addFlashAttribute("message", message);
-
-        return "redirect:/admin";
-    }
-
-    @GetMapping("/users/delete/{id}")
-    public String deleteUser(@PathVariable(name = "id") Integer id,
-                             Model model,
-                             RedirectAttributes redirectAttributes) {
-        try {
-            userServiceImpl.delete(id);;
-            redirectAttributes.addFlashAttribute("message",
-                    "The user ID " + id + " has been deleted successfully");
-        } catch (UserNotFoundException ex) {
-            redirectAttributes.addFlashAttribute("message", ex.getMessage());
-        }
-
-        return "redirect:/admin";
-    }
 
 
 }

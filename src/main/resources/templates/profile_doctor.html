@@ -5,7 +5,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0">
 
-    <title>Patient</title>
+    <title>Login</title>
 
     <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
     <link rel="stylesheet" type="text/css" th:href="@{/fontawesome/all.css}"/>
@@ -31,12 +31,6 @@
                 <ul class="navbar-nav ml-auto">
 
                     <li class="nav-item dropdown">
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" id="profile-link" href="">Profile</a>
-                        </div>
-                    </li>
-
-                    <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown"
                            th:href="@{/profile}"
                            sec:authentication="principal.fullname"></a>
@@ -50,36 +44,11 @@
 
         </nav>
     </div>
+
+
+    <h1>Doctor profile</h1>
+
+
 </div>
-
-
-<script type="text/javascript">
-	$(document).ready(function() {
-	$("#logoutLink").on("click", function(e) {
-		e.preventDefault();
-		document.logoutForm.submit();
-	});
-
-	customizeDropDownMenu();
-});
-
-function customizeDropDownMenu() {
-	$(".navbar .dropdown").hover(
-		function() {
-			$(this).find('.dropdown-menu').first().stop(true, true).delay(250).slideDown();
-		},
-		function() {
-			$(this).find('.dropdown-menu').first().stop(true, true).delay(100).slideUp();
-		}
-	);
-
-	$(".dropdown > a").click(function() {
-		location.href = this.href;
-	});
-}
-
-
-
-</script>
 </body>
 </html>
