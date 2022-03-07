@@ -1,8 +1,6 @@
 package com.group6.careu.entity;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -11,16 +9,16 @@ import java.util.Set;
  * Created by Bijitashya on 03, 2022
  */
 
-@Entity
-@Data
+@Setter
+@Getter
 @ToString
+@Entity
 @Table(name = "patients")
-@NoArgsConstructor
 public class Patient {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer patient_id;
+    private Integer patient_id;
 
     String disease;
 

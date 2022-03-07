@@ -41,7 +41,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .successHandler(loginSuccessHandler)
                 .permitAll().and()
                 .logout().permitAll();
-        ;
+        http.csrf().disable();
     }
 
     public DaoAuthenticationProvider authenticationProvider() {

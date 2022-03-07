@@ -38,7 +38,7 @@
 
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown"
-                           th:href="@{/profile}"
+                           th:href="@{/patientProfile}"
                            sec:authentication="principal.fullname"></a>
                         <div class="dropdown-menu">
                             <a class="dropdown-item" id="logoutLink" href="">Logout</a>
@@ -51,7 +51,19 @@
         </nav>
     </div>
 </div>
+<br>
+<div>
+    <h2 class="text-left">Hi, </h2>
+    <h2 class="text-left" sec:authentication="principal.fullname"></h2>
 
+    <!--        <h1 class="fw-bold text-center mt-5">CareU Landing</h1>-->
+</div>
+<br>
+[[${patient.firstName}]]
+[[${patient.lastName}]]
+[[${patient.email}]]
+[[${patient.patient.disease}]]
+[[${patient.patient.appointments}]]
 
 <script type="text/javascript">
 	$(document).ready(function() {

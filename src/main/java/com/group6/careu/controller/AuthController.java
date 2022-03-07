@@ -59,6 +59,8 @@ public class AuthController {
     public String redirectToDoctor() {
         return "doctor";
     }
+
+
     @GetMapping("/patient")
     public String redirectToPatient() {
         return "patient";
