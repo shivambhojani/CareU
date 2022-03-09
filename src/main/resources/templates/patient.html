@@ -65,6 +65,29 @@
 [[${patient.patient.disease}]]
 [[${patient.patient.appointments}]]
 
+<br>
+<h1>Appointments</h1>
+<table class = "table table-striped">
+    <thead class="thead-dark">
+    <th scope="row">Date</th>
+    <th scope="row">Time</th>
+    <th scope="row">Doctor</th>
+    <th scope="row">Consulation Type</th>
+    </thead>
+
+    <tr th:each="appointment: ${appointments}">
+
+        <td th:text="${appointment.appointment_date}"></td>
+        <td th:text="${appointment.time}"></td>
+        <td th:text="${appointment.doctorName}"></td>
+        <td th:text="${appointment.consulationType}"></td>
+    </tr>
+</table>
+
+<div class="fixed-bottom">
+    <p class="text-center">CareU - Copyright &copy; CareU</p>
+</div>
+
 <script type="text/javascript">
 	$(document).ready(function() {
 	$("#logoutLink").on("click", function(e) {

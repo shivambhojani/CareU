@@ -5,6 +5,8 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.sql.Date;
+import java.sql.Time;
 
 /**
  * Created by Bijitashya on 03, 2022
@@ -13,7 +15,7 @@ import javax.persistence.*;
 @Data
 @Entity
 @ToString
-@Table(name = "appointments")
+@Table(name = "appointment")
 @NoArgsConstructor
 public class Appointment {
 
@@ -29,4 +31,12 @@ public class Appointment {
 
     @ManyToOne
     private Patient patient;
+
+    private String consulationType;
+
+    //hh:mm:ss
+    private Time time;
+
+    //YYYY-MM-DD
+    private Date appointment_date;
 }
