@@ -60,4 +60,8 @@ public class CareuUserDetails implements UserDetails {
     public String getFullname() {
         return this.user.getFirstName() + " " + this.user.getLastName();
     }
+
+    public Integer getId() {
+        return this.user.getId();
+    }
 }
