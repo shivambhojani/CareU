@@ -3,10 +3,12 @@ package com.group6.careu.entity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.sql.Date;
 import java.sql.Time;
+import java.util.UUID;
 
 /**
  * Created by Bijitashya on 03, 2022
@@ -20,22 +22,36 @@ import java.sql.Time;
 public class Appointment {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer appointmentId;
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator",
+            parameters = {
+                    @org.hibernate.annotations.Parameter(
+                            name = "uuid_gen_strategy_class",
+                            value = "org.hibernate.id.uuid.CustomVersionOneStrategy"
+                    )
+            }
+    )
+    private UUID appointmentId;
 
     @Lob
     private String medications;
 
     @ManyToOne
+    @JoinColumn(name = "doctor_id", updatable = false)
     private Doctor doctor;
 
     @ManyToOne
+    @JoinColumn(name = "patient_id", updatable = false)
     private Patient patient;
 
     private String consulationType;
 
     //hh:mm:ss
-    private Time time;
+    private Time startTime;
+
+    private Time endTime;
 
     //YYYY-MM-DD
     private Date appointment_date;
