@@ -66,7 +66,11 @@ public class AuthController {
         return "patient";
     }
 
-
-
-
+    @GetMapping("/doctor/uploadDocuments/{id}")
+    public String uploadUserDocuments(@PathVariable(name = "id") Integer id,
+                                      Model model,
+                                      RedirectAttributes redirectAttributes) {
+        System.out.println("test page");
+        return "redirect:/getUploadedDocuments/1";
+    }
 }
