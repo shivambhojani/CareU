@@ -15,7 +15,7 @@ public interface AppointmentRepository extends CrudRepository<Appointment, Integ
 
     //@Query("From Appointment where Patient .patient_id=:patientId")
 
-    @Query(value = "Select * from appointment",nativeQuery = true)
+    @Query(value = "Select * from appointment where patient_id=:patientId",nativeQuery = true)
     List<Appointment> getAppointmentByPatientId(Integer patientId);
 
 

@@ -53,8 +53,9 @@ public class PatientController {
         user = patientServiceImpl.getPatientbyID(userId);
         model.addAttribute("patient", user);
 
+
         List<PatientAppointmentModel> patientAppointmentModels = new ArrayList<>();
-        List<Appointment> appointments = appointmentServiceImpl.getPatientAppointments(userId);
+        List<Appointment> appointments = appointmentServiceImpl.getPatientAppointments(user.getPatient().getPatient_id());
         for (int i = 0 ; i< appointments.size(); i++){
             PatientAppointmentModel p = new PatientAppointmentModel();
             int doctorId = appointments.get(i).getDoctor().getDoctor_id();
@@ -70,7 +71,7 @@ public class PatientController {
         }
 
         model.addAttribute("patientAppointments", patientAppointmentModels);
-
+        System.out.println("modelSize = " + patientAppointmentModels.size());
         return "patient";
     }
 
@@ -90,6 +91,7 @@ public class PatientController {
         patientSettingsModel.setDisease(user.getPatient().getDisease());
 
         model.addAttribute("patientDetails", patientSettingsModel);
+
         return "profile_patient";
     }
 
@@ -136,6 +138,7 @@ public class PatientController {
             p.setPatient_id(appointments.get(i).getPatient().getPatient_id());
             patientAppointmentModels.add(p);
         }
+
         model.addAttribute("patientAppointments", patientAppointmentModels);
         return patientAppointmentModels;
     }
