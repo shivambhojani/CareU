@@ -48,10 +48,11 @@ public class UserDocumentOperationController {
 
     @GetMapping(value = "/file-download/{fileId}")
     public ResponseEntity<byte[]> downloadFile(@PathVariable Integer fileId) {
+        String attachmentString = "attachment; filename=\"%s\"";
         UserDocument file = userDocumentOperationService.getDocument(fileId);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.set(HttpHeaders.CONTENT_TYPE, file.getFileType());
-        httpHeaders.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"%s\"".formatted(file.getFileName()));
+        httpHeaders.set(HttpHeaders.CONTENT_DISPOSITION, attachmentString.format(file.getFileName()));
         return ResponseEntity.ok().headers(httpHeaders).body(file.getFileContent());
     }
 }
