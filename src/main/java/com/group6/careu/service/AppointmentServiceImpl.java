@@ -4,6 +4,7 @@ import com.group6.careu.entity.Appointment;
 import com.group6.careu.entity.Doctor;
 import com.group6.careu.entity.Patient;
 import com.group6.careu.model.AppointmentModel;
+import com.group6.careu.model.PatientAppointmentModel;
 import com.group6.careu.repository.AppointmentRepository;
 import com.group6.careu.security.CareuUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.sql.Time;
+import java.util.List;
 
 @Service
 @Transactional
@@ -42,5 +44,12 @@ public class AppointmentServiceImpl implements AppointmentService{
         appointment.setEndTime(Time.valueOf(arr[1].trim()));
         appointment.setPatient(patient);
         return appointment;
+    }
+
+
+
+    @Override
+    public List<Appointment> getPatientAppointments(Integer id) {
+        return appointmentRepository.getAppointmentByPatientId(id);
     }
 }

@@ -55,4 +55,14 @@ public class Appointment {
 
     //YYYY-MM-DD
     private Date appointment_date;
+
+    public Appointment(String medications, Doctor doctor, Patient patient, String consulationType, Time startTime, Time endTime, Date appointment_date) {
+        this.medications = medications;
+        this.doctor = doctor;
+        this.patient = patient;
+        this.consulationType = consulationType;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.appointment_date = appointment_date;
+    }
 }

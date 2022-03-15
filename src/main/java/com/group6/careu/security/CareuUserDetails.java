@@ -64,4 +64,8 @@ public class CareuUserDetails implements UserDetails {
     public Integer getId() {
         return this.user.getId();
     }
+
+    public Integer getPatientId() {
+        return this.user.getPatient().getPatient_id();
+    }
 }

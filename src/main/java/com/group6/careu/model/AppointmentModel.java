@@ -8,15 +8,16 @@ import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.sql.Date;
+import java.sql.Time;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class AppointmentModel {
 
     private Integer doctor_id;
-    private Patient patient;
+    private Patient patient_id;
     private String consulationType;
     private String time;
     private Date appointment_date;
+
 }

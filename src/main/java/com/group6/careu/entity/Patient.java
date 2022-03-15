@@ -22,6 +22,6 @@ public class Patient {
 
     String disease;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "patient")
-    private Set<Appointment> appointments;
+//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "patient")
+//    private Set<Appointment> appointments;
 }

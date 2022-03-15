@@ -23,20 +23,20 @@ public class Doctor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer doctor_id;
 
-    @Column(name = "license_number", length = 20, nullable = false)
+    @Column(name = "license_number", length = 20)
     private String license_number;
 
-    @Column(name = "age", nullable = false)
+    @Column(name = "age")
     private Integer age;
 
-    @Column(name = "specialization", length = 20, nullable = false)
+    @Column(name = "specialization", length = 20)
     private String specialization;
 
-    @Column(name = "doctor_contact", nullable = false)
+    @Column(name = "doctor_contact")
     private Integer doctorContact;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "doctor")
-    private Set<Appointment> appointments;
+//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "doctor")
+//    private Set<Appointment> appointments;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "doctor")
 //    @JoinTable(name = "doctor_availability" ,joinColumns = @JoinColumn(name = "doctor_id"))
