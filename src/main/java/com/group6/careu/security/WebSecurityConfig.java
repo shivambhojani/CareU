@@ -40,8 +40,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .usernameParameter("email")
                 .successHandler(loginSuccessHandler)
                 .permitAll().and()
-                .logout().permitAll();
-        http.csrf().disable();
+                .logout().permitAll()
+                .and()
+                .rememberMe()
+                .key("ABBfwowrupncmoh_496241767433")
+                .tokenValiditySeconds(7 * 24 * 60 * 60);
+                http.csrf().disable();
     }
 
     public DaoAuthenticationProvider authenticationProvider() {
