@@ -90,7 +90,6 @@ code_quality:
     - develop
 
 
-
 ## deploy stage will create package the jar and keep it in the target folder.
 ## The success of deploy stage will mark the pipeline as passed.
 #Deploy Staging Client:
