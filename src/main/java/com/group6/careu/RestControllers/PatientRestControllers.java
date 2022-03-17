@@ -21,6 +21,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,12 +70,75 @@ public class PatientRestControllers {
         }
     }
 
-    @GetMapping(path = "/getAppointmentbyPatientId/{PatientId}")
-    public List<PatientAppointmentModel> getAppointmentByPatientId(@PathVariable("PatientId") Integer id) {
+    @GetMapping(path = "/getTodaysAppointmentbyPatientId/{PatientId}")
+    public List<PatientAppointmentModel> getTodaysAppointmentByPatientId(@PathVariable("PatientId") Integer id) {
+
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDateTime now = LocalDateTime.now();
+
+        Date dateToday = Date.valueOf(dtf.format(now));
 
         System.out.println(id);
         List<PatientAppointmentModel> patientAppointmentModels = new ArrayList<>();
-        List<Appointment> appointments = appointmentServiceImpl.getPatientAppointments(id);
+        List<Appointment> appointments = appointmentServiceImpl.getTodaysPatientAppointments(id, dateToday);
+        for (int i = 0 ; i< appointments.size(); i++){
+            PatientAppointmentModel p = new PatientAppointmentModel();
+            int doctorId = appointments.get(i).getDoctor().getDoctor_id();
+            User u  = repository.getUserByDoctorId(doctorId);
+            p.setDoctorName(u.getFirstName() + " " + u.getLastName());
+            p.setMedications(appointments.get(i).getMedications());
+            p.setConsultationType(appointments.get(i).getConsulationType());
+            p.setDate(appointments.get(i).getAppointment_date());
+            p.setEnd_time(appointments.get(i).getEndTime());
+            p.setStart_time(appointments.get(i).getStartTime());
+            p.setPatient_id(appointments.get(i).getPatient().getPatient_id());
+
+            patientAppointmentModels.add(p);
+        }
+        return patientAppointmentModels;
+    }
+
+
+    @GetMapping(path = "/getFutureAppointmentbyPatientId/{PatientId}")
+    public List<PatientAppointmentModel> getFutureAppointmentByPatientId(@PathVariable("PatientId") Integer id) {
+
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDateTime now = LocalDateTime.now();
+
+        Date dateToday = Date.valueOf(dtf.format(now));
+
+        System.out.println(id);
+        List<PatientAppointmentModel> patientAppointmentModels = new ArrayList<>();
+        List<Appointment> appointments = appointmentServiceImpl.getPatientFutureAppointments(id, dateToday);
+        for (int i = 0 ; i< appointments.size(); i++){
+            PatientAppointmentModel p = new PatientAppointmentModel();
+            int doctorId = appointments.get(i).getDoctor().getDoctor_id();
+            User u  = repository.getUserByDoctorId(doctorId);
+            p.setDoctorName(u.getFirstName() + " " + u.getLastName());
+            p.setMedications(appointments.get(i).getMedications());
+            p.setConsultationType(appointments.get(i).getConsulationType());
+            p.setDate(appointments.get(i).getAppointment_date());
+            p.setEnd_time(appointments.get(i).getEndTime());
+            p.setStart_time(appointments.get(i).getStartTime());
+            p.setPatient_id(appointments.get(i).getPatient().getPatient_id());
+
+            patientAppointmentModels.add(p);
+        }
+        return patientAppointmentModels;
+    }
+
+
+    @GetMapping(path = "/getPastAppointmentbyPatientId/{PatientId}")
+    public List<PatientAppointmentModel> getPastAppointmentByPatientId(@PathVariable("PatientId") Integer id) {
+
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDateTime now = LocalDateTime.now();
+
+        Date dateToday = Date.valueOf(dtf.format(now));
+
+        System.out.println(id);
+        List<PatientAppointmentModel> patientAppointmentModels = new ArrayList<>();
+        List<Appointment> appointments = appointmentServiceImpl.getPatientPastAppointments(id, dateToday);
         for (int i = 0 ; i< appointments.size(); i++){
             PatientAppointmentModel p = new PatientAppointmentModel();
             int doctorId = appointments.get(i).getDoctor().getDoctor_id();

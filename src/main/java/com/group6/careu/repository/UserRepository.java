@@ -23,4 +23,8 @@ public interface UserRepository extends CrudRepository<User, Integer> {
 
     @Query(value = "SELECT * from users u where u.role=:role", nativeQuery = true)
     public List<User> getAllDoctor(@Param("role") String role);
+
+    @Query(value = "SELECT * from users u where u.first_name like %:keyword%" +
+            " or u.last_name like %:keyword% and u.role=:role", nativeQuery = true)
+    public List<User> getFilteredDoctors(@Param("role") String role, @Param("keyword") String keyword);
 }

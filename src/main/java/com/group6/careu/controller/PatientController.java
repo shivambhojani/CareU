@@ -1,6 +1,6 @@
 /*
-*  Created by Shivam Bhojani
-*/
+ *  Created by Shivam Bhojani
+ */
 package com.group6.careu.controller;
 
 import com.group6.careu.entity.Appointment;
@@ -22,6 +22,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.sql.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,37 +49,34 @@ public class PatientController {
 
     @GetMapping(path = "/patienthomepage")
     public String getAllPatients(Model model, Integer id, @AuthenticationPrincipal CareuUserDetails loggedUser) {
-       //List<BookAppointment> appointments = bookAppointmentService.getAppointmentsByPatientId(id);
+        //List<BookAppointment> appointments = bookAppointmentService.getAppointmentsByPatientId(id);
         String email = loggedUser.getUsername();
         User user = userServiceImpl.getByEmail(email);
         Integer userId = user.getId();
         user = patientServiceImpl.getPatientbyID(userId);
         model.addAttribute("patient", user);
 
+        List<PatientAppointmentModel> patientTodaysAppointmentModels = new ArrayList<>();
+        List<PatientAppointmentModel> patientFutureAppointmentModels = new ArrayList<>();
+        List<PatientAppointmentModel> patientPastAppointmentModels = new ArrayList<>();
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDateTime now = LocalDateTime.now();
+        Date dateToday = Date.valueOf(dtf.format(now));
 
-        List<PatientAppointmentModel> patientAppointmentModels = new ArrayList<>();
-        List<Appointment> appointments = appointmentServiceImpl.getPatientAppointments(user.getPatient().getPatient_id());
-        for (int i = 0 ; i< appointments.size(); i++){
-            PatientAppointmentModel p = new PatientAppointmentModel();
-            int doctorId = appointments.get(i).getDoctor().getDoctor_id();
-            User u  = repository.getUserByDoctorId(doctorId);
-            p.setDoctorName(u.getFirstName() + " " + u.getLastName());
-            p.setMedications(appointments.get(i).getMedications());
-            p.setConsultationType(appointments.get(i).getConsulationType());
-            p.setDate(appointments.get(i).getAppointment_date());
-            p.setEnd_time(appointments.get(i).getEndTime());
-            p.setStart_time(appointments.get(i).getStartTime());
-            p.setPatient_id(appointments.get(i).getPatient().getPatient_id());
-            patientAppointmentModels.add(p);
-        }
+        patientTodaysAppointmentModels = getTodaysAppointments(user, user.getPatient().getPatient_id(), dateToday);
+        patientFutureAppointmentModels = getFutureAppointments(user, user.getPatient().getPatient_id(), dateToday);
+        patientPastAppointmentModels = getPastAppointments(user, user.getPatient().getPatient_id(), dateToday);
 
-        model.addAttribute("patientAppointments", patientAppointmentModels);
-        System.out.println("modelSize = " + patientAppointmentModels.size());
+
+        model.addAttribute("patientTodaysAppointments", patientTodaysAppointmentModels);
+        model.addAttribute("patientPastAppointments", patientPastAppointmentModels);
+        model.addAttribute("patientFutureAppointments", patientFutureAppointmentModels);
+
         return "patient";
     }
 
     @GetMapping(path = "/patientProfile")
-    public String getPatientDetails(Model model, @AuthenticationPrincipal CareuUserDetails loggedUser){
+    public String getPatientDetails(Model model, @AuthenticationPrincipal CareuUserDetails loggedUser) {
         String email = loggedUser.getUsername();
         User user = userServiceImpl.getByEmail(email);
         Integer userId = user.getId();
@@ -97,7 +97,7 @@ public class PatientController {
 
     @PostMapping("/updatePatient")
     public String updatePatient(@AuthenticationPrincipal CareuUserDetails loggedUser, PatientSettingsModel patientSettingsModel,
-        RedirectAttributes redirectAttributes){
+                                RedirectAttributes redirectAttributes) {
         String email = loggedUser.getUsername();
         User user = userServiceImpl.getByEmail(email);
         Integer userId = user.getId();
@@ -110,25 +110,40 @@ public class PatientController {
         String disease = patientSettingsModel.getDisease();
 
 
-
         patientRepository.updatePatientData(userId, firstName, lastName, phone, gender);
         patientRepository.updatePatientDatainPatient(loggedUser.getPatientId(), disease);
 
         return "redirect:/patientProfile";
     }
 
-    @GetMapping(path = "/getAppointmentbyPatientId/")
-    public List<PatientAppointmentModel> getAppointmentByPatientId(Model model, @AuthenticationPrincipal CareuUserDetails loggedUser) {
-        String email = loggedUser.getUsername();
-        User user = userServiceImpl.getByEmail(email);
-        Integer userId = user.getId();
+    public List<PatientAppointmentModel> getTodaysAppointments(User user, Integer patientId, Date todaysDate) {
+        List<PatientAppointmentModel> patientTodaysAppointmentModels = new ArrayList<>();
+        List<Appointment> appointments = appointmentServiceImpl.getTodaysPatientAppointments(user.getPatient().getPatient_id(), todaysDate);
+        patientTodaysAppointmentModels = fetchAppointmentDetails(appointments);
+        return patientTodaysAppointmentModels;
+    }
 
+    public List<PatientAppointmentModel> getPastAppointments(User user, Integer patientId, Date todaysDate) {
+        List<PatientAppointmentModel> patientPastAppointmentModels = new ArrayList<>();
+        List<Appointment> appointments = appointmentServiceImpl.getPatientPastAppointments(user.getPatient().getPatient_id(), todaysDate);
+        patientPastAppointmentModels = fetchAppointmentDetails(appointments);
+        return patientPastAppointmentModels;
+    }
+
+    public List<PatientAppointmentModel> getFutureAppointments(User user, Integer patientId, Date todaysDate) {
+        List<PatientAppointmentModel> patientFurtureAppointmentModels = new ArrayList<>();
+        List<Appointment> appointments = appointmentServiceImpl.getPatientFutureAppointments(user.getPatient().getPatient_id(), todaysDate);
+        patientFurtureAppointmentModels = fetchAppointmentDetails(appointments);
+        return patientFurtureAppointmentModels;
+    }
+
+    public List<PatientAppointmentModel> fetchAppointmentDetails(List<Appointment> appointments)
+    {
         List<PatientAppointmentModel> patientAppointmentModels = new ArrayList<>();
-        List<Appointment> appointments = appointmentServiceImpl.getPatientAppointments(userId);
-        for (int i = 0 ; i< appointments.size(); i++){
+        for (int i = 0; i < appointments.size(); i++) {
             PatientAppointmentModel p = new PatientAppointmentModel();
             int doctorId = appointments.get(i).getDoctor().getDoctor_id();
-            User u  = repository.getUserByDoctorId(doctorId);
+            User u = repository.getUserByDoctorId(doctorId);
             p.setDoctorName(u.getFirstName() + " " + u.getLastName());
             p.setMedications(appointments.get(i).getMedications());
             p.setConsultationType(appointments.get(i).getConsulationType());
@@ -138,9 +153,34 @@ public class PatientController {
             p.setPatient_id(appointments.get(i).getPatient().getPatient_id());
             patientAppointmentModels.add(p);
         }
-
-        model.addAttribute("patientAppointments", patientAppointmentModels);
         return patientAppointmentModels;
     }
+
+
+//    @GetMapping(path = "/getAppointmentbyPatientId/")
+//    public List<PatientAppointmentModel> getAppointmentByPatientId(Model model, @AuthenticationPrincipal CareuUserDetails loggedUser) {
+//        String email = loggedUser.getUsername();
+//        User user = userServiceImpl.getByEmail(email);
+//        Integer userId = user.getId();
+//
+//        List<PatientAppointmentModel> patientAppointmentModels = new ArrayList<>();
+//        List<Appointment> appointments = appointmentServiceImpl.getTodaysPatientAppointments(userId);
+//        for (int i = 0 ; i< appointments.size(); i++){
+//            PatientAppointmentModel p = new PatientAppointmentModel();
+//            int doctorId = appointments.get(i).getDoctor().getDoctor_id();
+//            User u  = repository.getUserByDoctorId(doctorId);
+//            p.setDoctorName(u.getFirstName() + " " + u.getLastName());
+//            p.setMedications(appointments.get(i).getMedications());
+//            p.setConsultationType(appointments.get(i).getConsulationType());
+//            p.setDate(appointments.get(i).getAppointment_date());
+//            p.setEnd_time(appointments.get(i).getEndTime());
+//            p.setStart_time(appointments.get(i).getStartTime());
+//            p.setPatient_id(appointments.get(i).getPatient().getPatient_id());
+//            patientAppointmentModels.add(p);
+//        }
+//
+//        model.addAttribute("patientAppointments", patientAppointmentModels);
+//        return patientAppointmentModels;
+//    }
 
 }
