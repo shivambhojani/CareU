@@ -26,4 +26,9 @@ public class DoctorServiceImpl implements DoctorService{
     public User getDoctorById(Integer doctor_id) {
         return doctorRepository.getUserByDoctorId(doctor_id);
     }
+
+    @Override
+    public List<User> getFilteredDoctor(String keyword) {
+        return (List<User>) doctorRepository.getFilteredDoctors("doctor", keyword);
+    }
 }

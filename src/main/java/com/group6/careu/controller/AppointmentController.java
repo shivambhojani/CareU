@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.print.Doc;
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -32,9 +33,15 @@ public class AppointmentController {
     AppointmentService appointmentService;
 
     @GetMapping("/searchDoctors")
-    public String getAllDoctors(Model model) {
-        List<User> doctorList = doctorService.getAllDoctor();
-        System.out.println("printing doctor 1" + doctorList.get(0).getDoctor().getLicense_number());
+    public String getAllDoctors(Model model, String keyword) {
+        List<User> doctorList = new ArrayList<>();
+        if (keyword!=null && !keyword.isEmpty()){
+            doctorList = doctorService.getFilteredDoctor(keyword);
+        }
+        else if (keyword == null || keyword.trim().length()==0){
+            doctorList = doctorService.getAllDoctor();
+        }
+  //      System.out.println("printing doctor 1" + doctorList.get(0).getDoctor().getLicense_number());
         model.addAttribute("doctorList", doctorList);
         return "doctorlist";
     }
