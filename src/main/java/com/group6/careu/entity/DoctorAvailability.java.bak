@@ -21,19 +21,19 @@ public class DoctorAvailability {
     private Integer id;
 
     @Column(name = "available_date", nullable = false)
-    private Date availableDate;
+    private String availableDate;
 
     @Column(name = "start_time", nullable = false)
-    private Time startTime;
+    private String startTime;
 
     @Column(name = "end_time", nullable = false)
-    private Time endTime;
+    private String endTime;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "doctor_id", updatable = false)
     private Doctor doctor;
 
-    public DoctorAvailability(Integer id, Date availableDate, Time startTime, Time endTime, Doctor doctor) {
+    public DoctorAvailability(Integer id, String availableDate, String startTime, String endTime, Doctor doctor) {
         this.id = id;
         this.availableDate = availableDate;
         this.startTime = startTime;
