@@ -101,13 +101,14 @@
 
 </div>
 
-<!--    <script type="text/javascript">-->
-<!--&lt;!&ndash;    $('.input-group.date').datepicker({&ndash;&gt;-->
-<!--&lt;!&ndash;        format: 'dd/mm/yyyy',&ndash;&gt;-->
-<!--&lt;!&ndash;        weekStart: 1,&ndash;&gt;-->
-<!--&lt;!&ndash;        autoclose: true&ndash;&gt;-->
-<!--&lt;!&ndash;    });&ndash;&gt;-->
-
-<!--</script>-->
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#logoutLink").on("click", function(e) {
+            e.preventDefault();
+            document.logoutForm.submit();
+        })
+        customizeDropDownMenu();
+    });
+</script>s
 </body>
 </html>
