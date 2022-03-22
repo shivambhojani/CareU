@@ -33,18 +33,6 @@ public interface AppointmentRepository extends CrudRepository<Appointment, Integ
     @Query(value = "Select * from appointment where patient_id=:patientId and appointment_date <:todayDate " +
             "order by appointment_date desc ", nativeQuery = true)
     List<Appointment> getPastAppointmentByPatientId(Integer patientId, Date todayDate);
-	
-	@Query(value = "Select * from appointment where doctor_id=:doctorId and appointment_date =:todayDate " +
-            "order by appointment_date desc", nativeQuery = true)
-    List<Appointment> getTodaysAppointmentByDoctorId(Integer doctorId, Date todayDate);
-
-    @Query(value = "Select * from appointment where doctor_id=:doctorId and appointment_date >:todayDate " +
-            "order by appointment_date desc ", nativeQuery = true)
-    List<Appointment> getFutureAppointmentByDoctorId(Integer doctorId, Date todayDate);
-
-    @Query(value = "Select * from appointment where doctor_id=:doctorId and appointment_date <:todayDate " +
-            "order by appointment_date desc ", nativeQuery = true)
-    List<Appointment> getPastAppointmentByDoctorId(Integer doctorId, Date todayDate);
 
 
 }
