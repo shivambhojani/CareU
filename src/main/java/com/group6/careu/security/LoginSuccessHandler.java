@@ -26,7 +26,6 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
         } else{
             redirectURL = "patienthomepage";
         }
-
         response.sendRedirect(redirectURL);
 
     }

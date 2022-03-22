@@ -3,11 +3,15 @@
 */
 package com.group6.careu.controller;
 
+import com.group6.careu.entity.Appointment;
 import com.group6.careu.entity.Patient;
 import com.group6.careu.entity.User;
+import com.group6.careu.model.PatientAppointmentModel;
 import com.group6.careu.model.PatientSettingsModel;
 import com.group6.careu.repository.PatientRepository;
+import com.group6.careu.repository.UserRepository;
 import com.group6.careu.security.CareuUserDetails;
+import com.group6.careu.service.AppointmentServiceImpl;
 import com.group6.careu.service.PatientServiceImpl;
 import com.group6.careu.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +21,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Controller
@@ -31,6 +38,12 @@ public class PatientController {
     @Autowired
     private PatientRepository patientRepository;
 
+    @Autowired
+    UserRepository repository;
+
+    @Autowired
+    AppointmentServiceImpl appointmentServiceImpl;
+
     @GetMapping(path = "/patienthomepage")
     public String getAllPatients(Model model, Integer id, @AuthenticationPrincipal CareuUserDetails loggedUser) {
        //List<BookAppointment> appointments = bookAppointmentService.getAppointmentsByPatientId(id);
@@ -39,7 +52,26 @@ public class PatientController {
         Integer userId = user.getId();
         user = patientServiceImpl.getPatientbyID(userId);
         model.addAttribute("patient", user);
-        //model.addAttribute("appointments", appointments);
+
+
+        List<PatientAppointmentModel> patientAppointmentModels = new ArrayList<>();
+        List<Appointment> appointments = appointmentServiceImpl.getPatientAppointments(user.getPatient().getPatient_id());
+        for (int i = 0 ; i< appointments.size(); i++){
+            PatientAppointmentModel p = new PatientAppointmentModel();
+            int doctorId = appointments.get(i).getDoctor().getDoctor_id();
+            User u  = repository.getUserByDoctorId(doctorId);
+            p.setDoctorName(u.getFirstName() + " " + u.getLastName());
+            p.setMedications(appointments.get(i).getMedications());
+            p.setConsultationType(appointments.get(i).getConsulationType());
+            p.setDate(appointments.get(i).getAppointment_date());
+            p.setEnd_time(appointments.get(i).getEndTime());
+            p.setStart_time(appointments.get(i).getStartTime());
+            p.setPatient_id(appointments.get(i).getPatient().getPatient_id());
+            patientAppointmentModels.add(p);
+        }
+
+        model.addAttribute("patientAppointments", patientAppointmentModels);
+        System.out.println("modelSize = " + patientAppointmentModels.size());
         return "patient";
     }
 
@@ -59,6 +91,7 @@ public class PatientController {
         patientSettingsModel.setDisease(user.getPatient().getDisease());
 
         model.addAttribute("patientDetails", patientSettingsModel);
+
         return "profile_patient";
     }
 
@@ -76,10 +109,38 @@ public class PatientController {
         String gender = patientSettingsModel.getGender();
         String disease = patientSettingsModel.getDisease();
 
+
+
         patientRepository.updatePatientData(userId, firstName, lastName, phone, gender);
-        patientRepository.updatePatientDatainPatient(userId, disease);
+        patientRepository.updatePatientDatainPatient(loggedUser.getPatientId(), disease);
 
         return "redirect:/patientProfile";
+    }
+
+    @GetMapping(path = "/getAppointmentbyPatientId/")
+    public List<PatientAppointmentModel> getAppointmentByPatientId(Model model, @AuthenticationPrincipal CareuUserDetails loggedUser) {
+        String email = loggedUser.getUsername();
+        User user = userServiceImpl.getByEmail(email);
+        Integer userId = user.getId();
+
+        List<PatientAppointmentModel> patientAppointmentModels = new ArrayList<>();
+        List<Appointment> appointments = appointmentServiceImpl.getPatientAppointments(userId);
+        for (int i = 0 ; i< appointments.size(); i++){
+            PatientAppointmentModel p = new PatientAppointmentModel();
+            int doctorId = appointments.get(i).getDoctor().getDoctor_id();
+            User u  = repository.getUserByDoctorId(doctorId);
+            p.setDoctorName(u.getFirstName() + " " + u.getLastName());
+            p.setMedications(appointments.get(i).getMedications());
+            p.setConsultationType(appointments.get(i).getConsulationType());
+            p.setDate(appointments.get(i).getAppointment_date());
+            p.setEnd_time(appointments.get(i).getEndTime());
+            p.setStart_time(appointments.get(i).getStartTime());
+            p.setPatient_id(appointments.get(i).getPatient().getPatient_id());
+            patientAppointmentModels.add(p);
+        }
+
+        model.addAttribute("patientAppointments", patientAppointmentModels);
+        return patientAppointmentModels;
     }
 
 }

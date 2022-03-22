@@ -1,14 +1,18 @@
 package com.group6.careu.repository;
 
 
+import com.group6.careu.entity.Appointment;
 import com.group6.careu.entity.User;
+import com.group6.careu.model.PatientAppointmentModel;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.SqlResultSetMapping;
 import javax.transaction.Transactional;
+import java.util.List;
 
 
 public interface PatientRepository extends CrudRepository<User, Integer> {
