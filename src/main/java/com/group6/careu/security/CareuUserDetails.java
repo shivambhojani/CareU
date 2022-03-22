@@ -57,7 +57,7 @@ public class CareuUserDetails implements UserDetails {
         return user.getRole();
     }
 
-    public String getFullname() {
+    public String getName() {
         return this.user.getFirstName() + " " + this.user.getLastName();
     }
 }
