@@ -21,10 +21,16 @@ public class UserServiceImpl implements UserService {
     private PasswordEncoder passwordEncoder;
 
     @Override
-    public void save(User user) {
+    public boolean save(User user) {
         user.setEnabled(true);
         encodePassword(user);
-        userRepository.save(user);
+
+        try {
+            userRepository.save(user);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
     }
 
     @Override
@@ -46,8 +52,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUserEnabledStatus(Integer id, boolean enabled) {
-        userRepository.updateEnabledStatus(id, enabled);
+    public boolean updateUserEnabledStatus(Integer id, boolean enabled) {
+        try {
+            userRepository.updateEnabledStatus(id, enabled);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
     }
 
     @Override
@@ -56,7 +67,6 @@ public class UserServiceImpl implements UserService {
         if (countById == null || countById == 0) {
             throw new UserNotFoundException("Could not find any user with ID " + id);
         }
-
         userRepository.deleteById(id);
     }
 
