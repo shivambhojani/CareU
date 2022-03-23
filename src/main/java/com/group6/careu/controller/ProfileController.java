@@ -14,14 +14,17 @@ import org.springframework.web.bind.annotation.GetMapping;
  */
 @Controller
 public class ProfileController {
-    @Autowired
+//    @Autowired
     private UserServiceImpl userServiceImpl;
+
+    public ProfileController(UserServiceImpl userServiceImpl) {
+        this.userServiceImpl = userServiceImpl;
+    }
 
     @GetMapping("/profile")
     public String editProfile(Model model, @AuthenticationPrincipal CareuUserDetails loggedUser){
         String email = loggedUser.getUsername();
         User user = userServiceImpl.getByEmail(email);
-        Integer userId = user.getId();
         String role = loggedUser.getRole();
         if(role.equalsIgnoreCase("doctor")){
             return "profile_doctor";
