@@ -36,6 +36,9 @@ public class User {
     private boolean enabled;
     private String role;
 
+    @Column(name = "reset_password_token", length = 30)
+    private String resetPasswordToken;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="doctor_id")
     @Fetch(FetchMode.JOIN)

@@ -31,4 +31,8 @@ public interface UserRepository extends CrudRepository<User, Integer> {
 	
 	@Query(value = "SELECT * from users u where u.patient_id=:patient_id", nativeQuery = true)
     public User getUserByPatientId(@Param("patient_id") int patient_id);
+
+    User findByEmail(String email);
+
+    User findByResetPasswordToken(String token);
 }
