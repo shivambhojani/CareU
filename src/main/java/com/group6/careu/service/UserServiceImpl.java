@@ -3,6 +3,7 @@ package com.group6.careu.service;
 import com.group6.careu.entity.User;
 import com.group6.careu.exceptions.UserNotFoundException;
 import com.group6.careu.repository.UserRepository;
+import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -73,5 +74,34 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getByEmail(String email) {
         return userRepository.getUserByEmail(email);
+    }
+
+    public String updateResetPasswordToken(String email) throws UserNotFoundException {
+        User user = userRepository.findByEmail(email);
+        if (user != null) {
+            String token = RandomString.make(30);
+            user.setResetPasswordToken(token);
+            userRepository.save(user);
+
+            return token;
+        } else {
+            throw new UserNotFoundException("Could not find any user with the email " + email);
+        }
+    }
+
+    public User getByResetPasswordToken(String token) {
+        return userRepository.findByResetPasswordToken(token);
+    }
+
+    public void updatePassword(String token, String newPassword) throws UserNotFoundException {
+        User user = userRepository.findByResetPasswordToken(token);
+        if (user == null) {
+            throw new UserNotFoundException("No customer found: invalid token");
+        }
+        user.setPassword(newPassword);
+        user.setResetPasswordToken(null);
+        encodePassword(user);
+
+        userRepository.save(user);
     }
 }
