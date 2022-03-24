@@ -12,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.sql.Date;
 import java.sql.Time;
 import java.util.List;
 
@@ -46,10 +47,33 @@ public class AppointmentServiceImpl implements AppointmentService{
         return appointment;
     }
 
-
+    @Override
+    public List<Appointment> getTodaysPatientAppointments(Integer id, Date date) {
+        return appointmentRepository.getTodaysAppointmentByPatientId(id, date);
+    }
 
     @Override
-    public List<Appointment> getPatientAppointments(Integer id) {
-        return appointmentRepository.getAppointmentByPatientId(id);
+    public List<Appointment> getPatientFutureAppointments(Integer id, Date date) {
+       return appointmentRepository.getFutureAppointmentByPatientId(id, date);
+    }
+
+    @Override
+    public List<Appointment> getPatientPastAppointments(Integer id, Date date) {
+        return appointmentRepository.getPastAppointmentByPatientId(id, date);
+    }
+	
+	@Override
+    public List<Appointment> getDoctorTodaysAppointments(Integer id, Date date) {
+        return appointmentRepository.getTodaysAppointmentByDoctorId(id, date);
+    }
+
+    @Override
+    public List<Appointment> getDoctorFutureAppointments(Integer id, Date date) {
+        return appointmentRepository.getFutureAppointmentByDoctorId(id, date);
+    }
+
+    @Override
+    public List<Appointment> getDoctorPastAppointments(Integer id, Date date) {
+        return appointmentRepository.getPastAppointmentByDoctorId(id, date);
     }
 }

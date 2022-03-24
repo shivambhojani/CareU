@@ -26,7 +26,7 @@ public class Doctor {
     @Column(name = "license_number", length = 20)
     private String license_number;
 
-    @Column(name = "age")
+    @Column(name = "age", nullable = true)
     private Integer age;
 
     @Column(name = "specialization", length = 20)
