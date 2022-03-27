@@ -66,7 +66,7 @@
                 <div class="col-md-4 mt-5">
                     <div class="input-group date">
                         <label col-sm-2 col-form-label for="date1">Date : </label>
-                        <input type="date" class="form-control" id="date1" autocomplete="off" th:field="*{appointment_date}"/>
+                        <input type="date" class="form-control" id="date1" autocomplete="off" th:field="*{appointment_date}" />
                     </div>
                 </div>
             </div>
@@ -88,27 +88,96 @@
             </div>
             <div class="form-group">
                 <label >Appointment Time : </label>
-                <select th:field="*{time}">
+                <select th:field="*{time}" id="apptList">
                     <option value="0">Select Appointment Time</option>
 
-                    <option th:each="appt : ${availTimes}" th:value="${appt.startTime.toString + ' to ' +appt.endTime.toString}" th:text="${appt.startTime.toString + ' to ' +appt.endTime.toString}"></option>
+                    <!--                    <option th:each="appt : ${availTimes}" th:value="${appt.startTime.toString + ' to ' +appt.endTime.toString}" th:text="${appt.startTime.toString + ' to ' +appt.endTime.toString}"></option>-->
                 </select>
             </div>
-            <input type="hidden" name="doctor_id" th:value="${selectedDoctor.doctor?.doctor_id}">
+            <input type="hidden" id="doctor_id" name="doctor_id" th:value="${selectedDoctor.doctor?.doctor_id}">
             <input type="submit" value="Book Appointment" class="btn btn-primary m-3" />
         </form>
+    </div>
+
+    <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    No Appointments Available for selected Date. Please select another date.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
     </div>
 
 </div>
 
 <script type="text/javascript">
-    $(document).ready(function() {
+$(document).ready(function() {
         $("#logoutLink").on("click", function(e) {
             e.preventDefault();
             document.logoutForm.submit();
         })
         customizeDropDownMenu();
     });
-</script>s
+
+$(document).ready(function() {
+        $("#logoutLink").on("click", function(e) {
+            e.preventDefault();
+            document.logoutForm.submit();
+        })
+        customizeDropDownMenu();
+    });
+
+    $('#date1').on('change', function(){
+            var date = document.getElementById('date1').value;
+            console.log(date);
+            var available_date_arr=[];
+            available_date_arr.push(date);
+            console.log(available_date_arr);
+            var doctorId = document.getElementById('doctor_id').value;
+            console.log(doctor_id)
+            var dateToSend = JSON.stringify({
+                    "availableDate": available_date_arr,
+                    "doctorId": doctorId,
+                    "startTime": null,
+                    "endTime": null
+            })
+
+            $.ajax({
+            url: "get-times",
+            type: "POST",
+            contentType: "application/json",
+            dataType: "json",
+            data: dateToSend,
+            complete: function( response ) {
+                var arr = response.responseJSON;
+                if(arr.length == 0) {
+                    $('#exampleModalLong').modal('show');
+                } else {
+                    $.each(arr, function(index, value) {
+                     $('#apptList').append($('<option/>', {
+                       value: value.startTime + " to " + value.endTime,
+                         text : value.startTime + " to " + value.endTime
+                      }));
+                    });
+                }
+            },
+            error: function( jqXHR, textStatus, errorThrown ) {
+
+            }
+        });
+
+        });
+
+</script>
 </body>
 </html>

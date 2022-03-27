@@ -33,11 +33,14 @@ public class DoctorAvailability {
     @JoinColumn(name = "doctor_id", updatable = false)
     private Doctor doctor;
 
-    public DoctorAvailability(Integer id, Date availableDate, Time startTime, Time endTime, Doctor doctor) {
+    private boolean appointmentBooked;
+
+    public DoctorAvailability(Integer id, Date availableDate, Time startTime, Time endTime, Doctor doctor, boolean appointmentBooked) {
         this.id = id;
         this.availableDate = availableDate;
         this.startTime = startTime;
         this.endTime = endTime;
         this.doctor = doctor;
+        this.appointmentBooked = appointmentBooked;
     }
 }
