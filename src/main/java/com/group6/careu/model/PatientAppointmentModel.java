@@ -12,6 +12,7 @@ import java.sql.Time;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PatientAppointmentModel {
+    private String appointmentId;
     private String doctorName;
     private Integer patient_id;
     private Date date;
@@ -19,6 +20,7 @@ public class PatientAppointmentModel {
     private Time end_time;
     private String consultationType;
     private String medications;
+    private String doctor_id;
 
 
 }

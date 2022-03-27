@@ -106,9 +106,15 @@ public class DoctorAvailabilityServiceImpl implements DoctorAvailabilityService{
 
     @Override
     public void updateBookedAppointment(AppointmentModel appointmentModel, boolean appointmentBooked) {
-        String[] arr = appointmentModel.getTime().split("to");
-        Time startTime = Time.valueOf(arr[0].trim());
-        Time endTime = Time.valueOf(arr[1].trim());
+        Time startTime = null;
+        Time endTime = null;
+        if (appointmentModel.getTime().contains("to")) {
+            String[] arr = appointmentModel.getTime().split("to");
+            startTime = Time.valueOf(arr[0].trim());
+            endTime = Time.valueOf(arr[1].trim());
+        } else {
+            startTime = Time.valueOf(appointmentModel.getTime());
+        }
         doctorAvailabilityRepository.updateBookedAppointment(appointmentModel.getDoctor_id(), appointmentModel.getAppointment_date(), startTime, appointmentBooked);
     }
 }
