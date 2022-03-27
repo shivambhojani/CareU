@@ -15,6 +15,7 @@ import javax.transaction.Transactional;
 import java.sql.Date;
 import java.sql.Time;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -60,5 +61,15 @@ public class AppointmentServiceImpl implements AppointmentService{
     @Override
     public List<Appointment> getPatientPastAppointments(Integer id, Date date) {
         return appointmentRepository.getPastAppointmentByPatientId(id, date);
+    }
+
+    @Override
+    public Appointment getAppointmentsByAppointmentId(UUID appointment_id) {
+        return appointmentRepository.getAppointmentsByAppointmentId(appointment_id);
+    }
+
+    @Override
+    public Integer updatePatientFeedback(UUID appointment_id, String patientFeedback) {
+        return appointmentRepository.updatePatientFeedback(appointment_id,patientFeedback);
     }
 }
