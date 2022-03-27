@@ -21,7 +21,7 @@
     </form>
     <div>
         <nav class="navbar navbar-expand-lg bg-dark navbar-dark ">
-            <a class="navbar-brand" th:href="@{/}">
+            <a class="navbar-brand" th:href="@{/patienthomepage}">
                 <h1>CareU</h1>
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar">
@@ -33,13 +33,6 @@
                     <li class="nav-item dropdown">
                         <div class="dropdown-menu">
                             <a class="dropdown-item" id="profile-link" href="">Profile</a>
-                        </div>
-                    </li>
-
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown">Appointments</a>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" th:href="@{/cancelAppointment}">Cancel Appointment</a>
                         </div>
                     </li>
 
@@ -61,83 +54,72 @@
 </div>
 <br>
 <div>
-    <h2 class="text-left">Hi, </h2>
-    <h2 class="text-left" sec:authentication="principal.fullname"></h2>
+    <h2>Patient Feedback</h2>
+    [[${appointmentModel.appointment_id}]]
+    [[${appointmentModel.doctorName}]]
+    [[${appointmentModel.patient_id}]]
+    [[${appointmentModel.date}]]
+    [[${appointmentModel.start_time}]]
+    [[${appointmentModel.end_time}]]
+    [[${appointmentModel.consultationType}]]
+    [[${appointmentModel.medications}]]
+    <form th:action="@{'/updatePatientFeedback/'+${appointmentModel.appointment_id}}" method="post"
+          style="max-width: 700px; margin: 0 auto"
+          th:object="${appointmentModel}">
+
+
+        <div class="border border-secondary rounded p-3">
+            <div class="alert alert-primary" role="alert" th:text="${success}" th:if="${success}"></div>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Appointment Date:</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" th:field="*{date}" required minlength="2" maxlength="45"
+                           readonly><br/>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Consultation Type:</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" th:field="*{consultationType}" required minlength="2"
+                           maxlength="45" readonly><br/>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Doctor name:</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" th:field="*{doctorName}" required minlength="2"
+                           maxlength="45" readonly><br/>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Doctor's Medication:</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" th:field="*{medications}" required minlength="2"
+                           maxlength="45" readonly><br/>
+                </div>
+            </div>
+
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Patient Feedback:</label>
+                <div class="col-sm-8">
+                    <textarea rows="6" cols="57" name="feedback" th:field="*{patientFeedback}"></textarea><br/>
+                </div>
+            </div>
+
+        </div>
+        <div class="text-center">
+            <input type="submit" value="Submit" class="btn btn-primary m-3"/>
+            <input type="button" value="Cancel" class="btn btn-secondary" id="buttonCancel"/>
+        </div>
+    </form>
 
     <!--        <h1 class="fw-bold text-center mt-5">CareU Landing</h1>-->
 </div>
-<br>
-<div>
-    <button><a id="HomePage" th:href="@{/searchDoctors}">Search Doctors</a></button>
-</div>
-<br>
-<h3>Today's Appointments</h3>
-<table class="table table-striped">
-    <thead class="thead-dark">
-    <th scope="row">Date</th>
-    <th scope="row">Start Time</th>
-    <th scope="row">End Time</th>
-    <th scope="row">Doctor</th>
-    <th scope="row">Consulation Type</th>
-    </thead>
 
-    <tr th:each="patientTodaysAppointments: ${patientTodaysAppointments}">
-
-        <td th:text="${patientTodaysAppointments.date}"></td>
-        <td th:text="${patientTodaysAppointments.start_time}"></td>
-        <td th:text="${patientTodaysAppointments.end_time}"></td>
-        <td th:text="${patientTodaysAppointments.doctorName}"></td>
-        <td th:text="${patientTodaysAppointments.consultationType}"></td>
-    </tr>
-</table>
-
-<br>
-<h3>Future Appointments</h3>
-<table class="table table-striped">
-    <thead class="thead-dark">
-    <th scope="row">Date</th>
-    <th scope="row">Start Time</th>
-    <th scope="row">End Time</th>
-    <th scope="row">Doctor</th>
-    <th scope="row">Consulation Type</th>
-    </thead>
-
-    <tr th:each="patientFutureAppointments: ${patientFutureAppointments}">
-
-        <td th:text="${patientFutureAppointments.date}"></td>
-        <td th:text="${patientFutureAppointments.start_time}"></td>
-        <td th:text="${patientFutureAppointments.end_time}"></td>
-        <td th:text="${patientFutureAppointments.doctorName}"></td>
-        <td th:text="${patientFutureAppointments.consultationType}"></td>
-    </tr>
-</table>
-
-<br>
-<h3>Past Appointments</h3>
-<table class="table table-striped">
-    <thead class="thead-dark">
-    <th scope="row">Date</th>
-    <th scope="row">Start Time</th>
-    <th scope="row">End Time</th>
-    <th scope="row">Doctor</th>
-    <th scope="row">Consulation Type</th>
-    <th scope="row">Feedback</th>
-    </thead>
-
-    <tr th:each="patientPastAppointments: ${patientPastAppointments}">
-
-        <td th:text="${patientPastAppointments.date}"></td>
-        <td th:text="${patientPastAppointments.start_time}"></td>
-        <td th:text="${patientPastAppointments.end_time}"></td>
-        <td th:text="${patientPastAppointments.doctorName}"></td>
-        <td th:text="${patientPastAppointments.consultationType}"></td>
-        <td>
-            <a th:href="@{'/patientFeedback/' + ${patientPastAppointments.appointment_id}}">Feedback</a>
-
-
-        </td>
-    </tr>
-</table>
 
 <div class="fixed-bottom">
     <p class="text-center">CareU - Copyright &copy; CareU</p>
@@ -167,8 +149,6 @@
             location.href = this.href;
         });
     }
-
-
 </script>
 </body>
 </html>
