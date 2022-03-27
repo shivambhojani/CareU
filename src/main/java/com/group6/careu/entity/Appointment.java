@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.sql.Date;
@@ -33,6 +34,8 @@ public class Appointment {
                     )
             }
     )
+    @Type(type="uuid-char")
+    @Column(name = "appointment_id", columnDefinition = "CHAR(36)")
     private UUID appointmentId;
 
     @Lob

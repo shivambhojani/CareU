@@ -35,10 +35,4 @@ public class Doctor {
     @Column(name = "doctor_contact")
     private Integer doctorContact;
 
-//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "doctor")
-//    private Set<Appointment> appointments;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "doctor")
-//    @JoinTable(name = "doctor_availability" ,joinColumns = @JoinColumn(name = "doctor_id"))
-    private List<DoctorAvailability> availabilityList;
 }
