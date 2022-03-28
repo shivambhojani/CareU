@@ -13,7 +13,7 @@
     <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
     <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
 </head>
-<body>
+<body onload="javascript:checkFeedBackValue()">
 <div class="container-fluid">
 
     <form th:action="@{/logout}" method="post" th:hidden="true" name="logoutForm">
@@ -106,7 +106,7 @@
             <div class="form-group row">
                 <label class="col-sm-4 col-form-label">Patient Feedback:</label>
                 <div class="col-sm-8">
-                    <textarea rows="6" cols="57" name="feedback" th:field="*{patientFeedback}"></textarea><br/>
+                    <textarea rows="6" cols="57" id="patientFeedbackBox" name="feedback" th:field="*{patientFeedback}"></textarea><br/>
                 </div>
             </div>
 
@@ -126,6 +126,22 @@
 </div>
 
 <script type="text/javascript">
+
+    function checkFeedBackValue() {
+        var a = `[[${appointmentModel.patientFeedback}]]`;
+        a = a.toString()
+        console.log(a);
+        if (a == null || a.length <= 0) {
+            //document.getElementById("patientFeedbackBox").setAttribute('readonly', 'readonly');
+            document.getElementById("patientFeedbackBox").readOnly = false;
+        }
+        else {
+            //document.getElementById("patientFeedbackBox").removeAttribute('readonly');
+            document.getElementById("patientFeedbackBox").readOnly = true;
+        }
+    }
+
+
     $(document).ready(function () {
         $("#logoutLink").on("click", function (e) {
             e.preventDefault();
