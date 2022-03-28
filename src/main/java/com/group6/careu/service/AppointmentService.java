@@ -29,4 +29,5 @@ public interface AppointmentService {
 
     List<Appointment> getDoctorPastAppointments(Integer id, Date date);
 
+    Appointment deleteAppointmentBasedOnId(String apptId);
 }

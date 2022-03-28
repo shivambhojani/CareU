@@ -87,5 +87,14 @@ public class AppointmentServiceImpl implements AppointmentService {
     public List<Appointment> getDoctorPastAppointments(Integer id, Date date) {
         return appointmentRepository.getPastAppointmentByDoctorId(id, date);
     }
+
+    @Override
+    public Appointment deleteAppointmentBasedOnId(String apptId) {
+        Appointment appointment = appointmentRepository.getAppointmentBasedOnApptId(apptId);
+        System.out.println(appointment + "is ");
+//        appointmentRepository.deleteAppointmentBasedOnId(apptId);
+        appointmentRepository.delete(appointment);
+        return appointment;
+    }
 }
 

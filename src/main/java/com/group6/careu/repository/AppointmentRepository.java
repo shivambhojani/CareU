@@ -55,4 +55,9 @@ public interface AppointmentRepository extends CrudRepository<Appointment, Integ
     List<Appointment> getPastAppointmentByDoctorId(Integer doctorId, Date todayDate);
 
 
+    @Query(value = "DELETE from appointment where appointment_id=:apptId", nativeQuery = true)
+    void deleteAppointmentBasedOnId(String apptId);
+
+    @Query(value = "SELECT * from appointment where appointment_id=:apptId", nativeQuery = true)
+    Appointment getAppointmentBasedOnApptId(String apptId);
 }
