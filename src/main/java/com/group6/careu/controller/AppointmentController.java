@@ -148,7 +148,7 @@ public class AppointmentController {
         List<PatientAppointmentModel> patientAppointmentModels = new ArrayList<>();
         for (int i = 0; i < appointments.size(); i++) {
             PatientAppointmentModel p = new PatientAppointmentModel();
-            p.setAppointmentId(appointments.get(i).getAppointmentId().toString());
+            p.setAppointment_id(appointments.get(i).getAppointmentId());
             int doctorId = appointments.get(i).getDoctor().getDoctor_id();
             User u = repository.getUserByDoctorId(doctorId);
             p.setDoctorName(u.getFirstName() + " " + u.getLastName());
