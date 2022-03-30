@@ -74,6 +74,11 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
+    public Integer updateMedication(UUID appointment_id, String medications) {
+        return appointmentRepository.updateMedication(appointment_id, medications);
+    }
+
+    @Override
     public List<Appointment> getDoctorTodaysAppointments(Integer id, Date date) {
         return appointmentRepository.getTodaysAppointmentByDoctorId(id, date);
     }

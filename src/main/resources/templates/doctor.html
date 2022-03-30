@@ -75,6 +75,7 @@
     <th scope="row">End Time</th>
     <th scope="row">Patient</th>
     <th scope="row">Consulation Type</th>
+    <th scope="row">Prescription</th>
     </thead>
 
     <tr th:each="doctorTodaysAppointmentModels: ${doctorTodaysAppointmentModels}">
@@ -84,6 +85,9 @@
         <td th:text="${doctorTodaysAppointmentModels.end_time}"></td>
         <td th:text="${doctorTodaysAppointmentModels.patientName}"></td>
         <td th:text="${doctorTodaysAppointmentModels.consultationType}"></td>
+        <td>
+            <a th:href="@{'/doctorPrescription/' + ${doctorTodaysAppointmentModels.appointment_id}}">Prescription</a>
+        </td>
     </tr>
 </table>
 

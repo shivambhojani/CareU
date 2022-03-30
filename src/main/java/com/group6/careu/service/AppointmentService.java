@@ -18,10 +18,11 @@ public interface AppointmentService {
 
     List<Appointment> getPatientPastAppointments(Integer id, Date date);
 
-
     Appointment getAppointmentsByAppointmentId(UUID appointment_id);
 
     Integer updatePatientFeedback(UUID appointment_id, String patientFeedback);
+
+    Integer updateMedication(UUID appointment_id, String medications);
 
 	List<Appointment> getDoctorTodaysAppointments(Integer id , Date date);
 
