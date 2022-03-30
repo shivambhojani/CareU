@@ -3,6 +3,7 @@ package com.group6.careu.controller;
 import com.group6.careu.entity.Appointment;
 import com.group6.careu.entity.User;
 import com.group6.careu.model.DoctorAppointmentModel;
+import com.group6.careu.model.PatientAppointmentModel;
 import com.group6.careu.repository.AppointmentRepository;
 import com.group6.careu.repository.UserRepository;
 import com.group6.careu.security.CareuUserDetails;
@@ -14,12 +15,16 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.sql.Date;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 public class DoctorHomePageController {
@@ -84,6 +89,42 @@ public class DoctorHomePageController {
         return "doctor";
     }
 
+    @GetMapping(path = "/doctorPrescription/{appointment_id}")
+    public String getDoctorAppointmentDetails(@PathVariable(name = "appointment_id") UUID appointment_id, Model model) {
+        PatientAppointmentModel patientAppointmentModelsByID = new PatientAppointmentModel();
+        Appointment singleAppointmentbyID = appointmentService.getAppointmentsByAppointmentId(appointment_id);
+
+        patientAppointmentModelsByID.setAppointment_id(appointment_id);
+        patientAppointmentModelsByID.setPatient_id(singleAppointmentbyID.getPatient().getPatient_id());
+
+        int doctorId = singleAppointmentbyID.getDoctor().getDoctor_id();
+        User u = userRepository.getUserByDoctorId(doctorId);
+        patientAppointmentModelsByID.setDoctorName(u.getFirstName() + " " + u.getLastName());
+
+        patientAppointmentModelsByID.setDate(singleAppointmentbyID.getAppointment_date());
+        patientAppointmentModelsByID.setConsultationType(singleAppointmentbyID.getConsulationType());
+        patientAppointmentModelsByID.setStart_time(singleAppointmentbyID.getStartTime());
+        patientAppointmentModelsByID.setEnd_time(singleAppointmentbyID.getEndTime());
+        patientAppointmentModelsByID.setPatientFeedback(singleAppointmentbyID.getPatientFeedback());
+        patientAppointmentModelsByID.setMedications(singleAppointmentbyID.getMedications());
+
+        model.addAttribute("appointmentModel", patientAppointmentModelsByID);
+        return "doctorprescription";
+    }
+
+    @PostMapping("/updateDoctorPrescription/{appointment_id}")
+    public String postMedications(@PathVariable(name = "appointment_id") UUID appointment_id, PatientAppointmentModel patientAppointmentModel,
+                                  RedirectAttributes redirectAttributes) {
+
+        String medications = patientAppointmentModel.getMedications();
+        Integer i = appointmentService.updateMedication(patientAppointmentModel.getAppointment_id(), medications);
+        if (i == 1) {
+            redirectAttributes.addFlashAttribute("success", "Medications Submitted Successfully.");
+        }
+        return "redirect:/doctorPrescription/" + appointment_id;
+
+    }
+
     public List<DoctorAppointmentModel> getTodaysAppointments(User user, Integer doctorId, Date todaysDate) {
         List<DoctorAppointmentModel> doctorTodaysAppointmentModels;
         List<Appointment> appointments = appointmentService.getDoctorTodaysAppointments(user.getDoctor().getDoctor_id(), todaysDate);
@@ -116,6 +157,7 @@ public class DoctorHomePageController {
             User u = userRepository.getUserByPatientId(patientId);
             d.setPatientName(u.getFirstName() + " " + u.getLastName());
             d.setMedications(appointments.get(i).getMedications());
+            d.setAppointment_id(appointments.get(i).getAppointmentId());
             d.setConsultationType(appointments.get(i).getConsulationType());
             d.setDate(appointments.get(i).getAppointment_date());
             d.setEnd_time(appointments.get(i).getEndTime());

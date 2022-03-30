@@ -27,6 +27,11 @@ public interface AppointmentRepository extends CrudRepository<Appointment, Integ
     @Query(value = "Update Appointment set patientFeedback=?2 where appointmentId=?1")
     Integer updatePatientFeedback(UUID appointmentID, String patientFeedback);
 
+    @Transactional
+    @Modifying
+    @Query(value = "Update Appointment set medications=?2 where appointmentId=?1")
+    Integer updateMedication(UUID appointmentID, String medications);
+
     Appointment getAppointmentsByAppointmentId(UUID appointment_id);
 
     @Query(value = "Select * from appointment where patient_id=:patientId and appointment_date =:todayDate " +
