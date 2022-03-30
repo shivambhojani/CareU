@@ -32,7 +32,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers("/")
+        http.csrf().disable();
+        http.authorizeRequests().antMatchers("/","/index.html","/login","/register/users","/oauth/**","static/**")
                 .permitAll()
                 .and()
                 .formLogin()
@@ -45,7 +46,37 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .rememberMe()
                 .key("ABBfwowrupncmoh_496241767433")
                 .tokenValiditySeconds(7 * 24 * 60 * 60);
-                http.csrf().disable();
+                .invalidateHttpSession(true)
+                .clearAuthentication(true)
+                .logoutSuccessUrl("/");
+
+
+        http.authorizeRequests().antMatchers("/","/index.html","/login","/register/users","/oauth/**","static/**")
+                .permitAll().and().oauth2Login()
+                .loginPage("/login")
+                .userInfoEndpoint()
+                .userService(oauthUserService)
+                .and()
+                .successHandler(new AuthenticationSuccessHandler() {
+                    @Override
+                    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+                                                        Authentication authentication) throws IOException, ServletException {
+
+                        CustomOAuth2User oauthUser = (CustomOAuth2User) authentication.getPrincipal();
+
+                        CareuUserDetails userDetails = (CareuUserDetails) userDetailsService().loadUserByUsername(oauthUser.getEmail());
+                        String redirectURL = request.getContextPath();
+                        if (userDetails.getRole().equalsIgnoreCase("doctor")) {
+                            redirectURL = "/doctor";
+                        } else if(userDetails.getRole().equalsIgnoreCase("admin")) {
+                            redirectURL = "/admin";
+                        } else{
+                            redirectURL = "/patienthomepage";
+                        }
+                        response.sendRedirect(redirectURL);
+                    }
+                })
+                .permitAll();
     }
 
     public DaoAuthenticationProvider authenticationProvider() {
