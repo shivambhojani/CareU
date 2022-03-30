@@ -2,6 +2,7 @@ package com.group6.careu;
 import com.group6.careu.controller.UserDocumentOperationController;
 import com.group6.careu.entity.UserDocument;
 import com.group6.careu.repository.UserDocumentRepository;
+import com.group6.careu.service.UserDocumentOperationService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -20,7 +21,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Rollback(true)
 public class UserDocumentUploadTest {
     private UserDocumentOperationController userDocumentOperationController = new UserDocumentOperationController();
-
     @Autowired
     private UserDocumentRepository userDocumentRepository;
 
@@ -39,9 +39,9 @@ public class UserDocumentUploadTest {
         files.forEach(file-> System.out.println(file.getFileName()));
     }
 
-    @Test
-    public void testGetDocumentById() throws Exception {
-         UserDocument file  = userDocumentRepository.findById(1).get();
-         System.out.println(file.getFileName());
-    }
+//    @Test
+//    public void testGetDocumentById() throws Exception {
+//         UserDocument file  = userDocumentRepository.findById(1).isPresent()
+//         System.out.println(file.getFileName());
+//    }
 }
