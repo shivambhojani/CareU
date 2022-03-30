@@ -20,7 +20,7 @@
     </form>
     <div>
         <nav class="navbar navbar-expand-lg bg-dark navbar-dark ">
-            <a class="navbar-brand" th:href="@{/}">
+            <a class="navbar-brand" th:href="@{/patienthomepage}">
                 <h1>CareU</h1>
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar">
@@ -40,7 +40,13 @@
             </div>
         </nav>
     </div>
-
+    <br>
+    <h4>Search Doctor</h4>
+    <form th:action="@{/searchDoctors}" method="get">
+        <input id="txtSearch" type="text" name="keyword">
+        <button type="submit">Go</button>
+    </form>
+    
     <div>
         <div>
             <br>
@@ -65,90 +71,8 @@
                         </div>
                     </div>
                 </tr>
-<!--                <tr>-->
 
-<!--                        <div class="card custom-card text-center mr-2 mt-2 ml-2 mb-2" style="width: 15rem; display: inline-block">-->
-<!--&lt;!&ndash;                            <img class="card-img-top" src="..." alt="Card image cap">&ndash;&gt;-->
-<!--                            <div class="card-body">-->
-<!--                                <h5 class="card-title">Doctor1</h5>-->
-<!--                                <p class="card-text" th:text="Vikas">Name</p>-->
-<!--                                <p class="card-text" th:text="PHD">Specialization</p>-->
-<!--                                <a href="#" class="btn btn-primary">Go somewhere</a>-->
-<!--                            </div>-->
-<!--                        </div>-->
-
-
-<!--                        <div class="card custom-card text-center mr-2 mt-2 ml-2 mb-2" style="width: 15rem; display: inline-block">-->
-<!--                            &lt;!&ndash;                            <img class="card-img-top" src="..." alt="Card image cap">&ndash;&gt;-->
-<!--                            <div class="card-body">-->
-<!--                                <h5 class="card-title">Doctor1</h5>-->
-<!--                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>-->
-<!--                                <a href="#" class="btn btn-primary">Go somewhere</a>-->
-<!--                            </div>-->
-<!--                        </div>-->
-
-
-<!--                        <div class="card custom-card text-center mr-2 mt-2 ml-2 mb-2" style="width: 15rem; display: inline-block">-->
-<!--                            &lt;!&ndash;                            <img class="card-img-top" src="..." alt="Card image cap">&ndash;&gt;-->
-<!--                            <div class="card-body">-->
-<!--                                <h5 class="card-title">Doctor1</h5>-->
-<!--                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>-->
-<!--                                <a href="#" class="btn btn-primary">Go somewhere</a>-->
-<!--                            </div>-->
-<!--                        </div>-->
-
-
-<!--                        <div class="card custom-card text-center mr-2 mt-2 ml-2 mb-2" style="width: 15rem; display: inline-block">-->
-<!--                            &lt;!&ndash;                            <img class="card-img-top" src="..." alt="Card image cap">&ndash;&gt;-->
-<!--                            <div class="card-body">-->
-<!--                                <h5 class="card-title">Doctor1</h5>-->
-<!--                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>-->
-<!--                                <a href="#" class="btn btn-primary">Go somewhere</a>-->
-<!--                            </div>-->
-<!--                        </div>-->
-
-
-<!--                        <div class="card custom-card text-center mr-2 mt-2 ml-2 mb-2" style="width: 15rem; display: inline-block">-->
-<!--                            &lt;!&ndash;                            <img class="card-img-top" src="..." alt="Card image cap">&ndash;&gt;-->
-<!--                            <div class="card-body">-->
-<!--                                <h5 class="card-title">Doctor1</h5>-->
-<!--                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>-->
-<!--                                <a href="#" class="btn btn-primary">Go somewhere</a>-->
-<!--                            </div>-->
-<!--                        </div>-->
-
-<!--&lt;!&ndash;                        <div class="card" style="width: 18rem;">&ndash;&gt;-->
-
-<!--&lt;!&ndash;                            <div class="card-body">&ndash;&gt;-->
-<!--&lt;!&ndash;                                <h5 class="card-title">Doctor1</h5>&ndash;&gt;-->
-<!--&lt;!&ndash;                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>&ndash;&gt;-->
-<!--&lt;!&ndash;                                <a href="#" class="btn btn-primary">Go somewhere</a>&ndash;&gt;-->
-<!--&lt;!&ndash;                            </div>&ndash;&gt;-->
-<!--&lt;!&ndash;                        </div>&ndash;&gt;-->
-<!--                        <div class="card custom-card text-center mr-2 mt-2 ml-2 mb-2" style="width: 15rem; display: inline-block">-->
-
-<!--                            <div class="card-body">-->
-<!--                                <h5 class="card-title">Doctor1</h5>-->
-<!--                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>-->
-<!--                                <a href="#" class="btn btn-primary">Go somewhere</a>-->
-<!--                            </div>-->
-<!--                        </div>-->
-
-<!--                </tr>-->
             </table>
-
-<!--            <div>-->
-<!--                <form th:action="@{/payment}" method="post" style="max-width: 700px; margin: 0 auto" th:object="${doctor}">-->
-<!--                <div class="border border-secondary rounded p-3">-->
-<!--                    <div class="form-group row">-->
-<!--                        <label class="col-sm-4 col-form-label">Name on Card:</label>-->
-<!--                        <div class="col-sm-8">-->
-<!--                            <input type="text" class="form-control" th:field="*{doctorContact}" required minlength="2" maxlength="45"  />-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                </form>-->
-<!--            </div>-->
         </div>
     </div>
 
@@ -157,6 +81,14 @@
     </div>
 
 </div>
-
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#logoutLink").on("click", function(e) {
+            e.preventDefault();
+            document.logoutForm.submit();
+        })
+        customizeDropDownMenu();
+    });
+</script>
 </body>
 </html>

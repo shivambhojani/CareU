@@ -85,7 +85,19 @@
     </div>
     <h2>Appointment Booking Success</h2>
     <p>Booking id [[${appointment_id}]].<br/> Please keep the booking id for future reference</p>
+    <br>
+    <a type="button" class="btn btn-outline-secondary" th:href="@{/patienthomepage}" style="float:right">Return Home Page</a>
 </div>
 <!--    <h4>Appointment Booking success with appointment id [[${appointment_id}]]. Please keep this id for future reference</h4>-->
 </body>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#logoutLink").on("click", function(e) {
+            e.preventDefault();
+            document.logoutForm.submit();
+        })
+        customizeDropDownMenu();
+    });
+</script>
 </html>

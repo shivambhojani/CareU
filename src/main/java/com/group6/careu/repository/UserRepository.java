@@ -5,9 +5,11 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface UserRepository extends CrudRepository<User, Integer> {
     @Query("SELECT u FROM User u WHERE u.email = :email")
     public User getUserByEmail(@Param("email") String email);
@@ -23,4 +25,19 @@ public interface UserRepository extends CrudRepository<User, Integer> {
 
     @Query(value = "SELECT * from users u where u.role=:role", nativeQuery = true)
     public List<User> getAllDoctor(@Param("role") String role);
+
+    @Query(value = "SELECT * from users u join doctors d on u.doctor_id = d.doctor_id where u.first_name like %:keyword%" +
+            " or u.last_name like %:keyword% or d.specialization like %:keyword% or d.license_number like %:keyword% " +
+            "and u.role=:role", nativeQuery = true)
+    public List<User> getFilteredDoctors(@Param("role") String role, @Param("keyword") String keyword);
+	
+	@Query(value = "SELECT * from users u where u.patient_id=:patient_id", nativeQuery = true)
+    public User getUserByPatientId(@Param("patient_id") int patient_id);
+
+    @Query(value = "SELECT * from users u where u.id=:id", nativeQuery = true)
+    public User getUserById(@Param("id") int id);
+
+    User findByEmail(String email);
+
+    User findByResetPasswordToken(String token);
 }

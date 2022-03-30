@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="application/x-www-form-urlencoded;charset=UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0">
+
+    <title>Doctor Availability</title>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+    <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}" ></script>
+    <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}" ></script>
+    <link th:rel="stylesheet" th:href="@{assets/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css}" type="text/css"/>
+    <link th:rel="stylesheet" th:href="@{webjars/bootstrap/4.3.1/css/bootstrap.min.css} " type="text/css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-datepicker@1.9.0/dist/css/bootstrap-datepicker3.min.css" id="bsdp-css">
+</head>
+<body>
+<div class="container-fluid">
+    <div>
+        <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+            <a class="navbar-brand" th:href="@{/}">
+                <h2>CareU</h2>
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+        </nav>
+    </div>
+    <div>
+        <h2 class="text-center mt-5">Save Your Availability</h2>
+    </div>
+
+    <label for="availabilitydate">Available Date:</label>
+    <div class="input-group date" data-date-format="dd/mm/yyyy">
+        <input class="form-control" type="text"  id="availabilitydate" placeholder="dd/mm/yyyy" />
+        <div class="input-group-addon input-group-append">
+            <span class="input-group-text"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+        </div>
+    </div>
+
+    <label for="starttime">Start Time:</label>
+    <div class="input-group date" id="start_time">
+        <input type="text" id="starttime" placeholder="Time" class="form-control"
+        />
+        <div class="input-group-addon input-group-append">
+            <div class="input-group-text">
+                <i class="fa fa-clock-o"></i>
+            </div>
+        </div>
+    </div>
+
+    <label for="endtime">End Time:</label>
+    <div class="input-group date" id="end_time">
+        <input type="text" id="endtime" placeholder="Time" class="form-control"
+        />
+        <div class="input-group-addon input-group-append">
+            <div class="input-group-text">
+                <i class="fa fa-clock-o"></i>
+            </div>
+        </div>
+    </div>
+    <!--
+    <div class="text-center">
+        <input class="btn btn-primary m-3" type="button" onclick="saveAvailability()" value="Add">
+        <button id="saveTimes" class="btn btn-primary m-3" type="submit">Save Availability</button>
+    </div>
+    -->
+    <div class="container">
+        <input class="btn btn-primary m-3" type="button" onclick="saveAvailability()" value="Add">
+        <button id="saveTimes" class="btn btn-primary m-3" type="submit">Save Availability</button>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Availability Date</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Delete</th>
+            </tr>
+            </thead>
+            <tbody id="table_body">
+            </tbody>
+        </table>
+    </div>
+
+
+    <div class="modal fade text-center" id="modalDialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="modalTitle">Warning</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <div class="modal-body">
+                    <span id="modalBody"></span>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center fixed-bottom">
+        <p>CareU - Copyright &copy; CareU</p>
+    </div>
+
+</div>
+
+<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+<script th:src="@{assets/moment/moment.min.js}"></script>
+<script th:src="@{assets/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.1/js/bootstrap-datepicker.min.js" crossorigin="anonymous"></script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#buttonCancel").on("click", function() {
+            window.location = "[[@{/}]]";
+        });
+    });
+
+    function showModalDialog(title, message) {
+        $("#modalTitle").text(title);
+        $("#modalBody").text(message);
+        $("#modalDialog").modal();
+    }
+
+    $('#start_time').datetimepicker({
+        "allowInputToggle": true,
+        "showClose": true,
+        "showClear": true,
+        "showTodayButton": true,
+        "format": "HH:mm:ss",
+    });
+
+    $('#end_time').datetimepicker({
+        "allowInputToggle": true,
+        "showClose": true,
+        "showClear": true,
+        "showTodayButton": true,
+        "format": "HH:mm:ss",
+    });
+
+    $('#availabilitydate').datepicker({
+        format: 'dd/mm/yyyy',
+        weekStart: 1,
+        autoclose: true
+    });
+
+    function saveAvailability() {
+        var starttime = document.getElementById('starttime');
+        var endtime = document.getElementById('endtime');
+        var availabilitydate = document.getElementById('availabilitydate');
+        start_time_arr.push(starttime.value);
+        end_time_arr.push(endtime.value);
+        available_date_arr.push(availabilitydate.value);
+        starttime.value = '';
+        endtime.value = '';
+
+        var table_row = "";
+        for (var i = 0; i < available_date_arr.length; i++) {
+            table_row += "<tr>";
+            table_row += "<td>" + available_date_arr[i] + "</td>" + "<td>" + start_time_arr[i] + "</td>" + "<td>" + end_time_arr[i] + "</td>";
+            table_row += "<td><input id=\"delete_btn\" type=\"button\" value=\"Delete\"></td>";
+            table_row += "</tr>";
+        }
+        document.getElementById("table_body").innerHTML = table_row;
+
+        console.log(start_time_arr);
+        console.log(end_time_arr);
+        console.log(available_date_arr)
+
+        $('input[id="delete_btn"]').click(function(e){
+            var row=$(this).closest("tr");
+
+            var date=row.find("td:eq(0)").text(); // get current row 1st TD value
+            var start_time=row.find("td:eq(1)").text(); // get current row 2nd TD
+            var end_time=row.find("td:eq(2)").text(); // get current row 3rd TD
+
+            var date_index = available_date_arr.indexOf(date);
+            available_date_arr.splice(date_index, 1);
+
+            var start_time_index = start_time_arr.indexOf(start_time);
+            start_time_arr.splice(start_time_index, 1)
+
+            var end_time_index = end_time_arr.indexOf(end_time);
+            end_time_arr.splice(end_time_index, 1)
+
+            row.remove()
+
+        })
+    }
+    var start_time_arr = [];
+    var end_time_arr= [];
+    var available_date_arr=[];
+
+
+    $("#saveTimes").click(function () {
+        console.log("debugging")
+        var dataToSend = JSON.stringify({
+            "availableDate": available_date_arr,
+            "startTime": start_time_arr,
+            "endTime": end_time_arr,
+            "doctorId": null
+        })
+        console.log(dataToSend)
+
+        $.ajax({
+            url: "doctor-availability",
+            type: "POST",
+            contentType: "application/json",
+            dataType: "json",
+            data: dataToSend,
+            complete: function( response ) {
+                // do something
+                window.location.href='/doctor';
+            },
+            error: function( jqXHR, textStatus, errorThrown ) {
+                // do something
+            }
+        });
+    });
+    // th:action="@{/doctor-availability}"
+</script>
+</body>
+</html>

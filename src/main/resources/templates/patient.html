@@ -37,10 +37,18 @@
                     </li>
 
                     <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown">Appointments</a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" th:href="@{/cancelAppointment}">Cancel Appointment</a>
+                        </div>
+                    </li>
+
+                    <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown"
                            sec:authentication="principal.fullname"></a>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" id="profileSettings" th:href="@{/patientProfile}">Profile Settings</a>
+                            <a class="dropdown-item" id="profileSettings" th:href="@{/patientProfile}">Profile
+                                Settings</a>
                             <a class="dropdown-item" id="logoutLink" href="">Logout</a>
                         </div>
                     </li>
@@ -59,10 +67,12 @@
     <!--        <h1 class="fw-bold text-center mt-5">CareU Landing</h1>-->
 </div>
 <br>
-
+<div>
+    <button><a id="HomePage" th:href="@{/searchDoctors}">Search Doctors</a></button>
+</div>
 <br>
-<h1>Appointments</h1>
-<table class = "table table-striped">
+<h3>Today's Appointments</h3>
+<table class="table table-striped">
     <thead class="thead-dark">
     <th scope="row">Date</th>
     <th scope="row">Start Time</th>
@@ -71,13 +81,61 @@
     <th scope="row">Consulation Type</th>
     </thead>
 
-    <tr th:each="patientAppointments: ${patientAppointments}">
+    <tr th:each="patientTodaysAppointments: ${patientTodaysAppointments}">
 
-        <td th:text="${patientAppointments.date}"></td>
-        <td th:text="${patientAppointments.start_time}"></td>
-        <td th:text="${patientAppointments.end_time}"></td>
-        <td th:text="${patientAppointments.doctorName}"></td>
-        <td th:text="${patientAppointments.consultationType}"></td>
+        <td th:text="${patientTodaysAppointments.date}"></td>
+        <td th:text="${patientTodaysAppointments.start_time}"></td>
+        <td th:text="${patientTodaysAppointments.end_time}"></td>
+        <td th:text="${patientTodaysAppointments.doctorName}"></td>
+        <td th:text="${patientTodaysAppointments.consultationType}"></td>
+    </tr>
+</table>
+
+<br>
+<h3>Future Appointments</h3>
+<table class="table table-striped">
+    <thead class="thead-dark">
+    <th scope="row">Date</th>
+    <th scope="row">Start Time</th>
+    <th scope="row">End Time</th>
+    <th scope="row">Doctor</th>
+    <th scope="row">Consulation Type</th>
+    </thead>
+
+    <tr th:each="patientFutureAppointments: ${patientFutureAppointments}">
+
+        <td th:text="${patientFutureAppointments.date}"></td>
+        <td th:text="${patientFutureAppointments.start_time}"></td>
+        <td th:text="${patientFutureAppointments.end_time}"></td>
+        <td th:text="${patientFutureAppointments.doctorName}"></td>
+        <td th:text="${patientFutureAppointments.consultationType}"></td>
+    </tr>
+</table>
+
+<br>
+<h3>Past Appointments</h3>
+<table class="table table-striped">
+    <thead class="thead-dark">
+    <th scope="row">Date</th>
+    <th scope="row">Start Time</th>
+    <th scope="row">End Time</th>
+    <th scope="row">Doctor</th>
+    <th scope="row">Consulation Type</th>
+    <th scope="row">Feedback</th>
+    </thead>
+
+    <tr th:each="patientPastAppointments: ${patientPastAppointments}">
+
+        <td th:text="${patientPastAppointments.date}"></td>
+        <td th:text="${patientPastAppointments.start_time}"></td>
+        <td th:text="${patientPastAppointments.end_time}"></td>
+        <td th:text="${patientPastAppointments.doctorName}"></td>
+        <td th:text="${patientPastAppointments.consultationType}"></td>
+        <td>
+            <a th:href="@{'/patientFeedback/' + ${patientPastAppointments.appointment_id}}">Feedback</a>
+
+
+        </td>
     </tr>
 </table>
 
@@ -86,30 +144,29 @@
 </div>
 
 <script type="text/javascript">
-	$(document).ready(function() {
-	$("#logoutLink").on("click", function(e) {
-		e.preventDefault();
-		document.logoutForm.submit();
-	});
+    $(document).ready(function () {
+        $("#logoutLink").on("click", function (e) {
+            e.preventDefault();
+            document.logoutForm.submit();
+        });
 
-	customizeDropDownMenu();
-});
+        customizeDropDownMenu();
+    });
 
-function customizeDropDownMenu() {
-	$(".navbar .dropdown").hover(
-		function() {
-			$(this).find('.dropdown-menu').first().stop(true, true).delay(250).slideDown();
-		},
-		function() {
-			$(this).find('.dropdown-menu').first().stop(true, true).delay(100).slideUp();
-		}
-	);
+    function customizeDropDownMenu() {
+        $(".navbar .dropdown").hover(
+            function () {
+                $(this).find('.dropdown-menu').first().stop(true, true).delay(250).slideDown();
+            },
+            function () {
+                $(this).find('.dropdown-menu').first().stop(true, true).delay(100).slideUp();
+            }
+        );
 
-	$(".dropdown > a").click(function() {
-		location.href = this.href;
-	});
-}
-
+        $(".dropdown > a").click(function () {
+            location.href = this.href;
+        });
+    }
 
 
 </script>

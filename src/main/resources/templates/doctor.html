@@ -5,7 +5,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0">
 
-    <title>Doctor</title>
+    <title>Doctor Homepage</title>
 
     <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
     <link rel="stylesheet" type="text/css" th:href="@{/fontawesome/all.css}"/>
@@ -31,10 +31,16 @@
                 <ul class="navbar-nav ml-auto">
 
                     <li class="nav-item dropdown">
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" id="profile-link" href="">Profile</a>
+                        </div>
+                    </li>
+
+                    <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown"
-                           th:href="@{/profile}"
                            sec:authentication="principal.fullname"></a>
                         <div class="dropdown-menu">
+                            <a class="dropdown-item" id="profileSettings" th:href="@{/doctor_profile.html}">Profile Settings</a>
                             <a class="dropdown-item" id="logoutLink" href="">Logout</a>
                         </div>
                     </li>
@@ -45,32 +51,117 @@
         </nav>
     </div>
 </div>
+<br>
+<div>
+    <h2 class="text-left">Hi, </h2>
+    <h2 class="text-left" sec:authentication="principal.fullname"></h2>
 
+    <!--        <h1 class="fw-bold text-center mt-5">CareU Landing</h1>-->
+</div>
+<br>
+<!--
+<div>
+    <button><a id="HomePage" th:href="@{/searchPatients}">Search Doctors</a></button>
+</div>
+-->
+<br>
+
+<h3>Today's Appointments</h3>
+
+<table class = "table table-striped">
+    <thead class="thead-dark">
+    <th scope="row">Date</th>
+    <th scope="row">Start Time</th>
+    <th scope="row">End Time</th>
+    <th scope="row">Patient</th>
+    <th scope="row">Consulation Type</th>
+    <th scope="row">Prescription</th>
+    </thead>
+
+    <tr th:each="doctorTodaysAppointmentModels: ${doctorTodaysAppointmentModels}">
+
+        <td th:text="${doctorTodaysAppointmentModels.date}"></td>
+        <td th:text="${doctorTodaysAppointmentModels.start_time}"></td>
+        <td th:text="${doctorTodaysAppointmentModels.end_time}"></td>
+        <td th:text="${doctorTodaysAppointmentModels.patientName}"></td>
+        <td th:text="${doctorTodaysAppointmentModels.consultationType}"></td>
+        <td>
+            <a th:href="@{'/doctorPrescription/' + ${doctorTodaysAppointmentModels.appointment_id}}">Prescription</a>
+        </td>
+    </tr>
+</table>
+
+<br>
+<h3>Future Appointments</h3>
+<table class = "table table-striped">
+    <thead class="thead-dark">
+    <th scope="row">Date</th>
+    <th scope="row">Start Time</th>
+    <th scope="row">End Time</th>
+    <th scope="row">Patient</th>
+    <th scope="row">Consulation Type</th>
+    </thead>
+
+    <tr th:each="doctorFutureAppointmentModels: ${doctorFutureAppointmentModels}">
+
+        <td th:text="${doctorFutureAppointmentModels.date}"></td>
+        <td th:text="${doctorFutureAppointmentModels.start_time}"></td>
+        <td th:text="${doctorFutureAppointmentModels.end_time}"></td>
+        <td th:text="${doctorFutureAppointmentModels.patientName}"></td>
+        <td th:text="${doctorFutureAppointmentModels.consultationType}"></td>
+    </tr>
+</table>
+
+<br>
+<h3>Past Appointments</h3>
+<table class = "table table-striped">
+    <thead class="thead-dark">
+    <th scope="row">Date</th>
+    <th scope="row">Start Time</th>
+    <th scope="row">End Time</th>
+    <th scope="row">Patient</th>
+    <th scope="row">Consulation Type</th>
+    </thead>
+
+    <tr th:each="doctorPastAppointmentModels: ${doctorPastAppointmentModels}">
+
+        <td th:text="${doctorPastAppointmentModels.date}"></td>
+        <td th:text="${doctorPastAppointmentModels.start_time}"></td>
+        <td th:text="${doctorPastAppointmentModels.end_time}"></td>
+        <td th:text="${doctorPastAppointmentModels.patientName}"></td>
+        <td th:text="${doctorPastAppointmentModels.consultationType}"></td>
+    </tr>
+</table>
+
+<!--[[${doctor.firstName}]]-->
+<div class="fixed-bottom">
+    <p class="text-center">CareU - Copyright &copy; CareU</p>
+</div>
 
 <script type="text/javascript">
-	$(document).ready(function() {
-	$("#logoutLink").on("click", function(e) {
-		e.preventDefault();
-		document.logoutForm.submit();
-	});
+    $(document).ready(function() {
+        $("#logoutLink").on("click", function(e) {
+            e.preventDefault();
+            document.logoutForm.submit();
+        });
 
-	customizeDropDownMenu();
-});
+        customizeDropDownMenu();
+    });
 
-function customizeDropDownMenu() {
-	$(".navbar .dropdown").hover(
-		function() {
-			$(this).find('.dropdown-menu').first().stop(true, true).delay(250).slideDown();
-		},
-		function() {
-			$(this).find('.dropdown-menu').first().stop(true, true).delay(100).slideUp();
-		}
-	);
+    function customizeDropDownMenu() {
+        $(".navbar .dropdown").hover(
+            function() {
+                $(this).find('.dropdown-menu').first().stop(true, true).delay(250).slideDown();
+            },
+            function() {
+                $(this).find('.dropdown-menu').first().stop(true, true).delay(100).slideUp();
+            }
+        );
 
-	$(".dropdown > a").click(function() {
-		location.href = this.href;
-	});
-}
+        $(".dropdown > a").click(function() {
+            location.href = this.href;
+        });
+    }
 
 
 

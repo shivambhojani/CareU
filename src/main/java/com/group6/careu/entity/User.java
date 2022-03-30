@@ -1,8 +1,6 @@
 package com.group6.careu.entity;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -13,6 +11,8 @@ import javax.persistence.*;
 @ToString
 @Table(name = "users")
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,6 +35,9 @@ public class User {
     private String password;
     private boolean enabled;
     private String role;
+
+    @Column(name = "reset_password_token", length = 30)
+    private String resetPasswordToken;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="doctor_id")

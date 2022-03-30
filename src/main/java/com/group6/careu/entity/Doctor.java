@@ -26,7 +26,7 @@ public class Doctor {
     @Column(name = "license_number", length = 20)
     private String license_number;
 
-    @Column(name = "age")
+    @Column(name = "age", nullable = true)
     private Integer age;
 
     @Column(name = "specialization", length = 20)
@@ -35,10 +35,4 @@ public class Doctor {
     @Column(name = "doctor_contact")
     private Integer doctorContact;
 
-//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "doctor")
-//    private Set<Appointment> appointments;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "doctor")
-//    @JoinTable(name = "doctor_availability" ,joinColumns = @JoinColumn(name = "doctor_id"))
-    private List<DoctorAvailability> availabilityList;
 }

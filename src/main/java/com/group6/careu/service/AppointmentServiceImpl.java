@@ -12,12 +12,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.sql.Date;
 import java.sql.Time;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @Transactional
-public class AppointmentServiceImpl implements AppointmentService{
+public class AppointmentServiceImpl implements AppointmentService {
 
     @Autowired
     AppointmentRepository appointmentRepository;
@@ -46,10 +48,58 @@ public class AppointmentServiceImpl implements AppointmentService{
         return appointment;
     }
 
-
+    @Override
+    public List<Appointment> getTodaysPatientAppointments(Integer id, Date date) {
+        return appointmentRepository.getTodaysAppointmentByPatientId(id, date);
+    }
 
     @Override
-    public List<Appointment> getPatientAppointments(Integer id) {
-        return appointmentRepository.getAppointmentByPatientId(id);
+    public List<Appointment> getPatientFutureAppointments(Integer id, Date date) {
+        return appointmentRepository.getFutureAppointmentByPatientId(id, date);
+    }
+
+    @Override
+    public List<Appointment> getPatientPastAppointments(Integer id, Date date) {
+        return appointmentRepository.getPastAppointmentByPatientId(id, date);
+    }
+
+    @Override
+    public Appointment getAppointmentsByAppointmentId(UUID appointment_id) {
+        return appointmentRepository.getAppointmentsByAppointmentId(appointment_id);
+    }
+
+    @Override
+    public Integer updatePatientFeedback(UUID appointment_id, String patientFeedback) {
+        return appointmentRepository.updatePatientFeedback(appointment_id, patientFeedback);
+    }
+
+    @Override
+    public Integer updateMedication(UUID appointment_id, String medications) {
+        return appointmentRepository.updateMedication(appointment_id, medications);
+    }
+
+    @Override
+    public List<Appointment> getDoctorTodaysAppointments(Integer id, Date date) {
+        return appointmentRepository.getTodaysAppointmentByDoctorId(id, date);
+    }
+
+    @Override
+    public List<Appointment> getDoctorFutureAppointments(Integer id, Date date) {
+        return appointmentRepository.getFutureAppointmentByDoctorId(id, date);
+    }
+
+    @Override
+    public List<Appointment> getDoctorPastAppointments(Integer id, Date date) {
+        return appointmentRepository.getPastAppointmentByDoctorId(id, date);
+    }
+
+    @Override
+    public Appointment deleteAppointmentBasedOnId(String apptId) {
+        Appointment appointment = appointmentRepository.getAppointmentBasedOnApptId(apptId);
+        System.out.println(appointment + "is ");
+//        appointmentRepository.deleteAppointmentBasedOnId(apptId);
+        appointmentRepository.delete(appointment);
+        return appointment;
     }
 }
+

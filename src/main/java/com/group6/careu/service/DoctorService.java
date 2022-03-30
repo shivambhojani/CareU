@@ -11,4 +11,6 @@ public interface DoctorService {
     List<User> getAllDoctor();
 
     User getDoctorById(Integer doctor_id);
+
+    List<User> getFilteredDoctor(String keyWord);
 }
