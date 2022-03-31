@@ -56,6 +56,7 @@ public class VISAPaymentServiceImpl implements PaymentService<VISARequestModel, 
             visaResponse.setTransactionId(visaResponseModel.getTransactionId());
 
             visaResponse=visaResponseRepository.save(visaResponse);
+            visaResponseModel.setResponseId(visaResponse.getResponseId());
 
         }else{
             visaResponseModel.setStatusCode(400);
@@ -68,6 +69,8 @@ public class VISAPaymentServiceImpl implements PaymentService<VISARequestModel, 
             visaResponse.setTransactionId(visaResponseModel.getTransactionId());
 
             visaResponse=visaResponseRepository.save(visaResponse);
+            visaResponseModel.setResponseId(visaResponse.getResponseId());
+
         }
 
         return visaResponseModel;
