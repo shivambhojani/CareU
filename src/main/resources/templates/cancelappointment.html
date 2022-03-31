@@ -73,8 +73,8 @@
             <td th:text="${patientFutureAppointments.doctorName}"></td>
             <td th:text="${patientFutureAppointments.consultationType}"></td>
             <td>&nbsp;
-                <input type="hidden" id="appointmentId" name="appointmentId" th:value="${patientFutureAppointments.appointmentId}">
-                <a type="button" class="btn btn-primary" id="cancelAppointment" th:href="@{'/cancelAppointment/' + ${patientFutureAppointments.appointmentId} + '/' + ${patientFutureAppointments.date} + '/' + ${patientFutureAppointments.start_time} + '/' + ${patientFutureAppointments.end_time}}"><span class="fa-solid fa-trash-can"></span> Cancel</a>
+                <input type="hidden" id="appointmentId" name="appointmentId" th:value="${patientFutureAppointments.appointment_id}">
+                <a type="button" class="btn btn-primary" id="cancelAppointment" th:href="@{'/cancelAppointment/' + ${patientFutureAppointments.appointment_id} + '/' + ${patientFutureAppointments.date} + '/' + ${patientFutureAppointments.start_time} + '/' + ${patientFutureAppointments.end_time}}"><span class="fa-solid fa-trash-can"></span> Cancel</a>
             </td>
         </tr>
     </table>
