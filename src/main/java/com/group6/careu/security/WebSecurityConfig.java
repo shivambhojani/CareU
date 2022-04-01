@@ -1,5 +1,8 @@
 package com.group6.careu.security;
 
+import com.group6.careu.controller.CustomOAuth2User;
+import com.group6.careu.service.CustomOAuth2UserService;
+import com.group6.careu.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +16,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
+import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 import javax.servlet.ServletException;
@@ -23,6 +34,8 @@ import java.io.IOException;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+    @Autowired
+    private CustomOAuth2UserService oauthUserService;
 
     @Bean
     public UserDetailsService userDetailsService() {
@@ -37,6 +50,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private LoginSuccessHandler loginSuccessHandler;
 
+    @Autowired
+    private GoogleAuthSuccessHandler googleAuthSuccessHandler;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
@@ -49,40 +65,38 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .successHandler(loginSuccessHandler)
                 .permitAll().and()
                 .logout().permitAll()
+                .invalidateHttpSession(true)
+                .clearAuthentication(true)
+                .logoutSuccessUrl("/");
+
+
+        http.authorizeRequests().antMatchers("/","/index.html","/login","/register/users","/oauth/**")
+                .permitAll().and().oauth2Login()
+                .loginPage("/login")
+                .userInfoEndpoint()
+                .userService(oauthUserService)
                 .and()
-                .rememberMe()
-                .key("ABBfwowrupncmoh_496241767433");
+                .successHandler(new AuthenticationSuccessHandler() {
+                    @Override
+                    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+                                                        Authentication authentication) throws IOException, ServletException {
 
-//                .tokenValiditySeconds(7 * 24 * 60 * 60);
+//                        DefaultOidcUser oauthUser = (DefaultOidcUser) authentication.getPrincipal();
+                        CustomOAuth2User oauthUser = (CustomOAuth2User) authentication.getPrincipal();
 
-
-
-//        http.authorizeRequests().antMatchers("/","/index.html","/login","/register/users","/oauth/**","static/**")
-//                .permitAll().and().oauth2Login()
-//                .loginPage("/login")
-//                .userInfoEndpoint()
-//                .userService(oauthUserService)
-//                .and()
-//                .successHandler(new AuthenticationSuccessHandler() {
-//                    @Override
-//                    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-//                                                        Authentication authentication) throws IOException, ServletException {
-//
-//                        CustomOAuth2User oauthUser = (CustomOAuth2User) authentication.getPrincipal();
-//
-//                        CareuUserDetails userDetails = (CareuUserDetails) userDetailsService().loadUserByUsername(oauthUser.getEmail());
-//                        String redirectURL = request.getContextPath();
-//                        if (userDetails.getRole().equalsIgnoreCase("doctor")) {
-//                            redirectURL = "/doctor";
-//                        } else if(userDetails.getRole().equalsIgnoreCase("admin")) {
-//                            redirectURL = "/admin";
-//                        } else{
-//                            redirectURL = "/patienthomepage";
-//                        }
-//                        response.sendRedirect(redirectURL);
-//                    }
-//                })
-//                .permitAll();
+                        CareuUserDetails userDetails = (CareuUserDetails) userDetailsService().loadUserByUsername(oauthUser.getEmail());
+                        String redirectURL = request.getContextPath();
+                        if (userDetails.getRole().equalsIgnoreCase("doctor")) {
+                            redirectURL = "/doctor";
+                        } else if(userDetails.getRole().equalsIgnoreCase("admin")) {
+                            redirectURL = "/admin";
+                        } else{
+                            redirectURL = "/patienthomepage";
+                        }
+                        response.sendRedirect(redirectURL);
+                    }
+                })
+                .permitAll();
     }
 
     public DaoAuthenticationProvider authenticationProvider() {
