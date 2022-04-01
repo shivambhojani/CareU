@@ -1,97 +1,112 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0">
 
-    <title>Payment</title>
-
-    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.min.css} "/>
-    <link th:rel="stylesheet" th:href="@{/assets/bootstrap-select/css/bootstrap-select.min.css} "/>
-    <link th:rel="stylesheet" th:href="@{/assets/bootstrap-select-country/css/bootstrap-select-country.min.css} "/>
-    <link th:rel="stylesheet" th:href="@{/assets/bootstrap-select-country/css/bootstrap4-support.css} "/>
-    <link th:rel="stylesheet" th:href="@{/assets/container.css} "/>
-    <link th:rel="stylesheet" th:href="@{/assets/creditCardTypeDetector.css} "/>
+    <title>Doctors</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/navigationStyles.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/fontawesome/all.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}"/>
+    <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
 </head>
-<body>
-<div class="container-fluid">
-    <div>
-        <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
-            <a class="navbar-brand" th:href="@{/}">
-                <h2>CareU</h2>
-            </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-        </nav>
-    </div>
-    <div>
-        <h2 class="text-center mt-5">Payment</h2>
-    </div>
-
-    <!--The 2 div side by side-->
-    <div class="float-container">
-
-        <div class="float-child">
-            <div class="green">Bill</div>
-            <div class="border border-secondary rounded p-3">
-
+<body style="background: #EEF0F8;">
+<div class="container-fluid p-0">
+    <nav class="navbar navbar-expand-lg bg-navbar text-light">
+        <a class="navbar-brand text-light m-0" href="/">
+            <img src="careu_white.svg" alt="App logo" height="50" width="200">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </nav>
+</div>
+<div class="container-fluid p-3">
+    <div class="card card-custom text-center m-2">
+        <div class="card-header  p-0 pl-3">
+            <div class="card-title">
+                <h3 class="card-label">Payment</h3>
             </div>
         </div>
-
-        <div class="float-child">
-            <form th:action="@{/payment-latest}" method="post" style="max-width: 700px; margin: 0 auto" th:object="${transactionsModel}">
-                <div class="border border-secondary rounded p-3">
-                    <div class="form-group row">
-
-                        <label class="col-sm-4 col-form-label">Email</label>
-                        <div class="col-sm-8">
-                            <label>
-                                <input type="text" class="form-control" th:field="*{email}" required minlength="2" maxlength="45"  />
-                            </label>
-                        </div>
-
-                        <label class="col-sm-4 col-form-label">Card Information</label>
-                        <div class="col-sm-8">
-                            <label>
-                                <input type="text" id="checkout_card_number" pattern="[0-9]*" class="form-control" th:field="*{cardNumber}" placeholder="1234 1234 1234 1234" required minlength="15" maxlength="16"  />
-                                <ul class="card_logos">
-                                    <li class="card_visa">Visa</li>
-                                    <li class="card_amex">American Express</li>
-                                </ul>
-                                <input type="text" class="form-control" th:field="*{expiryMonth}" placeholder="MM" required minlength="2" maxlength="45"  />
-                                <input type="text" class="form-control" th:field="*{expiryYear}" placeholder="YY" required minlength="2" maxlength="45"  />
-                                <input type="text" class="form-control" th:field="*{cvv}" placeholder="CVV" required minlength="2" maxlength="45"  />
-                            </label>
-                        </div>
-
-                        <label class="col-sm-4 col-form-label">Name on card</label>
-                        <div class="col-sm-8">
-                            <label>
-                                <input type="text" class="form-control" th:field="*{fullName}" required minlength="2" maxlength="45"  />
-                            </label>
-                        </div>
-
-                        <label class="col-sm-4 col-form-label">Country or region</label>
-                        <div class="col-sm-8">
-                            <label>
-                                <select class="form-control selectpicker countrypicker" id="country" th:field="*{country}" data-flag="true">
-                                </select>
-                                <input type="text" class="form-control" th:field="*{zipcode}" placeholder="ZIP" required minlength="2" maxlength="45"  />
-                            </label>
-                        </div>
-
-                        <div class="text-center">
-                            <input type="submit" value="Pay" class="btn btn-primary m-3" />
-                            <input type="button" value="Cancel" class="btn btn-secondary" id="buttonCancel" />
-                        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-6">
+                    <div class="green">Bill</div>
+                    <div class="border border-secondary rounded p-3">
                     </div>
                 </div>
-            </form>
+                <div class="col-6">
+                    <form th:action="@{/payment-latest}" method="post" style="max-width: 700px; margin: 0 auto"
+                          th:object="${transactionsModel}">
+                        <div class="border border-secondary rounded p-3">
+                            <div class="form-group row">
+                                <label class="col-sm-4 col-form-label">Email</label>
+                                <div class="col-sm-8">
+                                    <label>
+                                        <input type="text" class="form-control" th:field="*{email}" required
+                                               minlength="2"
+                                               maxlength="45"/>
+                                    </label>
+                                </div>
+                                <label class="col-sm-4 col-form-label">Card Information</label>
+                                <div class="col-sm-8">
+                                    <label>
+                                        <input type="text" id="checkout_card_number" pattern="[0-9]*"
+                                               class="form-control"
+                                               th:field="*{cardNumber}" placeholder="1234 1234 1234 1234" required
+                                               minlength="15" maxlength="16"/>
+                                        <ul class="card_logos">
+                                            <li class="card_visa">Visa</li>
+                                            <li class="card_amex">American Express</li>
+                                        </ul>
+                                        <input type="text" class="form-control" th:field="*{expiryMonth}"
+                                               placeholder="MM"
+                                               required minlength="2" maxlength="45"/>
+                                        <input type="text" class="form-control" th:field="*{expiryYear}"
+                                               placeholder="YY"
+                                               required minlength="2" maxlength="45"/>
+                                        <input type="text" class="form-control" th:field="*{cvv}" placeholder="CVV"
+                                               required
+                                               minlength="2" maxlength="45"/>
+                                    </label>
+                                </div>
+
+                                <label class="col-sm-4 col-form-label">Name on card</label>
+                                <div class="col-sm-8">
+                                    <label>
+                                        <input type="text" class="form-control" th:field="*{fullName}" required
+                                               minlength="2"
+                                               maxlength="45"/>
+                                    </label>
+                                </div>
+
+                                <label class="col-sm-4 col-form-label">Country or region</label>
+                                <div class="col-sm-8">
+                                    <label>
+                                        <select class="form-control selectpicker countrypicker" id="country"
+                                                th:field="*{country}" data-flag="true">
+                                        </select>
+                                        <input type="text" class="form-control" th:field="*{zipcode}" placeholder="ZIP"
+                                               required
+                                               minlength="2" maxlength="45"/>
+                                    </label>
+                                </div>
+
+                                <div class="text-center">
+                                    <input type="submit" value="Pay" class="btn btn-primary m-3"/>
+                                    <input type="button" value="Cancel" class="btn btn-secondary" id="buttonCancel"/>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-
     </div>
-
     <div class="modal fade text-center" id="modalDialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -136,7 +151,6 @@
     $(document).ready(function(){
         $('#checkout_card_number').creditCardTypeDetector({ 'credit_card_logos' : '.card_logos' });
     });
-
 </script>
 </body>
 </html>

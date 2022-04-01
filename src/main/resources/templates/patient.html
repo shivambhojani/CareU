@@ -6,23 +6,23 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0">
 
     <title>Patient</title>
-
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/navigationStyles.css}"/>
     <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
     <link rel="stylesheet" type="text/css" th:href="@{/fontawesome/all.css}"/>
     <link rel="stylesheet" type="text/css" th:href="@{/style.css}"/>
     <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
     <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
 </head>
-<body>
-<div class="container-fluid">
-
+<body style="background: #EEF0F8;">
+<div class="container-fluid p-0">
     <form th:action="@{/logout}" method="post" th:hidden="true" name="logoutForm">
         <input type="submit"/>
     </form>
     <div>
-        <nav class="navbar navbar-expand-lg bg-dark navbar-dark ">
-            <a class="navbar-brand" th:href="@{/}">
-                <h1>CareU</h1>
+        <nav class="navbar navbar-expand-lg bg-navbar text-light">
+            <a class="navbar-brand text-light m-0" href="/">
+                <img src="careu_white.svg" alt="App logo" height="50" width="200">
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar">
                 <span class="navbar-toggler-icon"></span>
@@ -59,88 +59,114 @@
         </nav>
     </div>
 </div>
-<br>
-<div>
-    <h2 class="text-left">Hi, </h2>
-    <h2 class="text-left" sec:authentication="principal.fullname"></h2>
+<div class="container-fluid p-3">
+    <a id="HomePage" class="btn btn-primary mb-3" th:href="@{/searchDoctors}"><i class="fa-solid fa-magnifying-glass mr-2"></i>Search Doctors</a>
+    <div class="card card-custom mb-3">
+        <div class="card-header  p-0 pl-3">
+            <div class="card-title">
+                <h3 class="card-label">Today's Appointments</h3>
+            </div>
+        </div>
+        <!--begin::Body-->
+        <div class="card-body">
+            <tr th:if="${#lists.isEmpty(patientTodaysAppointments)}">
+                <td>No Appointments.</td>
+            </tr>
+            <table class="table" th:if="${not #lists.isEmpty(patientTodaysAppointments)}">
+                <thead>
+                <tr>
+                    <th scope="row">Date</th>
+                    <th scope="row">Start Time</th>
+                    <th scope="row">End Time</th>
+                    <th scope="row">Doctor</th>
+                    <th scope="row">Consultation Type</th>
+                </tr>
+                </thead>
+                <tbody>
 
-    <!--        <h1 class="fw-bold text-center mt-5">CareU Landing</h1>-->
-</div>
-<br>
-<div>
-    <button><a id="HomePage" th:href="@{/searchDoctors}">Search Doctors</a></button>
-</div>
-<br>
-<h3>Today's Appointments</h3>
-<table class="table table-striped">
-    <thead class="thead-dark">
-    <th scope="row">Date</th>
-    <th scope="row">Start Time</th>
-    <th scope="row">End Time</th>
-    <th scope="row">Doctor</th>
-    <th scope="row">Consulation Type</th>
-    </thead>
+                <tr th:each="patientTodaysAppointments: ${patientTodaysAppointments}">
+                    <td th:text="${patientTodaysAppointments.date}"></td>
+                    <td th:text="${patientTodaysAppointments.start_time}"></td>
+                    <td th:text="${patientTodaysAppointments.end_time}"></td>
+                    <td th:text="${patientTodaysAppointments.doctorName}"></td>
+                    <td th:text="${patientTodaysAppointments.consultationType}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card card-custom mb-3">
+        <div class="card-header  p-0 pl-3">
+            <div class="card-title">
+                <h3 class="card-label">Today's Appointments</h3>
+            </div>
+        </div>
+        <!--begin::Body-->
+        <div class="card-body">
+            <tr th:if="${#lists.isEmpty(patientFutureAppointments)}">
+                <td>No Appointments.</td>
+            </tr>
+            <table class="table" th:if="${not #lists.isEmpty(patientFutureAppointments)}">
+                <thead>
+                <tr>
+                    <th scope="row">Date</th>
+                    <th scope="row">Start Time</th>
+                    <th scope="row">End Time</th>
+                    <th scope="row">Doctor</th>
+                    <th scope="row">Consulation Type</th>
+                </tr>
+                </thead>
+                <tbody>
 
-    <tr th:each="patientTodaysAppointments: ${patientTodaysAppointments}">
+                <tr th:each="patientFutureAppointments: ${patientFutureAppointments}">
+                    <td th:text="${patientFutureAppointments.date}"></td>
+                    <td th:text="${patientFutureAppointments.start_time}"></td>
+                    <td th:text="${patientFutureAppointments.end_time}"></td>
+                    <td th:text="${patientFutureAppointments.doctorName}"></td>
+                    <td th:text="${patientFutureAppointments.consultationType}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card card-custom mb-3">
+        <div class="card-header  p-0 pl-3">
+            <div class="card-title">
+                <h3 class="card-label">Today's Appointments</h3>
+            </div>
+        </div>
+        <!--begin::Body-->
+        <div class="card-body">
+            <tr th:if="${#lists.isEmpty(patientPastAppointments)}">
+                <td>No Appointments.</td>
+            </tr>
+            <table class="table" th:if="${not #lists.isEmpty(patientPastAppointments)}">
+                <thead>
+                <tr>
+                    <th scope="row">Date</th>
+                    <th scope="row">Start Time</th>
+                    <th scope="row">End Time</th>
+                    <th scope="row">Doctor</th>
+                    <th scope="row">Consulation Type</th>
+                    <th scope="row">Feedback</th>
+                </tr>
+                </thead>
+                <tbody>
 
-        <td th:text="${patientTodaysAppointments.date}"></td>
-        <td th:text="${patientTodaysAppointments.start_time}"></td>
-        <td th:text="${patientTodaysAppointments.end_time}"></td>
-        <td th:text="${patientTodaysAppointments.doctorName}"></td>
-        <td th:text="${patientTodaysAppointments.consultationType}"></td>
-    </tr>
-</table>
-
-<br>
-<h3>Future Appointments</h3>
-<table class="table table-striped">
-    <thead class="thead-dark">
-    <th scope="row">Date</th>
-    <th scope="row">Start Time</th>
-    <th scope="row">End Time</th>
-    <th scope="row">Doctor</th>
-    <th scope="row">Consulation Type</th>
-    </thead>
-
-    <tr th:each="patientFutureAppointments: ${patientFutureAppointments}">
-
-        <td th:text="${patientFutureAppointments.date}"></td>
-        <td th:text="${patientFutureAppointments.start_time}"></td>
-        <td th:text="${patientFutureAppointments.end_time}"></td>
-        <td th:text="${patientFutureAppointments.doctorName}"></td>
-        <td th:text="${patientFutureAppointments.consultationType}"></td>
-    </tr>
-</table>
-
-<br>
-<h3>Past Appointments</h3>
-<table class="table table-striped">
-    <thead class="thead-dark">
-    <th scope="row">Date</th>
-    <th scope="row">Start Time</th>
-    <th scope="row">End Time</th>
-    <th scope="row">Doctor</th>
-    <th scope="row">Consulation Type</th>
-    <th scope="row">Feedback</th>
-    </thead>
-
-    <tr th:each="patientPastAppointments: ${patientPastAppointments}">
-
-        <td th:text="${patientPastAppointments.date}"></td>
-        <td th:text="${patientPastAppointments.start_time}"></td>
-        <td th:text="${patientPastAppointments.end_time}"></td>
-        <td th:text="${patientPastAppointments.doctorName}"></td>
-        <td th:text="${patientPastAppointments.consultationType}"></td>
-        <td>
-            <a th:href="@{'/patientFeedback/' + ${patientPastAppointments.appointment_id}}">Feedback</a>
-
-
-        </td>
-    </tr>
-</table>
-
-<div class="fixed-bottom">
-    <p class="text-center">CareU - Copyright &copy; CareU</p>
+                <tr th:each="patientPastAppointments: ${patientPastAppointments}">
+                    <td th:text="${patientPastAppointments.date}"></td>
+                    <td th:text="${patientPastAppointments.start_time}"></td>
+                    <td th:text="${patientPastAppointments.end_time}"></td>
+                    <td th:text="${patientPastAppointments.doctorName}"></td>
+                    <td th:text="${patientPastAppointments.consultationType}"></td>
+                    <td>
+                        <a th:href="@{'/patientFeedback/' + ${patientPastAppointments.appointment_id}}">Feedback</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 
 <script type="text/javascript">

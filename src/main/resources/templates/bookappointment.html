@@ -5,30 +5,34 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0">
 
-    <title>BookAppointment</title>
+    <title>Book Appointment</title>
 
-    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
-    <link th:rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"/>
-    <link th:rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.standalone.min.css"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+    <link th:rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"/>
+    <link th:rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.standalone.min.css"/>
     <link rel="stylesheet" type="text/css" th:href="@{/fontawesome/all.css}"/>
     <link rel="stylesheet" type="text/css" th:href="@{/style.css}"/>
-
+    <link rel="stylesheet" type="text/css" th:href="@{/navigationStyles.css}"/>
     <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
     <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
     <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.1/js/bootstrap-datepicker.min.js" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.15.0/js/mdb.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.1/js/bootstrap-datepicker.min.js"
+            crossorigin="anonymous"></script>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.15.0/js/mdb.min.js"></script>
 </head>
-<body>
-<div class="container-fluid">
+<body style="background: #EEF0F8;">
+<div class="container-fluid p-0">
     <form th:action="@{/logout}" method="post" th:hidden="true" name="logoutForm">
-        <input type="submit" />
+        <input type="submit"/>
     </form>
     <div>
-        <nav class="navbar navbar-expand-lg bg-dark navbar-dark ">
-            <a class="navbar-brand" th:href="@{/}">
-                <h1>CareU</h1>
+        <nav class="navbar navbar-expand-lg bg-navbar text-light">
+            <a class="navbar-brand text-light m-0" href="/">
+                <img src="careu_white.svg" alt="App logo" height="50" width="200">
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar">
                 <span class="navbar-toggler-icon"></span>
@@ -48,58 +52,63 @@
         </nav>
     </div>
 </div>
-<br>
-<br>
-<br>
-<div>
-    <div>
-        <img th:src="@{/images/img.png}" class="img-fluid img-thumbnail" style="margin-left: 40px; width:25%; float: left" alt="RandomPIC"/>
-    </div>
-    <div style="margin-left: 60px; padding-left: 30%">
-        <h5 class="card-title">Name - [[${selectedDoctor.firstName}]] [[${selectedDoctor.lastName}]]</h5>
-        <p>Specialization - [[${selectedDoctor.doctor?.specialization}]]
-            <br>
-            Contact - [[${selectedDoctor.doctor.doctorContact}]]
-        </p>
-        <form th:object="${appointment}" th:action="@{/book}" method="post">
-            <div class="form-group">
-                <div class="col-md-4 mt-5">
-                    <div class="input-group date">
-                        <label col-sm-2 col-form-label for="date1">Date : </label>
-                        <input type="date" class="form-control" id="date1" autocomplete="off" th:field="*{appointment_date}" />
-                    </div>
+<div class="container-fluid p-3">
+    <div class="card card-custom text-center m-2">
+        <div class="card-header  p-0 pl-3">
+            <div class="card-title">
+                <h3 class="card-label">Book Appointment</h3>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-5">
+                    <img th:src="@{/images/img.png}" class="img-fluid img-thumbnail m-2" alt="RandomPIC" height="300" width="300"/>
+                </div>
+                <div class="col-6">
+                    <h5 class="card-title">Name - [[${selectedDoctor.firstName}]] [[${selectedDoctor.lastName}]]</h5>
+                    <p class="mb-1"><b>Specialization</b> : [[${selectedDoctor.doctor?.specialization}]]
+                    </p>
+                    <p class="mb-1">
+                        <b>Contact</b> : [[${selectedDoctor.doctor.doctorContact}]]
+                    </p>
+                    <form th:object="${appointment}" th:action="@{/book}" method="post">
+                        <div class="form-group">
+                            <label for="date1">Appointment Date</label>
+                            <input type="date" class="form-control" id="date1" autocomplete="off"
+                                   th:field="*{appointment_date}" placeholder="Select Date"/>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="appointmentType">Appointment Type</label><br>
+                                    <select th:field="*{consulationType}" id="appointmentType" class="form-control">
+                                        <option th:value="online" th:text="online"></option>
+                                        <option th:value="inPerson" th:text="inPerson"></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="apptList">Appointment Time</label><br>
+                                    <select th:field="*{time}" id="apptList" class="form-control">
+                                        <option value="0">Select Appointment Time</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <input type="hidden" id="doctor_id" name="doctor_id"
+                               th:value="${selectedDoctor.doctor?.doctor_id}">
+                        <input type="submit" value="Book" class="btn btn-primary m-3"/>
+
+                    </form>
                 </div>
             </div>
-            <!--                <div class="form-group">-->
-            <!--                    <label for="startDate" style="float: left">Start Date</label>-->
-            <!--                    <div class="input-group date" style="width: 40%; margin-left: 16%" data-date-format="dd/mm/yyyy">-->
-            <!--                        <input class="form-control" th:field="*{appt_date}" type="text" id="startDate" placeholder="dd/mm/yyyy" />-->
-            <!--                        <div class="input-group-addon input-group-append">-->
-            <!--                            <span class="input-group-text"><i class="fa fa-calendar" aria-hidden="true"></i></span>-->
-            <!--                        </div>-->
-            <!--                    </div>-->
-            <!--                </div>-->
-            <div class="form-group">
-                <label >Appointment Type : </label>
-                <select th:field="*{consulationType}">
-                    <option th:value="online" th:text="online"></option>
-                    <option th:value="inPerson" th:text="inPerson"></option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label >Appointment Time : </label>
-                <select th:field="*{time}" id="apptList">
-                    <option value="0">Select Appointment Time</option>
-
-                    <!--                    <option th:each="appt : ${availTimes}" th:value="${appt.startTime.toString + ' to ' +appt.endTime.toString}" th:text="${appt.startTime.toString + ' to ' +appt.endTime.toString}"></option>-->
-                </select>
-            </div>
-            <input type="hidden" id="doctor_id" name="doctor_id" th:value="${selectedDoctor.doctor?.doctor_id}">
-            <input type="submit" value="Book Appointment" class="btn btn-primary m-3" />
-        </form>
+        </div>
     </div>
 
-    <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -137,7 +146,7 @@ $(document).ready(function() {
         customizeDropDownMenu();
     });
 
-    $('#date1').on('change', function(){
+    $('#date1').on('blur', function(){
             var date = document.getElementById('date1').value;
             console.log(date);
             var available_date_arr=[];
@@ -177,6 +186,8 @@ $(document).ready(function() {
         });
 
         });
+
+
 
 </script>
 </body>
