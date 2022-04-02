@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -18,4 +19,5 @@ public class DoctorAppointmentModel {
     private Time end_time;
     private String consultationType;
     private String medications;
+    private UUID appointment_id;
 }

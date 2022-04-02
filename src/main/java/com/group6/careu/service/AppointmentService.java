@@ -6,6 +6,7 @@ import com.group6.careu.model.PatientAppointmentModel;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.UUID;
 
 public interface AppointmentService {
 
@@ -16,10 +17,18 @@ public interface AppointmentService {
     List<Appointment> getPatientFutureAppointments(Integer id, Date date);
 
     List<Appointment> getPatientPastAppointments(Integer id, Date date);
-	
+
+    Appointment getAppointmentsByAppointmentId(UUID appointment_id);
+
+    Integer updatePatientFeedback(UUID appointment_id, String patientFeedback);
+
+    Integer updateMedication(UUID appointment_id, String medications);
+
 	List<Appointment> getDoctorTodaysAppointments(Integer id , Date date);
 
     List<Appointment> getDoctorFutureAppointments(Integer id, Date date);
 
     List<Appointment> getDoctorPastAppointments(Integer id, Date date);
+
+    Appointment deleteAppointmentBasedOnId(String apptId);
 }

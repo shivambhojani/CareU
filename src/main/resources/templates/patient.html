@@ -21,7 +21,7 @@
     </form>
     <div>
         <nav class="navbar navbar-expand-lg bg-dark navbar-dark ">
-            <a class="navbar-brand" th:href="@{/}">
+            <a class="navbar-brand" th:href="@{/patienthomepage}">
                 <h1>CareU</h1>
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar">
@@ -37,10 +37,17 @@
                     </li>
 
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown"
-                           sec:authentication="principal.fullname"></a>
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown">Appointments</a>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" id="profileSettings" th:href="@{/patientProfile}">Profile Settings</a>
+                            <a class="dropdown-item" th:href="@{/cancelAppointment}">Cancel Appointment</a>
+                        </div>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown">[[${patient.firstName}]] [[${patient.lastName}]]</a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" id="profileSettings" th:href="@{/patientProfile}">Profile
+                                Settings</a>
                             <a class="dropdown-item" id="logoutLink" href="">Logout</a>
                         </div>
                     </li>
@@ -53,8 +60,8 @@
 </div>
 <br>
 <div>
-    <h2 class="text-left">Hi, </h2>
-    <h2 class="text-left" sec:authentication="principal.fullname"></h2>
+<!--    <h2 class="text-left">Hi, </h2>-->
+    <h2 class="text-left">Hi, [[${patient.firstName}]] [[${patient.lastName}]]</h2>
 
     <!--        <h1 class="fw-bold text-center mt-5">CareU Landing</h1>-->
 </div>
@@ -64,7 +71,7 @@
 </div>
 <br>
 <h3>Today's Appointments</h3>
-<table class = "table table-striped">
+<table class="table table-striped">
     <thead class="thead-dark">
     <th scope="row">Date</th>
     <th scope="row">Start Time</th>
@@ -85,7 +92,7 @@
 
 <br>
 <h3>Future Appointments</h3>
-<table class = "table table-striped">
+<table class="table table-striped">
     <thead class="thead-dark">
     <th scope="row">Date</th>
     <th scope="row">Start Time</th>
@@ -106,13 +113,14 @@
 
 <br>
 <h3>Past Appointments</h3>
-<table class = "table table-striped">
+<table class="table table-striped">
     <thead class="thead-dark">
     <th scope="row">Date</th>
     <th scope="row">Start Time</th>
     <th scope="row">End Time</th>
     <th scope="row">Doctor</th>
     <th scope="row">Consulation Type</th>
+    <th scope="row">Feedback</th>
     </thead>
 
     <tr th:each="patientPastAppointments: ${patientPastAppointments}">
@@ -122,6 +130,11 @@
         <td th:text="${patientPastAppointments.end_time}"></td>
         <td th:text="${patientPastAppointments.doctorName}"></td>
         <td th:text="${patientPastAppointments.consultationType}"></td>
+        <td>
+            <a th:href="@{'/patientFeedback/' + ${patientPastAppointments.appointment_id}}">Feedback</a>
+
+
+        </td>
     </tr>
 </table>
 
@@ -130,30 +143,29 @@
 </div>
 
 <script type="text/javascript">
-	$(document).ready(function() {
-	$("#logoutLink").on("click", function(e) {
-		e.preventDefault();
-		document.logoutForm.submit();
-	});
+    $(document).ready(function () {
+        $("#logoutLink").on("click", function (e) {
+            e.preventDefault();
+            document.logoutForm.submit();
+        });
 
-	customizeDropDownMenu();
-});
+        customizeDropDownMenu();
+    });
 
-function customizeDropDownMenu() {
-	$(".navbar .dropdown").hover(
-		function() {
-			$(this).find('.dropdown-menu').first().stop(true, true).delay(250).slideDown();
-		},
-		function() {
-			$(this).find('.dropdown-menu').first().stop(true, true).delay(100).slideUp();
-		}
-	);
+    function customizeDropDownMenu() {
+        $(".navbar .dropdown").hover(
+            function () {
+                $(this).find('.dropdown-menu').first().stop(true, true).delay(250).slideDown();
+            },
+            function () {
+                $(this).find('.dropdown-menu').first().stop(true, true).delay(100).slideUp();
+            }
+        );
 
-	$(".dropdown > a").click(function() {
-		location.href = this.href;
-	});
-}
-
+        $(".dropdown > a").click(function () {
+            location.href = this.href;
+        });
+    }
 
 
 </script>

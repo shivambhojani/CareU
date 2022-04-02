@@ -2,6 +2,7 @@ package com.group6.careu.service;
 
 import com.group6.careu.entity.Doctor;
 import com.group6.careu.entity.DoctorAvailability;
+import com.group6.careu.model.AppointmentModel;
 import com.group6.careu.model.DoctorAvailabilityModel;
 import com.group6.careu.repository.DoctorAvailabilityRepository;
 import com.group6.careu.security.CareuUserDetails;
@@ -95,5 +96,25 @@ public class DoctorAvailabilityServiceImpl implements DoctorAvailabilityService{
         }
 
         return list;
+    }
+
+    @Override
+    public List<DoctorAvailability> getAvailableTimesOfDoctor(DoctorAvailabilityModel doctorAvailability) {
+        String available_date = doctorAvailability.getAvailableDate().get(0).replaceFirst("=", "");
+        return doctorAvailabilityRepository.getAvailableTimeOfDoctorBasedOnDate(doctorAvailability.getDoctorId(), Date.valueOf(available_date));
+    }
+
+    @Override
+    public void updateBookedAppointment(AppointmentModel appointmentModel, boolean appointmentBooked) {
+        Time startTime = null;
+        Time endTime = null;
+        if (appointmentModel.getTime().contains("to")) {
+            String[] arr = appointmentModel.getTime().split("to");
+            startTime = Time.valueOf(arr[0].trim());
+            endTime = Time.valueOf(arr[1].trim());
+        } else {
+            startTime = Time.valueOf(appointmentModel.getTime());
+        }
+        doctorAvailabilityRepository.updateBookedAppointment(appointmentModel.getDoctor_id(), appointmentModel.getAppointment_date(), startTime, appointmentBooked);
     }
 }

@@ -71,7 +71,6 @@ class UserServiceImplTest {
     void Save() {
         Doctor doctor = new Doctor();
         doctor.setAge(1);
-        doctor.setAvailabilityList(new ArrayList<>());
         doctor.setDoctorContact(1);
         doctor.setDoctor_id(1);
         doctor.setLicense_number("42");
@@ -97,7 +96,6 @@ class UserServiceImplTest {
 
         Doctor doctor1 = new Doctor();
         doctor1.setAge(1);
-        doctor1.setAvailabilityList(new ArrayList<>());
         doctor1.setDoctorContact(1);
         doctor1.setDoctor_id(1);
         doctor1.setLicense_number("42");
@@ -139,7 +137,6 @@ class UserServiceImplTest {
 
         Doctor doctor = new Doctor();
         doctor.setAge(1);
-        doctor.setAvailabilityList(new ArrayList<>());
         doctor.setDoctorContact(1);
         doctor.setDoctor_id(1);
         doctor.setLicense_number("42");
@@ -169,7 +166,7 @@ class UserServiceImplTest {
     void isEmailUnique() {
         Doctor doctor = new Doctor();
         doctor.setAge(1);
-        doctor.setAvailabilityList(new ArrayList<>());
+//        doctor.setAvailabilityList(new ArrayList<>());
         doctor.setDoctorContact(1);
         doctor.setDoctor_id(1);
         doctor.setLicense_number("42");
@@ -231,7 +228,6 @@ class UserServiceImplTest {
     void getByEmail() {
         Doctor doctor = new Doctor();
         doctor.setAge(1);
-        doctor.setAvailabilityList(new ArrayList<>());
         doctor.setDoctorContact(1);
         doctor.setDoctor_id(1);
         doctor.setLicense_number("42");

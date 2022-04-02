@@ -93,10 +93,15 @@
 			<artifactId>webjars-locator-core</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>org.apache.pdfbox</groupId>
+			<artifactId>pdfbox</artifactId>
+			<version>2.0.24</version>
+		</dependency>
+
 
 
 	</dependencies>
-
 	<build>
 		<plugins>
 			<plugin>
@@ -116,7 +121,8 @@
 				<artifactId>maven-resources-plugin</artifactId>
 				<version>3.1.0</version>
 			</plugin>
-		</plugins>
+
+        </plugins>
 	</build>
 
 	<profiles>

@@ -27,6 +27,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 
 @Controller
@@ -67,7 +68,6 @@ public class PatientController {
         patientFutureAppointmentModels = getFutureAppointments(user, user.getPatient().getPatient_id(), dateToday);
         patientPastAppointmentModels = getPastAppointments(user, user.getPatient().getPatient_id(), dateToday);
 
-
         model.addAttribute("patientTodaysAppointments", patientTodaysAppointmentModels);
         model.addAttribute("patientPastAppointments", patientPastAppointmentModels);
         model.addAttribute("patientFutureAppointments", patientFutureAppointmentModels);
@@ -95,6 +95,7 @@ public class PatientController {
         return "profile_patient";
     }
 
+
     @PostMapping("/updatePatient")
     public String updatePatient(@AuthenticationPrincipal CareuUserDetails loggedUser, PatientSettingsModel patientSettingsModel,
                                 RedirectAttributes redirectAttributes) {
@@ -109,11 +110,50 @@ public class PatientController {
         String gender = patientSettingsModel.getGender();
         String disease = patientSettingsModel.getDisease();
 
+        Integer i = patientRepository.updatePatientData(userId, firstName, lastName, phone, gender);
+        Integer j = patientRepository.updatePatientDatainPatient(loggedUser.getPatientId(), disease);
 
-        patientRepository.updatePatientData(userId, firstName, lastName, phone, gender);
-        patientRepository.updatePatientDatainPatient(loggedUser.getPatientId(), disease);
+        if (i == 1 && j == 1) {
+            redirectAttributes.addFlashAttribute("success", "Details Updated Successfully.");
+        }
 
         return "redirect:/patientProfile";
+    }
+
+    @PostMapping("/updatePatientFeedback/{appointment_id}")
+    public String postPatientFeedback(@PathVariable(name = "appointment_id") UUID appointment_id, PatientAppointmentModel patientAppointmentModel,
+                                      RedirectAttributes redirectAttributes) {
+
+        String patientFeedback = patientAppointmentModel.getPatientFeedback();
+        Integer i = appointmentServiceImpl.updatePatientFeedback(patientAppointmentModel.getAppointment_id(), patientFeedback);
+        if (i == 1) {
+            redirectAttributes.addFlashAttribute("success", "FeedBack Submitted Successfully.");
+        }
+        return "redirect:/patientFeedback/" + appointment_id;
+
+    }
+
+    @GetMapping(path = "/patientFeedback/{appointment_id}")
+    public String getAppointmentDetails(@PathVariable(name = "appointment_id") UUID appointment_id, Model model) {
+        PatientAppointmentModel patientAppointmentModelsByID = new PatientAppointmentModel();
+        Appointment singleAppointmentbyID = appointmentServiceImpl.getAppointmentsByAppointmentId(appointment_id);
+
+        patientAppointmentModelsByID.setAppointment_id(appointment_id);
+        patientAppointmentModelsByID.setPatient_id(singleAppointmentbyID.getPatient().getPatient_id());
+
+        int doctorId = singleAppointmentbyID.getDoctor().getDoctor_id();
+        User u = repository.getUserByDoctorId(doctorId);
+        patientAppointmentModelsByID.setDoctorName(u.getFirstName() + " " + u.getLastName());
+
+        patientAppointmentModelsByID.setDate(singleAppointmentbyID.getAppointment_date());
+        patientAppointmentModelsByID.setConsultationType(singleAppointmentbyID.getConsulationType());
+        patientAppointmentModelsByID.setStart_time(singleAppointmentbyID.getStartTime());
+        patientAppointmentModelsByID.setEnd_time(singleAppointmentbyID.getEndTime());
+        patientAppointmentModelsByID.setPatientFeedback(singleAppointmentbyID.getPatientFeedback());
+        patientAppointmentModelsByID.setMedications(singleAppointmentbyID.getMedications());
+
+        model.addAttribute("appointmentModel", patientAppointmentModelsByID);
+        return "appointmentfeedback";
     }
 
     public List<PatientAppointmentModel> getTodaysAppointments(User user, Integer patientId, Date todaysDate) {
@@ -137,13 +177,13 @@ public class PatientController {
         return patientFurtureAppointmentModels;
     }
 
-    public List<PatientAppointmentModel> fetchAppointmentDetails(List<Appointment> appointments)
-    {
+    public List<PatientAppointmentModel> fetchAppointmentDetails(List<Appointment> appointments) {
         List<PatientAppointmentModel> patientAppointmentModels = new ArrayList<>();
         for (int i = 0; i < appointments.size(); i++) {
             PatientAppointmentModel p = new PatientAppointmentModel();
             int doctorId = appointments.get(i).getDoctor().getDoctor_id();
             User u = repository.getUserByDoctorId(doctorId);
+            p.setAppointment_id(appointments.get(i).getAppointmentId());
             p.setDoctorName(u.getFirstName() + " " + u.getLastName());
             p.setMedications(appointments.get(i).getMedications());
             p.setConsultationType(appointments.get(i).getConsulationType());
