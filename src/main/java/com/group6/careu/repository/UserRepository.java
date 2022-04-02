@@ -20,7 +20,7 @@ public interface UserRepository extends CrudRepository<User, Integer> {
     @Modifying
     public void updateEnabledStatus(Integer id, boolean enabled);
 
-    @Query(value = "SELECT * from users u where u.doctor_id=:doctor_id", nativeQuery = true)
+    @Query("FROM User WHERE id = :doctor_id")
     public User getUserByDoctorId(@Param("doctor_id") int doctor_id);
 
     @Query(value = "SELECT * from users u where u.role=:role", nativeQuery = true)

@@ -110,7 +110,6 @@ public class PatientController {
         String gender = patientSettingsModel.getGender();
         String disease = patientSettingsModel.getDisease();
 
-
         Integer i = patientRepository.updatePatientData(userId, firstName, lastName, phone, gender);
         Integer j = patientRepository.updatePatientDatainPatient(loggedUser.getPatientId(), disease);
 

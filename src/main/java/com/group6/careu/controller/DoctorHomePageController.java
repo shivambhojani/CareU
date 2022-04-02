@@ -9,6 +9,7 @@ import com.group6.careu.repository.UserRepository;
 import com.group6.careu.security.CareuUserDetails;
 import com.group6.careu.service.AppointmentService;
 import com.group6.careu.service.DoctorService;
+import com.group6.careu.service.DoctorServiceImpl;
 import com.group6.careu.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -33,7 +34,7 @@ public class DoctorHomePageController {
     UserService userService;
 
     @Autowired
-    DoctorService doctorService;
+    DoctorServiceImpl doctorServiceImpl;
 
     @Autowired
     UserRepository userRepository;
@@ -51,8 +52,8 @@ public class DoctorHomePageController {
         String email = loggedUser.getUsername();
         User user = userService.getByEmail(email);
         Integer userId = user.getId();
-        user = doctorService.getDoctorById(userId);
-        System.out.println("User: "+user);
+        user = doctorServiceImpl.getDoctorById(userId);
+        System.out.println("User: "+ user);
         model.addAttribute("doctor", user);
 
         List<DoctorAppointmentModel> doctorTodaysAppointmentModels;
@@ -63,6 +64,7 @@ public class DoctorHomePageController {
         LocalDateTime now = LocalDateTime.now();
         Date dateToday = Date.valueOf(dtf.format(now));
         System.out.println("Today's date: "+dateToday);
+
 
 
         doctorTodaysAppointmentModels = getTodaysAppointments(user, user.getDoctor().getDoctor_id(), dateToday);

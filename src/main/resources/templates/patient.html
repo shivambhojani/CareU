@@ -21,7 +21,7 @@
     </form>
     <div>
         <nav class="navbar navbar-expand-lg bg-dark navbar-dark ">
-            <a class="navbar-brand" th:href="@{/}">
+            <a class="navbar-brand" th:href="@{/patienthomepage}">
                 <h1>CareU</h1>
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar">
@@ -44,8 +44,7 @@
                     </li>
 
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown"
-                           sec:authentication="principal.fullname"></a>
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown">[[${patient.firstName}]] [[${patient.lastName}]]</a>
                         <div class="dropdown-menu">
                             <a class="dropdown-item" id="profileSettings" th:href="@{/patientProfile}">Profile
                                 Settings</a>
@@ -61,8 +60,8 @@
 </div>
 <br>
 <div>
-    <h2 class="text-left">Hi, </h2>
-    <h2 class="text-left" sec:authentication="principal.fullname"></h2>
+<!--    <h2 class="text-left">Hi, </h2>-->
+    <h2 class="text-left">Hi, [[${patient.firstName}]] [[${patient.lastName}]]</h2>
 
     <!--        <h1 class="fw-bold text-center mt-5">CareU Landing</h1>-->
 </div>
