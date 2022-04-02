@@ -2,7 +2,6 @@ package com.group6.careu.security;
 
 import com.group6.careu.controller.CustomOAuth2User;
 import com.group6.careu.service.CustomOAuth2UserService;
-import com.group6.careu.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,14 +15,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
-import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 import javax.servlet.ServletException;
@@ -34,8 +25,7 @@ import java.io.IOException;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    @Autowired
-    private CustomOAuth2UserService oauthUserService;
+    private CustomOAuth2UserService oauthUserService = new CustomOAuth2UserService();
 
     @Bean
     public UserDetailsService userDetailsService() {
@@ -49,9 +39,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private LoginSuccessHandler loginSuccessHandler;
-
-    @Autowired
-    private GoogleAuthSuccessHandler googleAuthSuccessHandler;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -81,7 +68,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                                         Authentication authentication) throws IOException, ServletException {
 
-//                        DefaultOidcUser oauthUser = (DefaultOidcUser) authentication.getPrincipal();
                         CustomOAuth2User oauthUser = (CustomOAuth2User) authentication.getPrincipal();
 
                         CareuUserDetails userDetails = (CareuUserDetails) userDetailsService().loadUserByUsername(oauthUser.getEmail());
@@ -91,7 +77,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         } else if(userDetails.getRole().equalsIgnoreCase("admin")) {
                             redirectURL = "/admin";
                         } else{
-                            redirectURL = "/patienthomepage";
+                            redirectURL = "/patient";
                         }
                         response.sendRedirect(redirectURL);
                     }

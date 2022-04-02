@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
 /**
  * Created by Bijitashya on 03, 2022
@@ -38,10 +39,10 @@ public class AuthController {
 
     @PostMapping("/register/user")
     @ResponseBody
-    public String saveUser(User user, RedirectAttributes redirectAttributes) {
+    public RedirectView saveUser(User user, RedirectAttributes redirectAttributes) {
         userServiceImpl.save(user);
         redirectAttributes.addFlashAttribute("message", "Registration Successful, Please login to continue.");
-        return "redirect:/login";
+       return new RedirectView("/login", true);
     }
 
     @GetMapping("/login")
