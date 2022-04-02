@@ -26,7 +26,7 @@ public class DoctorAvailabilityController {
         System.out.println("available date: " + availableDate);
 
         doctorAvailabilityService.saveAvailability(availableDate);
-        return new ModelAndView("redirect:/doctor");
+        return new ModelAndView("redirect:/doctorhomepage");
     }
 
 }

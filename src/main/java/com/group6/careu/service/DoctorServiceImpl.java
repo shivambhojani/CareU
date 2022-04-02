@@ -48,4 +48,11 @@ public class DoctorServiceImpl implements DoctorService{
 
         d = doctorProfileRepository.save(doctor);
     }
+
+    @Override
+    public Optional<Doctor> getDoctorDetailsById(Integer id) {
+        return doctorProfileRepository.findById(id);
+    }
+
+
 }

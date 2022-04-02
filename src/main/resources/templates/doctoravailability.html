@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta http-equiv="Content-Type" content="application/x-www-form-urlencoded;charset=UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0">
@@ -17,24 +18,43 @@
 </head>
 <body>
 <div class="container-fluid">
+    <form th:action="@{/logout}" method="post" th:hidden="true" name="logoutForm">
+        <input type="submit" />
+    </form>
     <div>
         <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
-            <a class="navbar-brand" th:href="@{/}">
-                <h2>CareU</h2>
+            <a class="navbar-brand" th:href="@{/doctorhomepage}">
+                <h1>CareU</h1>
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar">
                 <span class="navbar-toggler-icon"></span>
             </button>
+            <div class="collapse navbar-collapse" id="topNavbar">
+                <ul class="navbar-nav ml-auto">
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown"
+                           sec:authentication="principal.fullname"></a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" id="profileSettings" th:href="@{/doctorProfile}">Profile
+                                Settings</a>
+                            <a class="dropdown-item" id="logoutLink" href="">Logout</a>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
 
         </nav>
     </div>
+
     <div>
         <h2 class="text-center mt-5">Save Your Availability</h2>
     </div>
 
     <label for="availabilitydate">Available Date:</label>
     <div class="input-group date" data-date-format="dd/mm/yyyy">
-        <input class="form-control" type="text"  id="availabilitydate" placeholder="dd/mm/yyyy" />
+        <input class="form-control" type="text"  id="availabilitydate" placeholder="dd/mm/yyyy" required/>
         <div class="input-group-addon input-group-append">
             <span class="input-group-text"><i class="fa fa-calendar" aria-hidden="true"></i></span>
         </div>
@@ -43,7 +63,7 @@
     <label for="starttime">Start Time:</label>
     <div class="input-group date" id="start_time">
         <input type="text" id="starttime" placeholder="Time" class="form-control"
-        />
+        required/>
         <div class="input-group-addon input-group-append">
             <div class="input-group-text">
                 <i class="fa fa-clock-o"></i>
@@ -54,7 +74,7 @@
     <label for="endtime">End Time:</label>
     <div class="input-group date" id="end_time">
         <input type="text" id="endtime" placeholder="Time" class="form-control"
-        />
+        required/>
         <div class="input-group-addon input-group-append">
             <div class="input-group-text">
                 <i class="fa fa-clock-o"></i>
@@ -70,6 +90,7 @@
     <div class="container">
         <input class="btn btn-primary m-3" type="button" onclick="saveAvailability()" value="Add">
         <button id="saveTimes" class="btn btn-primary m-3" type="submit">Save Availability</button>
+        <a class="btn btn-secondary" th:href="@{/doctorhomepage}">Cancel</a>
         <table class="table">
             <thead>
             <tr>
@@ -156,44 +177,49 @@
         var starttime = document.getElementById('starttime');
         var endtime = document.getElementById('endtime');
         var availabilitydate = document.getElementById('availabilitydate');
-        start_time_arr.push(starttime.value);
-        end_time_arr.push(endtime.value);
-        available_date_arr.push(availabilitydate.value);
-        starttime.value = '';
-        endtime.value = '';
 
-        var table_row = "";
-        for (var i = 0; i < available_date_arr.length; i++) {
-            table_row += "<tr>";
-            table_row += "<td>" + available_date_arr[i] + "</td>" + "<td>" + start_time_arr[i] + "</td>" + "<td>" + end_time_arr[i] + "</td>";
-            table_row += "<td><input id=\"delete_btn\" type=\"button\" value=\"Delete\"></td>";
-            table_row += "</tr>";
+        if(starttime.value.toString().length > 0 && endtime.value.toString().length>0 && availabilitydate.value.toString().length>0){
+            start_time_arr.push(starttime.value);
+            end_time_arr.push(endtime.value);
+            available_date_arr.push(availabilitydate.value);
+            starttime.value = '';
+            endtime.value = '';
+
+            var table_row = "";
+            for (var i = 0; i < available_date_arr.length; i++) {
+                table_row += "<tr>";
+                table_row += "<td>" + available_date_arr[i] + "</td>" + "<td>" + start_time_arr[i] + "</td>" + "<td>" + end_time_arr[i] + "</td>";
+                table_row += "<td><input id=\"delete_btn\" type=\"button\" value=\"Delete\"></td>";
+                table_row += "</tr>";
+            }
+            document.getElementById("table_body").innerHTML = table_row;
+
+            console.log(start_time_arr);
+            console.log(end_time_arr);
+            console.log(available_date_arr)
+
+            $('input[id="delete_btn"]').click(function(e){
+                var row=$(this).closest("tr");
+
+                var date=row.find("td:eq(0)").text(); // get current row 1st TD value
+                var start_time=row.find("td:eq(1)").text(); // get current row 2nd TD
+                var end_time=row.find("td:eq(2)").text(); // get current row 3rd TD
+
+                var date_index = available_date_arr.indexOf(date);
+                available_date_arr.splice(date_index, 1);
+
+                var start_time_index = start_time_arr.indexOf(start_time);
+                start_time_arr.splice(start_time_index, 1)
+
+                var end_time_index = end_time_arr.indexOf(end_time);
+                end_time_arr.splice(end_time_index, 1)
+
+                row.remove()
+
+            })
+        }else{
+            window.alert("Hey! All 3 fields are required here.");
         }
-        document.getElementById("table_body").innerHTML = table_row;
-
-        console.log(start_time_arr);
-        console.log(end_time_arr);
-        console.log(available_date_arr)
-
-        $('input[id="delete_btn"]').click(function(e){
-            var row=$(this).closest("tr");
-
-            var date=row.find("td:eq(0)").text(); // get current row 1st TD value
-            var start_time=row.find("td:eq(1)").text(); // get current row 2nd TD
-            var end_time=row.find("td:eq(2)").text(); // get current row 3rd TD
-
-            var date_index = available_date_arr.indexOf(date);
-            available_date_arr.splice(date_index, 1);
-
-            var start_time_index = start_time_arr.indexOf(start_time);
-            start_time_arr.splice(start_time_index, 1)
-
-            var end_time_index = end_time_arr.indexOf(end_time);
-            end_time_arr.splice(end_time_index, 1)
-
-            row.remove()
-
-        })
     }
     var start_time_arr = [];
     var end_time_arr= [];
@@ -201,31 +227,63 @@
 
 
     $("#saveTimes").click(function () {
-        console.log("debugging")
-        var dataToSend = JSON.stringify({
-            "availableDate": available_date_arr,
-            "startTime": start_time_arr,
-            "endTime": end_time_arr,
-            "doctorId": null
-        })
-        console.log(dataToSend)
 
-        $.ajax({
-            url: "doctor-availability",
-            type: "POST",
-            contentType: "application/json",
-            dataType: "json",
-            data: dataToSend,
-            complete: function( response ) {
-                // do something
-                window.location.href='/doctor';
-            },
-            error: function( jqXHR, textStatus, errorThrown ) {
-                // do something
-            }
-        });
+        console.log(available_date_arr.length);
+        console.log(start_time_arr.length);
+        console.log(end_time_arr.length);
+
+        if(available_date_arr.length>0 && start_time_arr.length>0 && end_time_arr.length>0){
+            console.log("debugging")
+            var dataToSend = JSON.stringify({
+                "availableDate": available_date_arr,
+                "startTime": start_time_arr,
+                "endTime": end_time_arr,
+                "doctorId": null
+            })
+            console.log(dataToSend)
+
+            $.ajax({
+                url: "doctor-availability",
+                type: "POST",
+                contentType: "application/json",
+                dataType: "json",
+                data: dataToSend,
+                complete: function( response ) {
+                    // do something
+                    window.location.href='/doctorhomepage';
+                },
+                error: function( jqXHR, textStatus, errorThrown ) {
+                    // do something
+                }
+            });
+        }else{
+            window.alert("Hey! Please enter at least 1 day.");
+        }
+
     });
     // th:action="@{/doctor-availability}"
+    $(document).ready(function() {
+        $("#logoutLink").on("click", function(e) {
+            e.preventDefault();
+            document.logoutForm.submit();
+        })
+        customizeDropDownMenu();
+    });
+
+    function customizeDropDownMenu() {
+        $(".navbar .dropdown").hover(
+            function () {
+                $(this).find('.dropdown-menu').first().stop(true, true).delay(250).slideDown();
+            },
+            function () {
+                $(this).find('.dropdown-menu').first().stop(true, true).delay(100).slideUp();
+            }
+        );
+
+        $(".dropdown > a").click(function () {
+            location.href = this.href;
+        });
+    }
 </script>
 </body>
 </html>

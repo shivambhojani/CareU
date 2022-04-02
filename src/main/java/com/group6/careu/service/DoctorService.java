@@ -15,4 +15,6 @@ public interface DoctorService {
     List<User> getFilteredDoctor(String keyWord);
 
     void saveDoctorInformation(Doctor doctor);
+
+    Optional<Doctor> getDoctorDetailsById(Integer id);
 }

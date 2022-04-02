@@ -33,7 +33,7 @@ public class Doctor {
     @Column(name = "doctor_overview", length = 255)
     private String doctorOverview;
 
-    @Column(name = "doctor_reg_number", length = 10)
+    @Column(name = "doctor_reg_number")
     private String doctorRegNumber;
 
     @Column(name = "doctor_experience", length = 255)

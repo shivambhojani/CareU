@@ -13,6 +13,9 @@
 </head>
 <body>
 <div class="container-fluid">
+    <form th:action="@{/logout}" method="post" th:hidden="true" name="logoutForm">
+        <input type="submit" />
+    </form>
     <div>
         <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
             <a class="navbar-brand" th:href="@{/doctorhomepage}">
@@ -53,7 +56,7 @@
             </div>
             <div class="text-center">
                 <input type="submit" value="Save" class="btn btn-primary m-3" />
-                <input type="button" value="Cancel" class="btn btn-secondary" id="buttonCancel" />
+                <a class="btn btn-secondary" th:href="@{/doctorhomepage}">Cancel</a>
             </div>
         </div>
     </form>
@@ -93,6 +96,29 @@
         $("#modalBody").text(message);
         $("#modalDialog").modal();
 
+    }
+
+    $(document).ready(function() {
+        $("#logoutLink").on("click", function(e) {
+            e.preventDefault();
+            document.logoutForm.submit();
+        })
+        customizeDropDownMenu();
+    });
+
+    function customizeDropDownMenu() {
+        $(".navbar .dropdown").hover(
+            function () {
+                $(this).find('.dropdown-menu').first().stop(true, true).delay(250).slideDown();
+            },
+            function () {
+                $(this).find('.dropdown-menu').first().stop(true, true).delay(100).slideUp();
+            }
+        );
+
+        $(".dropdown > a").click(function () {
+            location.href = this.href;
+        });
     }
 
 </script>
