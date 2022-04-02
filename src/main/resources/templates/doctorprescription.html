@@ -13,7 +13,7 @@
   <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
   <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
 </head>
-<body onload="javascript:checkMedicationsValue()">
+<body>
 <div class="container-fluid">
 
   <form th:action="@{/logout}" method="post" th:hidden="true" name="logoutForm">
@@ -40,7 +40,7 @@
             <a class="nav-link dropdown-toggle" data-toggle="dropdown"
                sec:authentication="principal.fullname"></a>
             <div class="dropdown-menu">
-              <a class="dropdown-item" id="profileSettings" th:href="@{/patientProfile}">Profile
+              <a class="dropdown-item" id="profileSettings" th:href="@{/doctorProfile}">Profile
                 Settings</a>
               <a class="dropdown-item" id="logoutLink" href="">Logout</a>
             </div>
@@ -96,7 +96,7 @@
     </div>
     <div class="text-center">
       <input type="submit" value="Submit" class="btn btn-primary m-3"/>
-      <input type="button" th:href="@{/doctorhomepage}" value="Cancel" class="btn btn-secondary" id="buttonCancel" />
+      <a class="btn btn-secondary" th:href="@{/doctorhomepage}">Cancel</a>
     </div>
   </form>
 </div>
