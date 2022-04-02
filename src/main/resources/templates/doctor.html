@@ -21,7 +21,7 @@
     </form>
     <div>
         <nav class="navbar navbar-expand-lg bg-dark navbar-dark ">
-            <a class="navbar-brand" th:href="@{/}">
+            <a class="navbar-brand" th:href="@{/doctorhomepage}">
                 <h1>CareU</h1>
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar">
@@ -40,7 +40,7 @@
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown"
                            sec:authentication="principal.fullname"></a>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" id="profileSettings" th:href="@{/doctor_profile.html}">Profile Settings</a>
+                            <a class="dropdown-item" id="profileSettings" th:href="@{/doctorProfile}">Profile Settings</a>
                             <a class="dropdown-item" id="logoutLink" href="">Logout</a>
                         </div>
                     </li>

@@ -2,8 +2,11 @@ package com.group6.careu.service;
 
 import com.group6.careu.entity.Doctor;
 import com.group6.careu.entity.User;
+import com.group6.careu.repository.DoctorRepository;
 import com.group6.careu.repository.UserRepository;
+import com.group6.careu.security.CareuUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -16,6 +19,9 @@ public class DoctorServiceImpl implements DoctorService{
 
     @Autowired
     UserRepository doctorRepository;
+
+    @Autowired
+    DoctorRepository doctorProfileRepository;
 
     @Override
     public List<User> getAllDoctor() {
@@ -30,5 +36,16 @@ public class DoctorServiceImpl implements DoctorService{
     @Override
     public List<User> getFilteredDoctor(String keyword) {
         return (List<User>) doctorRepository.getFilteredDoctors("doctor", keyword);
+    }
+
+    @Override
+    public void saveDoctorInformation(Doctor doctor){
+        Doctor d=new Doctor();
+
+        CareuUserDetails userDetails= (CareuUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        doctor.setDoctor_id(userDetails.getId());
+        System.out.println(userDetails.getId());
+
+        d = doctorProfileRepository.save(doctor);
     }
 }
