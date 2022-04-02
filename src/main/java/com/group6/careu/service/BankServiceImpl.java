@@ -12,6 +12,7 @@ import com.group6.careu.repository.BankRepository;
 import com.group6.careu.repository.TransactionsRepository;
 import com.group6.careu.security.CareuUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -91,7 +92,7 @@ public class BankServiceImpl implements BankService{
 
             //System.out.println(response);
             System.out.println("Response Id: "+visaResponseModel.getResponseId());
-            if(visaResponseModel.getStatusCode() == 200){
+            if(visaResponseModel.getStatusCode() == HttpStatus.OK.value()){
                 status=true;
             }else{
                 status=false;
@@ -123,7 +124,7 @@ public class BankServiceImpl implements BankService{
 
             //System.out.println(response);
             System.out.println("Response Id: "+amexResponseModel.getResponseId());
-            if(amexResponseModel.getStatusCode() == 200){
+            if(amexResponseModel.getStatusCode() == HttpStatus.OK.value()){
                 status=true;
             }else{
                 status=false;
@@ -155,7 +156,7 @@ public class BankServiceImpl implements BankService{
 
     @Override
     public void updateTransaction(Transactions transaction,VISAResponseModel response ){
-        if(response.getStatusCode()==200){
+        if(response.getStatusCode()==HttpStatus.OK.value()){
             transaction.setTransactionStatus("Completed");
         }else{
             transaction.setTransactionStatus("Failure");
@@ -174,7 +175,7 @@ public class BankServiceImpl implements BankService{
 
     @Override
     public void updateTransaction(Transactions transaction, AMEXResponseModel response ){
-        if(response.getStatusCode()==200){
+        if(response.getStatusCode()==HttpStatus.OK.value()){
             transaction.setTransactionStatus("Completed");
         }else{
             transaction.setTransactionStatus("Failure");

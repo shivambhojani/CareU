@@ -20,11 +20,11 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
         CareuUserDetails userDetails = (CareuUserDetails) authentication.getPrincipal();
         String redirectURL = request.getContextPath();
        if (userDetails.getRole().equalsIgnoreCase("doctor")) {
-            redirectURL = "doctor";
+            redirectURL = "/doctor";
         } else if(userDetails.getRole().equalsIgnoreCase("admin")) {
             redirectURL = "/admin";
         } else{
-            redirectURL = "/patienthomepage";
+            redirectURL = "/patient";
         }
         response.sendRedirect(redirectURL);
 

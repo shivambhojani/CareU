@@ -7,6 +7,7 @@ import com.group6.careu.repository.AMEXRequestRepository;
 import com.group6.careu.repository.AMEXResponseRepository;
 import com.group6.careu.repository.BankRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -39,7 +40,7 @@ public class AMEXPaymentServiceImpl implements PaymentService<AMEXRequestModel, 
         AMEXResponse amexResponse=new AMEXResponse();
         AMEXResponseModel amexResponseModel=new AMEXResponseModel();
         if(status){
-            amexResponseModel.setStatusCode(200);
+            amexResponseModel.setStatusCode(HttpStatus.OK.value());
             amexResponseModel.setStatusDescription("Success");
             amexResponseModel.setTransactionId(amexRequest.getBankTransactionId());
 
@@ -50,7 +51,7 @@ public class AMEXPaymentServiceImpl implements PaymentService<AMEXRequestModel, 
             amexResponse=amexResponseRepository.save(amexResponse);
 
         }else{
-            amexResponseModel.setStatusCode(400);
+            amexResponseModel.setStatusCode(HttpStatus.BAD_REQUEST.value());
             amexResponseModel.setStatusDescription("Failure");
             amexResponseModel.setTransactionId(amexRequest.getBankTransactionId()); // Foreign Key from request
             System.out.println("In line 63; "+amexResponseModel);
@@ -76,7 +77,6 @@ public class AMEXPaymentServiceImpl implements PaymentService<AMEXRequestModel, 
 
         int id;
 
-        System.out.println(userByCardNumber);
 
         if(amexRequestModel.getCvv() == userByCardNumber.getCvv()){
             if(amexRequestModel.getExpiryYear()== userByCardNumber.getExpiryYear()){
@@ -86,8 +86,10 @@ public class AMEXPaymentServiceImpl implements PaymentService<AMEXRequestModel, 
                     customerAccount=userByCardNumber;
                 }
             }else{
-                if(amexRequestModel.getExpiryMonth()<= userByCardNumber.getExpiryMonth() &&
-                        amexRequestModel.getExpiryYear()<= userByCardNumber.getExpiryYear()){
+                 boolean checkExpiryMonth = amexRequestModel.getExpiryMonth()<= userByCardNumber.getExpiryMonth();
+                 boolean checkExpiryYear = amexRequestModel.getExpiryYear()<= userByCardNumber.getExpiryYear();
+                if(checkExpiryMonth &&
+                        checkExpiryYear){
                     accountCheck= true;
                     id=userByCardNumber.getId();
                     customerAccount=userByCardNumber;
