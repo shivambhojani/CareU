@@ -85,7 +85,7 @@ public class EmailServiceImpl implements EmailService{
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
         helper.setFrom(emailSettings.getMAIL_FROM(), emailSettings.getMAIL_SENDER_NAME());
-        helper.setTo("johnvickyj7@gmail.com");
+        helper.setTo(email);
         helper.setSubject(subject);
         String content = "Please keep the attached pdf for your future reference.";
         helper.setText(content, true);
@@ -95,8 +95,8 @@ public class EmailServiceImpl implements EmailService{
 
     private String getContentStringForBillEmail() {
         CareuUserDetails careuUserDetails = (CareuUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return "<p><b>Hi " + careuUserDetails.getFullname() + "</b></p>" +
-                "<p>Your payment for the appointment has been processed successfully. If you have any queries related to payment of appointment please write to careumail@gmail.com. </p>" +
-                "<p><b>NOTE: </b></p>" + "<p>Please mention your appointment or payment reference id for any queries.</p>";
+        return "Hi " + careuUserDetails.getFullname() +
+                "Your payment for the appointment has been processed successfully. If you have any queries related to payment of appointment please write to careumail@gmail.com." +
+                "NOTE: </b></p>" + "Please mention your appointment or payment reference id for any queries.";
     }
 }

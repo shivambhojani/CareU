@@ -69,12 +69,23 @@ class UserServiceImplTest {
 
     @Test
     void Save() {
+        /*
         Doctor doctor = new Doctor();
         doctor.setAge(1);
         doctor.setDoctorContact(1);
         doctor.setDoctor_id(1);
         doctor.setLicense_number("42");
         doctor.setSpecialization("Specialization");
+        */
+        Doctor doctor = new Doctor();
+        doctor.setDoctorQualification("Sample Qualification");
+        doctor.setDoctorOverview("Sample Overview");
+        doctor.setDoctorLocation("Sample Location");
+        doctor.setDoctorAge(1);
+        doctor.setDoctorSpel("Sample Specialization");
+        doctor.setDoctorExperience("Sample Experience");
+        doctor.setDoctor_id(1);
+        doctor.setDoctorRegNumber("S1");
 
         Patient patient = new Patient();
         patient.setDisease("Disease");
@@ -95,11 +106,21 @@ class UserServiceImplTest {
         when(this.passwordEncoder.encode((CharSequence) any())).thenReturn("secret");
 
         Doctor doctor1 = new Doctor();
+        /*
         doctor1.setAge(1);
         doctor1.setDoctorContact(1);
         doctor1.setDoctor_id(1);
         doctor1.setLicense_number("42");
         doctor1.setSpecialization("Specialization");
+        */
+        doctor1.setDoctorQualification("Sample Qualification");
+        doctor1.setDoctorOverview("Sample Overview");
+        doctor1.setDoctorLocation("Sample Location");
+        doctor1.setDoctorAge(1);
+        doctor1.setDoctorSpel("Sample Specialization");
+        doctor1.setDoctorExperience("Sample Experience");
+        doctor1.setDoctor_id(1);
+        doctor1.setDoctorRegNumber("S1");
 
         Patient patient1 = new Patient();
         patient1.setDisease("Disease");
@@ -136,11 +157,14 @@ class UserServiceImplTest {
         when(this.passwordEncoder.encode((CharSequence) any())).thenReturn("secret");
 
         Doctor doctor = new Doctor();
-        doctor.setAge(1);
-        doctor.setDoctorContact(1);
+        doctor.setDoctorQualification("Sample Qualification");
+        doctor.setDoctorOverview("Sample Overview");
+        doctor.setDoctorLocation("Sample Location");
+        doctor.setDoctorAge(1);
+        doctor.setDoctorSpel("Sample Specialization");
+        doctor.setDoctorExperience("Sample Experience");
         doctor.setDoctor_id(1);
-        doctor.setLicense_number("42");
-        doctor.setSpecialization("Specialization");
+        doctor.setDoctorRegNumber("S1");
 
         Patient patient = new Patient();
         patient.setDisease("Disease");
@@ -165,12 +189,14 @@ class UserServiceImplTest {
     @Test
     void isEmailUnique() {
         Doctor doctor = new Doctor();
-        doctor.setAge(1);
-//        doctor.setAvailabilityList(new ArrayList<>());
-        doctor.setDoctorContact(1);
+        doctor.setDoctorQualification("Sample Qualification");
+        doctor.setDoctorOverview("Sample Overview");
+        doctor.setDoctorLocation("Sample Location");
+        doctor.setDoctorAge(1);
+        doctor.setDoctorSpel("Sample Specialization");
+        doctor.setDoctorExperience("Sample Experience");
         doctor.setDoctor_id(1);
-        doctor.setLicense_number("42");
-        doctor.setSpecialization("Specialization");
+        doctor.setDoctorRegNumber("S1");
 
         Patient patient = new Patient();
         patient.setDisease("Disease");
@@ -227,11 +253,14 @@ class UserServiceImplTest {
     @Test
     void getByEmail() {
         Doctor doctor = new Doctor();
-        doctor.setAge(1);
-        doctor.setDoctorContact(1);
+        doctor.setDoctorQualification("Sample Qualification");
+        doctor.setDoctorOverview("Sample Overview");
+        doctor.setDoctorLocation("Sample Location");
+        doctor.setDoctorAge(1);
+        doctor.setDoctorSpel("Sample Specialization");
+        doctor.setDoctorExperience("Sample Experience");
         doctor.setDoctor_id(1);
-        doctor.setLicense_number("42");
-        doctor.setSpecialization("Specialization");
+        doctor.setDoctorRegNumber("S1");
 
         Patient patient = new Patient();
         patient.setDisease("Disease");

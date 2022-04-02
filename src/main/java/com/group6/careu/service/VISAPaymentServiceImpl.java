@@ -12,6 +12,12 @@ import com.group6.careu.repository.VISAResponseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+
 @Service
 public class VISAPaymentServiceImpl implements PaymentService<VISARequestModel, VISAResponseModel> {
 
@@ -89,16 +95,28 @@ public class VISAPaymentServiceImpl implements PaymentService<VISARequestModel, 
 
         System.out.println(userByCardNumber);
 
-        if(visaRequestModel.getCvv() == userByCardNumber.getCvv()){
-            if(visaRequestModel.getExpiryYear()== userByCardNumber.getExpiryYear()){
-                if(visaRequestModel.getExpiryMonth() <= userByCardNumber.getExpiryMonth()){
+        Date date = new Date();
+        LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        System.out.println("Date Today Month--------------------->"+localDate.getMonthValue());
+        System.out.println("Date Today Year---------------------->"+localDate.getYear());
+
+        int month=localDate.getMonthValue();
+        int year=localDate.getYear()%100;
+
+        if(visaRequestModel.getCvv() == userByCardNumber.getCvv()
+        && visaRequestModel.getExpiryYear()== userByCardNumber.getExpiryYear()
+        && visaRequestModel.getExpiryMonth() == userByCardNumber.getExpiryMonth()){
+            if(visaRequestModel.getExpiryYear()== year ){
+                if(visaRequestModel.getExpiryMonth() <= month &&
+                        visaRequestModel.getAmount() <= userByCardNumber.getAmount()){
                     accountCheck= true;
                     id=userByCardNumber.getId();
                     customerAccount=userByCardNumber;
                 }
             }else{
-                if(visaRequestModel.getExpiryMonth()<= userByCardNumber.getExpiryMonth() &&
-                        visaRequestModel.getExpiryYear()<= userByCardNumber.getExpiryYear()){
+                if(visaRequestModel.getExpiryMonth()<= month &&
+                        visaRequestModel.getExpiryYear()<= year &&
+                        visaRequestModel.getAmount() <= userByCardNumber.getAmount()){
                     accountCheck= true;
                     id=userByCardNumber.getId();
                     customerAccount=userByCardNumber;
