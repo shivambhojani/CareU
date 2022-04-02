@@ -45,9 +45,6 @@ public class Doctor {
     @Column(name = "doctor_location", length = 255)
     private String doctorLocation;
 
-    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "doctor")
-    private List<DoctorAvailability> availabilityList;
-
     /*
     @OneToMany(mappedBy = "doctor_profile", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<DoctorAvailability> availabilityList;
