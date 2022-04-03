@@ -1,6 +1,7 @@
 package com.group6.careu.controller;
 
 import com.group6.careu.Utility;
+import com.group6.careu.constants.ApplicationConstants;
 import com.group6.careu.entity.*;
 import com.group6.careu.model.AppointmentModel;
 import com.group6.careu.model.DoctorAvailabilityModel;
@@ -29,6 +30,10 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+
+/**
+ * Created by Sai Chinthirla on 03, 2022
+ */
 
 @Controller
 public class AppointmentController {
@@ -63,14 +68,12 @@ public class AppointmentController {
         else if (keyword == null || keyword.trim().length()==0){
             doctorList = doctorService.getAllDoctor();
         }
-        //      System.out.println("printing doctor 1" + doctorList.get(0).getDoctor().getLicense_number());
         model.addAttribute("doctorList", doctorList);
-        return "doctorlist";
+        return ApplicationConstants.DOCTOR_LIST_VIEWPAGE;
     }
 
     @GetMapping("/searchDoctors/{doctor_id}")
     public String bookAnAppointment(@PathVariable("doctor_id") Integer doctor_id, Model model) {
-        System.out.println("Doctor id in start" + doctor_id);
         User doctor = doctorService.getUserByDoctor(doctor_id);
         List<DoctorAvailability> availTimes = doctorAvailabilityService.getAllTimes(doctor_id);
         Appointment appointment = new Appointment();
@@ -78,15 +81,12 @@ public class AppointmentController {
         model.addAttribute("appointment", appointmentModel);
         model.addAttribute("selectedDoctor", doctor);
         model.addAttribute("availTimes", availTimes);
-        return "bookappointment";
+        return ApplicationConstants.BOOK_APPOINTMENT_VIEWPAGE;
     }
 
     @RequestMapping(value = "/searchDoctors/get-times", method = RequestMethod.POST)
     public @ResponseBody List<DoctorAvailability> getAppointmentTimesBasedOnDate(@RequestBody DoctorAvailabilityModel doctorAvailability, Model model) {
-        System.out.println("selected appt date: " + doctorAvailability.getAvailableDate().get(0) + " wowow");
         String date = doctorAvailability.getAvailableDate().get(0).replaceFirst("=", "");
-        System.out.println("Doctor id " + doctorAvailability.getDoctorId());
-        System.out.println("Converted Date: " + Date.valueOf(date));
         User doctor = doctorService.getDoctorById(doctorAvailability.getDoctorId());
         AppointmentModel appointmentModel = new AppointmentModel();
         model.addAttribute("appointment", appointmentModel);
@@ -104,7 +104,7 @@ public class AppointmentController {
         httpServletRequest.getSession().setAttribute("Appointment_Session", appointment);
         doctorAvailabilityService.updateBookedAppointment(appointmentModel, true);
         model.addAttribute("appointment_id", appt.getAppointmentId().toString());
-        return "redirect:/payment-latest";
+        return ApplicationConstants.PAYMENT_LATEST_REDIRECT;
     }
 
     private void sendEmailForAppointment(String email, String content, boolean isBookingAppointment) throws MessagingException, UnsupportedEncodingException {
@@ -112,14 +112,14 @@ public class AppointmentController {
         JavaMailSenderImpl mailSender = Utility.prepareMailSender(emailSettings);
         String subject = "";
         if (isBookingAppointment) {
-            subject = "Your appointment has been Booked!!";
+            subject = ApplicationConstants.APPOINTMENT_BOOKED;
         } else {
-            subject = "Your appointment has been Cancelled!!";
+            subject = ApplicationConstants.APPOINTMENT_CANCELLED;
         }
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
         helper.setFrom(emailSettings.getMAIL_FROM(), emailSettings.getMAIL_SENDER_NAME());
-        helper.setTo("johnvickyj7@gmail.com");
+        helper.setTo(email);
         helper.setSubject(subject);
         helper.setText(content, true);
         mailSender.send(message);
@@ -136,7 +136,7 @@ public class AppointmentController {
         model.addAttribute("patient", user);
         List<PatientAppointmentModel> patientFutureAppointmentModels = getFutureAppointments(user, user.getPatient().getPatient_id(), dateToday);
         model.addAttribute("patientFutureAppointments", patientFutureAppointmentModels);
-        return "cancelappointment";
+        return ApplicationConstants.CANCEL_APPOINTMENT_VIEWPAGE;
     }
 
     public List<PatientAppointmentModel> getFutureAppointments (User user, Integer patientId, Date todaysDate){
@@ -167,12 +167,11 @@ public class AppointmentController {
 
     @GetMapping("/cancelAppointment/{apptId}/{date}/{time}/{endTime}")
     public String cancelCurrentAppointmentOfUser (@PathVariable("apptId") String apptId, @PathVariable("date") String date, @PathVariable("time") String time, @PathVariable String endTime) throws MessagingException, UnsupportedEncodingException {
-        System.out.println(apptId);
         Appointment appointment = appointmentService.deleteAppointmentBasedOnId(apptId);
         doctorAvailabilityService.updateBookedAppointment(setAppointmentModelForUpdating(date, time, endTime, appointment), false);
         CareuUserDetails careuUserDetails = (CareuUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         emailService.sendEmailForAppointment(careuUserDetails.getUsername(), emailService.getContentForCancelAppointment(appointment), false);
-        return "redirect:/patienthomepage";
+        return ApplicationConstants.PATIENT_HOMEPAGE_REDIRECT;
     }
 
     private AppointmentModel setAppointmentModelForUpdating (String date, String startTime, String endTime, Appointment appointment){

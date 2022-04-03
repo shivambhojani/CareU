@@ -22,6 +22,10 @@ import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
 import java.io.UnsupportedEncodingException;
 
+/**
+ * Created by Sai Chinthirla on 04, 2022
+ */
+
 @Service
 public class EmailServiceImpl implements EmailService{
 
