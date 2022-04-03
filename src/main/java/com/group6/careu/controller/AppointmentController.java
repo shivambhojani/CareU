@@ -54,6 +54,9 @@ public class AppointmentController {
     @Autowired
     EmailService emailService;
 
+    public AppointmentController(AppointmentService appointmentService) {
+    }
+
     @GetMapping("/searchDoctors")
     public String getAllDoctors(Model model, String keyword) {
         List<User> doctorList = new ArrayList<>();
