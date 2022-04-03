@@ -1,8 +1,9 @@
 package com.group6.careu.service;
 
+import com.group6.careu.entity.UserDocument;
 import org.springframework.stereotype.Service;
 
 @Service
 public interface BillService {
-    void billProcessor(Integer id,Integer bankReferenceCode);
+    UserDocument billProcessor(Integer id, Integer bankReferenceCode);
 }

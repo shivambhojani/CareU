@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta http-equiv="Content-Type" content="application/x-www-form-urlencoded;charset=UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0">
@@ -21,14 +22,32 @@
 </head>
 <body style="background: #EEF0F8;">
 <div class="container-fluid p-0">
+    <form th:action="@{/logout}" method="post" th:hidden="true" name="logoutForm">
+        <input type="submit" />
+    </form>
     <div>
         <nav class="navbar navbar-expand-lg bg-navbar text-light">
-            <a class="navbar-brand text-light m-0" href="/">
+            <a class="navbar-brand text-light m-0" th:href="@{/doctorhomepage}">
                 <img src="careu_white.svg" alt="App logo" height="50" width="200">
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar">
                 <span class="navbar-toggler-icon"></span>
             </button>
+            <div class="collapse navbar-collapse" id="topNavbar">
+                <ul class="navbar-nav ml-auto">
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown"
+                           sec:authentication="principal.fullname"></a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" id="profileSettings" th:href="@{/doctorProfile}">Profile
+                                Settings</a>
+                            <a class="dropdown-item" id="logoutLink" href="">Logout</a>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
         </nav>
     </div>
 </div>
@@ -178,29 +197,48 @@
         }
         document.getElementById("table_body").innerHTML = table_row;
 
-        console.log(start_time_arr);
-        console.log(end_time_arr);
-        console.log(available_date_arr)
+        if(starttime.value.toString().length > 0 && endtime.value.toString().length>0 && availabilitydate.value.toString().length>0){
+            start_time_arr.push(starttime.value);
+            end_time_arr.push(endtime.value);
+            available_date_arr.push(availabilitydate.value);
+            starttime.value = '';
+            endtime.value = '';
 
-        $('input[id="delete_btn"]').click(function(e){
-            var row=$(this).closest("tr");
+            var table_row = "";
+            for (var i = 0; i < available_date_arr.length; i++) {
+                table_row += "<tr>";
+                table_row += "<td>" + available_date_arr[i] + "</td>" + "<td>" + start_time_arr[i] + "</td>" + "<td>" + end_time_arr[i] + "</td>";
+                table_row += "<td><input id=\"delete_btn\" type=\"button\" value=\"Delete\"></td>";
+                table_row += "</tr>";
+            }
+            document.getElementById("table_body").innerHTML = table_row;
 
-            var date=row.find("td:eq(0)").text(); // get current row 1st TD value
-            var start_time=row.find("td:eq(1)").text(); // get current row 2nd TD
-            var end_time=row.find("td:eq(2)").text(); // get current row 3rd TD
+            console.log(start_time_arr);
+            console.log(end_time_arr);
+            console.log(available_date_arr)
 
-            var date_index = available_date_arr.indexOf(date);
-            available_date_arr.splice(date_index, 1);
+            $('input[id="delete_btn"]').click(function(e){
+                var row=$(this).closest("tr");
 
-            var start_time_index = start_time_arr.indexOf(start_time);
-            start_time_arr.splice(start_time_index, 1)
+                var date=row.find("td:eq(0)").text(); // get current row 1st TD value
+                var start_time=row.find("td:eq(1)").text(); // get current row 2nd TD
+                var end_time=row.find("td:eq(2)").text(); // get current row 3rd TD
 
-            var end_time_index = end_time_arr.indexOf(end_time);
-            end_time_arr.splice(end_time_index, 1)
+                var date_index = available_date_arr.indexOf(date);
+                available_date_arr.splice(date_index, 1);
 
-            row.remove()
+                var start_time_index = start_time_arr.indexOf(start_time);
+                start_time_arr.splice(start_time_index, 1)
 
-        })
+                var end_time_index = end_time_arr.indexOf(end_time);
+                end_time_arr.splice(end_time_index, 1)
+
+                row.remove()
+
+            })
+        }else{
+            window.alert("Hey! All 3 fields are required here.");
+        }
     }
     var start_time_arr = [];
     var end_time_arr= [];
@@ -208,32 +246,63 @@
 
 
     $("#saveTimes").click(function () {
-        console.log("debugging")
-        var dataToSend = JSON.stringify({
-            "availableDate": available_date_arr,
-            "startTime": start_time_arr,
-            "endTime": end_time_arr,
-            "doctorId": null
-        })
-        console.log(dataToSend)
 
-        $.ajax({
-            url: "doctor-availability",
-            type: "POST",
-            contentType: "application/json",
-            dataType: "json",
-            data: dataToSend,
-            complete: function( response ) {
-                // do something
-                window.location.href='/doctor';
-            },
-            error: function( jqXHR, textStatus, errorThrown ) {
-                // do something
-            }
-        });
+        console.log(available_date_arr.length);
+        console.log(start_time_arr.length);
+        console.log(end_time_arr.length);
+
+        if(available_date_arr.length>0 && start_time_arr.length>0 && end_time_arr.length>0){
+            console.log("debugging")
+            var dataToSend = JSON.stringify({
+                "availableDate": available_date_arr,
+                "startTime": start_time_arr,
+                "endTime": end_time_arr,
+                "doctorId": null
+            })
+            console.log(dataToSend)
+
+            $.ajax({
+                url: "doctor-availability",
+                type: "POST",
+                contentType: "application/json",
+                dataType: "json",
+                data: dataToSend,
+                complete: function( response ) {
+                    // do something
+                    window.location.href='/doctorhomepage';
+                },
+                error: function( jqXHR, textStatus, errorThrown ) {
+                    // do something
+                }
+            });
+        }else{
+            window.alert("Hey! Please enter at least 1 day.");
+        }
+
     });
     // th:action="@{/doctor-availability}"
+    $(document).ready(function() {
+        $("#logoutLink").on("click", function(e) {
+            e.preventDefault();
+            document.logoutForm.submit();
+        })
+        customizeDropDownMenu();
+    });
 
+    function customizeDropDownMenu() {
+        $(".navbar .dropdown").hover(
+            function () {
+                $(this).find('.dropdown-menu').first().stop(true, true).delay(250).slideDown();
+            },
+            function () {
+                $(this).find('.dropdown-menu').first().stop(true, true).delay(100).slideUp();
+            }
+        );
+
+        $(".dropdown > a").click(function () {
+            location.href = this.href;
+        });
+    }
 </script>
 </body>
 </html>

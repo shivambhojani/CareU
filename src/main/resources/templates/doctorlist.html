@@ -70,8 +70,8 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <label class="card-text"><b>Specialization : </b>[[${doctor.doctor?.specialization}]]</label><br>
-                            <label class="card-text"><b>License : </b>[[${doctor.doctor?.license_number}]]</label><br>
+                            <label class="card-text"><b>Specialization : </b>[[${doctor.doctor?.doctorSpel}]]</label><br>
+                            <label class="card-text"><b>License : </b>[[${doctor.doctor?.doctorRegNumber}]]</label><br>
                             <label class="card-text"><b>Contact : </b>[[${doctor.doctor?.doctorContact}]]</label><br>
                         </div>
                         <div class="card-footer d-flex justify-content-between pr-4">
@@ -91,6 +91,21 @@
         })
         customizeDropDownMenu();
     });
+
+    function customizeDropDownMenu() {
+        $(".navbar .dropdown").hover(
+            function () {
+                $(this).find('.dropdown-menu').first().stop(true, true).delay(250).slideDown();
+            },
+            function () {
+                $(this).find('.dropdown-menu').first().stop(true, true).delay(100).slideUp();
+            }
+        );
+
+        $(".dropdown > a").click(function () {
+            location.href = this.href;
+        });
+    }
 </script>
 </body>
 </html>

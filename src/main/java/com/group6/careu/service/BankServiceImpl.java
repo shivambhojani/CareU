@@ -6,6 +6,7 @@ import com.group6.careu.entity.VISAResponse;
 import com.group6.careu.model.Request.AMEXRequestModel;
 import com.group6.careu.model.Request.VISARequestModel;
 import com.group6.careu.model.Response.AMEXResponseModel;
+import com.group6.careu.model.Response.GenericResponseModel;
 import com.group6.careu.model.Response.VISAResponseModel;
 import com.group6.careu.model.TransactionsModel;
 import com.group6.careu.repository.BankRepository;
@@ -38,7 +39,7 @@ public class BankServiceImpl implements BankService{
     }
 
     @Override
-    public boolean processPayment(TransactionsModel transactionsModel){
+    public GenericResponseModel processPayment(TransactionsModel transactionsModel){
         boolean status=false;
 
         System.out.println(transactionsModel);
@@ -70,7 +71,7 @@ public class BankServiceImpl implements BankService{
 
         CareuUserDetails userDetails= (CareuUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         int userId=userDetails.getId();
-
+        GenericResponseModel genericResponseModel = null;
         if(cardType.equals("VISA")){
             VISARequestModel visaRequestModel = new VISARequestModel();
 
@@ -88,8 +89,9 @@ public class BankServiceImpl implements BankService{
             visaRequestModel.setZipcode(transactionsModel.getZipcode());
             visaRequestModel.setTransactionId(transaction.getTransaction_id());
 
-            VISAResponseModel visaResponseModel= visaPaymentService.makePayment(visaRequestModel);
-
+//            VISAResponseModel visaResponseModel= visaPaymentService.makePayment(visaRequestModel);
+            genericResponseModel = visaPaymentService.makePayment(visaRequestModel);;
+            System.out.println("Debug Generic Response Model " + genericResponseModel.getResponseId());
             //System.out.println(response);
             System.out.println("Response Id: "+visaResponseModel.getResponseId());
             if(visaResponseModel.getStatusCode() == HttpStatus.OK.value()){
@@ -98,7 +100,7 @@ public class BankServiceImpl implements BankService{
                 status=false;
             }
 
-            updateTransaction(transaction,visaResponseModel);
+            updateTransaction(transaction,genericResponseModel);
 
 
         }else if(cardType.equals("AMEX")){
@@ -120,8 +122,8 @@ public class BankServiceImpl implements BankService{
             amexRequestModel.setCreditorId("A2345");
             amexRequestModel.setCreditorName("CareU");
 
-            AMEXResponseModel amexResponseModel= amexPaymentService.makePayment(amexRequestModel);
-
+//            AMEXResponseModel amexResponseModel= amexPaymentService.makePayment(amexRequestModel);
+            genericResponseModel=amexPaymentService.makePayment(amexRequestModel);
             //System.out.println(response);
             System.out.println("Response Id: "+amexResponseModel.getResponseId());
             if(amexResponseModel.getStatusCode() == HttpStatus.OK.value()){
@@ -130,10 +132,10 @@ public class BankServiceImpl implements BankService{
                 status=false;
             }
 
-            updateTransaction(transaction,amexResponseModel);
+            updateTransaction(transaction,genericResponseModel);
         }
 
-        return status;
+        return genericResponseModel;
     }
 
     @Override
@@ -173,7 +175,7 @@ public class BankServiceImpl implements BankService{
         transactionsRepository.save(transactionById);
     }
 
-    @Override
+    //    @Override
     public void updateTransaction(Transactions transaction, AMEXResponseModel response ){
         if(response.getStatusCode()==HttpStatus.OK.value()){
             transaction.setTransactionStatus("Completed");

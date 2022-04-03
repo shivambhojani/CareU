@@ -1,16 +1,23 @@
 package com.group6.careu.service;
 
 import com.group6.careu.entity.User;
+import com.group6.careu.entity.UserDocument;
 import com.group6.careu.model.BillModel;
+import com.group6.careu.repository.UserDocumentRepository;
 import com.group6.careu.repository.UserRepository;
+import com.group6.careu.security.CareuUserDetails;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 
+import javax.mail.Multipart;
 import javax.transaction.Transactional;
 import java.io.*;
 
@@ -21,8 +28,12 @@ public class BillServiceImpl implements BillService{
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    private UserDocumentRepository userDocumentRepository;
+
+
     @Override
-    public void billProcessor(Integer id,Integer bankReferenceCode){
+    public UserDocument billProcessor(Integer id,Integer bankReferenceCode){
 
         User u=userRepository.getUserById(id);
 
@@ -153,9 +164,18 @@ public class BillServiceImpl implements BillService{
 
             bill.close();
 
+            File file = new File("src/main/resources/sample_bills/bill_"+bankReferenceCode+".pdf");
+            System.out.println("File name " + file.getName());
+            FileInputStream inputStream = new FileInputStream(file);
+            byte[] arr = new byte[(int) file.length()];
+            inputStream.read(arr);
+            CareuUserDetails careuUserDetails = (CareuUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            UserDocument userDocument = new UserDocument(file.getName(), "pdf", arr, careuUserDetails.getId());
+            inputStream.close();
+            return userDocumentRepository.save(userDocument);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        return null;
     }
 }

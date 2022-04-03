@@ -3,9 +3,11 @@ package com.group6.careu.service;
 import com.group6.careu.entity.Appointment;
 import com.group6.careu.entity.Doctor;
 import com.group6.careu.entity.Patient;
+import com.group6.careu.entity.User;
 import com.group6.careu.model.AppointmentModel;
 import com.group6.careu.model.PatientAppointmentModel;
 import com.group6.careu.repository.AppointmentRepository;
+import com.group6.careu.repository.UserRepository;
 import com.group6.careu.security.CareuUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,17 +26,22 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Autowired
     AppointmentRepository appointmentRepository;
 
+    @Autowired
+    UserRepository userRepository;
+
     @Override
     public Appointment pushPatientAppointment(AppointmentModel appointmentModel) {
-        Appointment appointment = getAppointmentDTO(appointmentModel);
+        CareuUserDetails u = (CareuUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userRepository.getUserById(u.getId());
+        Appointment appointment = getAppointmentDTO(appointmentModel,user.getPatient().getPatient_id());
         appointment = appointmentRepository.save(appointment);
         return appointment;
     }
 
-    private Appointment getAppointmentDTO(AppointmentModel appointmentModel) {
-        CareuUserDetails u = (CareuUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    private Appointment getAppointmentDTO(AppointmentModel appointmentModel,Integer patientId) {
+        //CareuUserDetails u = (CareuUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Patient patient = new Patient();
-        patient.setPatient_id(u.getId());
+        patient.setPatient_id(patientId);
         Appointment appointment = new Appointment();
         appointment.setAppointment_date(appointmentModel.getAppointment_date());
         Doctor doctor = new Doctor();

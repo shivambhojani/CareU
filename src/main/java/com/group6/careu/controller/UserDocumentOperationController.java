@@ -1,9 +1,13 @@
 package com.group6.careu.controller;
+import com.group6.careu.entity.User;
 import com.group6.careu.entity.UserDocument;
 import com.group6.careu.model.UserDocumentModel;
+import com.group6.careu.security.CareuUserDetails;
 import com.group6.careu.service.UserDocumentOperationService;
+import com.group6.careu.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,17 +23,25 @@ public class UserDocumentOperationController {
     @Autowired
     private UserDocumentOperationService userDocumentOperationService;
 
+    @Autowired
+    private UserServiceImpl userServiceImpl;
+
     @PostMapping("/uploadDocument/file")
     //@PathVariable Integer userId
-    public ResponseEntity<String> uploadDocument(@RequestParam("file") MultipartFile file) {
+    public String uploadDocument(@RequestParam("file") MultipartFile file,@AuthenticationPrincipal CareuUserDetails loggedUser) {
         String message = "";
+
+        String email = loggedUser.getUsername();
+        User user = userServiceImpl.getByEmail(email);
+        Integer userId = user.getId();
+
         try {
-            userDocumentOperationService.store(file, 1);
+            userDocumentOperationService.store(file, userId);
             message = "Document uploaded successfully: " + file.getOriginalFilename();
-            return ResponseEntity.status(HttpStatus.OK).body(message);
+            return "licenseuploadsuccess";
         } catch (Exception e) {
             message = "Could not upload document: " + file.getOriginalFilename() + "!";
-            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(message);
+            return "licenseuploadfailure";
         }
     }
 
