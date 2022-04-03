@@ -17,4 +17,6 @@ public interface DoctorService {
     void saveDoctorInformation(Doctor doctor);
 
     Optional<Doctor> getDoctorDetailsById(Integer id);
+
+    User getUserByDoctor(Integer doctor_id);
 }

@@ -53,10 +53,12 @@ public class PaymentController {
         CareuUserDetails careuUserDetails = (CareuUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 //        boolean status =bankService.processPayment(transactionsModel);
         GenericResponseModel genericResponseModel = bankService.processPayment(transactionsModel);
+        System.out.println("debugggg" + genericResponseModel.getStatusCode());
+        System.out.println("debuugggg" + appointment);
         if(null != genericResponseModel && genericResponseModel.getStatusCode() != 200){
             Appointment deletedAppointment = appointmentService.deleteAppointmentBasedOnId(appointment.getAppointmentId().toString());
             doctorAvailabilityService.updateBookedAppointment(setAppointmentModelForUpdating(appointment.getAppointment_date().toString(), appointment.getStartTime().toString(), appointment.getEndTime().toString(), appointment), false);
-            return "payment_failure";
+            return "failurescreen";
         } else {
             UserDocument userDocument = billService.billProcessor(careuUserDetails.getId(),genericResponseModel.getResponseId());
             emailService.sendEmailWithAttachment(userDocument, careuUserDetails.getUsername(), appointment);
