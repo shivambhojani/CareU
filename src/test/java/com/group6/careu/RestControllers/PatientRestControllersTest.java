@@ -50,6 +50,7 @@ class PatientRestControllersTest {
     @MockBean
     private UserRepository userRepository;
 
+
     @Test
     void testGetTodaysAppointmentByPatientId() throws Exception {
         when(this.appointmentRepository.getTodaysAppointmentByPatientId((Integer) any(), (java.sql.Date) any()))
@@ -138,52 +139,8 @@ class PatientRestControllersTest {
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
                 .andExpect(MockMvcResultMatchers.content()
                         .string(
-                                "[{\"appointment_id\":null,\"doctorName\":\"Jane Doe\",\"patient_id\":1,\"date\":10,\"start_time\":10,\"end_time\""
-                                        + ":10,\"consultationType\":\"?\",\"medications\":\"?\",\"patientFeedback\":null}]"));
-    }
-
-    @Test
-    void testGetAllPatientsRest() throws Exception {
-        Doctor doctor = new Doctor();
-        doctor.setDoctorAge(1);
-        doctor.setDoctorExperience("Doctor Experience");
-        doctor.setDoctorLocation("Doctor Location");
-        doctor.setDoctorOverview("Doctor Overview");
-        doctor.setDoctorQualification("Doctor Qualification");
-        doctor.setDoctorRegNumber("42");
-        doctor.setDoctorSpel("Doctor Spel");
-        doctor.setDoctor_id(1);
-
-        Patient patient = new Patient();
-        patient.setDisease("Disease");
-        patient.setPatient_id(1);
-
-        User user = new User();
-        user.setDoctor(doctor);
-        user.setEmail("jane.doe@example.org");
-        user.setEnabled(true);
-        user.setFirstName("Jane");
-        user.setGender("Gender");
-        user.setId(1);
-        user.setLastName("Doe");
-        user.setPassword("44556");
-        user.setPatient(patient);
-        user.setPhone("4105551212");
-        user.setResetPasswordToken("ABC123");
-        when(this.patientRepository.findPatient((Integer) any())).thenReturn(user);
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/patienthomepage/{id}", 1);
-        MockMvcBuilders.standaloneSetup(this.patientRestControllers)
-                .build()
-                .perform(requestBuilder)
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
-                .andExpect(MockMvcResultMatchers.content()
-                        .string(
-                                "{\"id\":1,\"firstName\":\"Jane\",\"lastName\":\"Doe\",\"gender\":\"Gender\",\"email\":\"jane.doe@example.org\",\"phone\""
-                                        + ":\"4105551212\",\"password\":\"44556\",\"enabled\":true,\"role\":null,\"resetPasswordToken\":\"ABC123\",\"doctor"
-                                        + "\":{\"doctor_id\":1,\"doctorSpel\":\"Doctor Spel\",\"doctorAge\":1,\"doctorOverview\":\"Doctor Overview\","
-                                        + "\"doctorRegNumber\":\"42\",\"doctorExperience\":\"Doctor Experience\",\"doctorQualification\":\"Doctor"
-                                        + " Qualification\",\"doctorLocation\":\"Doctor Location\"},\"patient\":{\"patient_id\":1,\"disease\":\"Disease\"}}"));
+                                "[{\"appointment_id\":null,\"doctorContact\":null,\"doctorName\":\"Jane Doe\",\"patient_id\":1,\"date\":10,\"start"
+                                        + "_time\":10,\"end_time\":10,\"consultationType\":\"?\",\"medications\":\"?\",\"patientFeedback\":null}]"));
     }
 
     @Test
@@ -274,8 +231,8 @@ class PatientRestControllersTest {
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
                 .andExpect(MockMvcResultMatchers.content()
                         .string(
-                                "[{\"appointment_id\":null,\"doctorName\":\"Jane Doe\",\"patient_id\":1,\"date\":10,\"start_time\":10,\"end_time\""
-                                        + ":10,\"consultationType\":\"?\",\"medications\":\"?\",\"patientFeedback\":null}]"));
+                                "[{\"appointment_id\":null,\"doctorContact\":null,\"doctorName\":\"Jane Doe\",\"patient_id\":1,\"date\":10,\"start"
+                                        + "_time\":10,\"end_time\":10,\"consultationType\":\"?\",\"medications\":\"?\",\"patientFeedback\":null}]"));
     }
 
     @Test
@@ -366,9 +323,54 @@ class PatientRestControllersTest {
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
                 .andExpect(MockMvcResultMatchers.content()
                         .string(
-                                "[{\"appointment_id\":null,\"doctorName\":\"Jane Doe\",\"patient_id\":1,\"date\":10,\"start_time\":10,\"end_time\""
-                                        + ":10,\"consultationType\":\"?\",\"medications\":\"?\",\"patientFeedback\":null}]"));
+                                "[{\"appointment_id\":null,\"doctorContact\":null,\"doctorName\":\"Jane Doe\",\"patient_id\":1,\"date\":10,\"start"
+                                        + "_time\":10,\"end_time\":10,\"consultationType\":\"?\",\"medications\":\"?\",\"patientFeedback\":null}]"));
     }
+
+    @Test
+    void testGetAllPatientsRest() throws Exception {
+        Doctor doctor = new Doctor();
+        doctor.setDoctorAge(1);
+        doctor.setDoctorExperience("Doctor Experience");
+        doctor.setDoctorLocation("Doctor Location");
+        doctor.setDoctorOverview("Doctor Overview");
+        doctor.setDoctorQualification("Doctor Qualification");
+        doctor.setDoctorRegNumber("42");
+        doctor.setDoctorSpel("Doctor Spel");
+        doctor.setDoctor_id(1);
+
+        Patient patient = new Patient();
+        patient.setDisease("Disease");
+        patient.setPatient_id(1);
+
+        User user = new User();
+        user.setDoctor(doctor);
+        user.setEmail("jane.doe@example.org");
+        user.setEnabled(true);
+        user.setFirstName("Jane");
+        user.setGender("Gender");
+        user.setId(1);
+        user.setLastName("Doe");
+        user.setPassword("44556");
+        user.setPatient(patient);
+        user.setPhone("4105551212");
+        user.setResetPasswordToken("ABC123");
+        when(this.patientRepository.findPatient((Integer) any())).thenReturn(user);
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/patienthomepage/{id}", 1);
+        MockMvcBuilders.standaloneSetup(this.patientRestControllers)
+                .build()
+                .perform(requestBuilder)
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
+                .andExpect(MockMvcResultMatchers.content()
+                        .string(
+                                "{\"id\":1,\"firstName\":\"Jane\",\"lastName\":\"Doe\",\"gender\":\"Gender\",\"email\":\"jane.doe@example.org\",\"phone\""
+                                        + ":\"4105551212\",\"password\":\"44556\",\"enabled\":true,\"role\":null,\"resetPasswordToken\":\"ABC123\",\"doctor"
+                                        + "\":{\"doctor_id\":1,\"doctorSpel\":\"Doctor Spel\",\"doctorAge\":1,\"doctorOverview\":\"Doctor Overview\","
+                                        + "\"doctorRegNumber\":\"42\",\"doctorExperience\":\"Doctor Experience\",\"doctorQualification\":\"Doctor"
+                                        + " Qualification\",\"doctorLocation\":\"Doctor Location\"},\"patient\":{\"patient_id\":1,\"disease\":\"Disease\"}}"));
+    }
+
 
     @Test
     void testGetAllPatientsRest2() throws Exception {

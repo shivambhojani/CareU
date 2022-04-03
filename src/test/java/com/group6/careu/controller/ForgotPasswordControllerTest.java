@@ -138,7 +138,7 @@ class ForgotPasswordControllerTest {
         user1.setGender("Gender");
         user1.setId(1);
         user1.setLastName("Doe");
-        user1.setPassword("iloveyou");
+        user1.setPassword("44556");
         user1.setPatient(patient1);
         user1.setPhone("4105551212");
         user1.setResetPasswordToken("ABC123");

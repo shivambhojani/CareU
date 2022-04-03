@@ -53,7 +53,7 @@ class ProfileControllerTest {
         ProfileController profileController = new ProfileController(userServiceImpl);
         ConcurrentModel model = new ConcurrentModel();
         assertEquals("profile_doctor", profileController.editProfile(model, new CareuUserDetails(
-                new User("Jane", "Doe", "doctor", "4105551212", "jane.doe@example.org", "iloveyou", true, "doctor"))));
+                new User("Jane", "Doe", "doctor", "4105551212", "jane.doe@example.org", "44556", true, "doctor"))));
         verify(userServiceImpl).getByEmail((String) any());
     }
 
@@ -93,7 +93,7 @@ class ProfileControllerTest {
         ProfileController profileController = new ProfileController(userServiceImpl);
         ConcurrentModel model = new ConcurrentModel();
         assertEquals("profile_patient", profileController.editProfile(model, new CareuUserDetails(
-                new User("Jane", "Doe", "doctor", "4105551212", "jane.doe@example.org", "iloveyou", true, "profile_doctor"))));
+                new User("Jane", "Doe", "doctor", "4105551212", "jane.doe@example.org", "44556", true, "profile_doctor"))));
         verify(userServiceImpl).getByEmail((String) any());
     }
 }
