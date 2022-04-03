@@ -197,6 +197,7 @@ public class PatientController {
             User u = repository.getUserByDoctorId(doctorId);
             p.setAppointment_id(appointments.get(i).getAppointmentId());
             p.setDoctorName(u.getFirstName() + " " + u.getLastName());
+            p.setDoctorContact(u.getPhone());
             p.setMedications(appointments.get(i).getMedications());
             p.setConsultationType(appointments.get(i).getConsulationType());
             p.setDate(appointments.get(i).getAppointment_date());
