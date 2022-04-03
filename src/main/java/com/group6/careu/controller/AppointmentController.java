@@ -70,8 +70,8 @@ public class AppointmentController {
 
     @GetMapping("/searchDoctors/{doctor_id}")
     public String bookAnAppointment(@PathVariable("doctor_id") Integer doctor_id, Model model) {
-        System.out.println("Doctor id " + doctor_id);
-        User doctor = doctorService.getDoctorById(doctor_id);
+        System.out.println("Doctor id in start" + doctor_id);
+        User doctor = doctorService.getUserByDoctor(doctor_id);
         List<DoctorAvailability> availTimes = doctorAvailabilityService.getAllTimes(doctor_id);
         Appointment appointment = new Appointment();
         AppointmentModel appointmentModel = new AppointmentModel();
@@ -100,34 +100,12 @@ public class AppointmentController {
     public String bookAppointment(Model model, @ModelAttribute("appointmentModel") AppointmentModel appointmentModel, HttpServletRequest httpServletRequest) throws MessagingException, UnsupportedEncodingException {
         Appointment appt = appointmentService.pushPatientAppointment(appointmentModel);
         Appointment appointment = (Appointment) httpServletRequest.getSession().getAttribute("Appointment_Session");
-        if (appointment == null) {
-            appointment = appt;
-            httpServletRequest.getSession().setAttribute("Appointment_Session", appointment);
-        }
+        appointment = appt;
+        httpServletRequest.getSession().setAttribute("Appointment_Session", appointment);
         doctorAvailabilityService.updateBookedAppointment(appointmentModel, true);
         model.addAttribute("appointment_id", appt.getAppointmentId().toString());
-//        CareuUserDetails careuUserDetails = (CareuUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        sendEmailForAppointment(careuUserDetails.getUsername(), getContentStringToBookAppointment(appt), true);
         return "redirect:/payment-latest";
     }
-
-//    private String getContentStringToBookAppointment(Appointment appointment) {
-//        return "Your appointment Id is - <b>" + appointment.getAppointmentId() + "</b>" +
-//                "<br>" +
-//                "<h4><b>Appointment Date : </b>" + appointment.getAppointment_date() +"</h4>" +
-//                "<h4><b>Appointment Start Time : </b>" + appointment.getStartTime() +"</h4>" +
-//                "<h4><b>Appointment End Time : </b>" + appointment.getEndTime() +"</h4>" +
-//                "<h4><b>Consultation Type : </b>" + appointment.getConsulationType() +"</h4>";
-//    }
-//
-//    private String getContentForCancelAppointment(Appointment appointment) {
-//        return "Your upcoming appointment with Id - <b>" + appointment.getAppointmentId() + "</b> and date - <b>"
-//                + appointment.getAppointment_date() + "</b> has been cancelled."
-//                + "<br>"
-//                + "<p>If you have not cancelled the appointment then please revert back to us by replying to this email.</p>"
-//                + "<p>Any issues related to cancelling appointments will be resolved in 2-3 hours so please be patient while our team revert back to you.</p>"
-//                + "<b>Thank you for using CareU</b>";
-//    }
 
     private void sendEmailForAppointment(String email, String content, boolean isBookingAppointment) throws MessagingException, UnsupportedEncodingException {
         EmailSetting emailSettings = new EmailSetting();

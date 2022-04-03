@@ -15,14 +15,29 @@
 </head>
 <body>
 <div class="container-fluid">
+    <form th:action="@{/logout}" method="post" th:hidden="true" name="logoutForm">
+        <input type="submit" />
+    </form>
     <div>
-        <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+        <nav class="navbar navbar-expand-lg bg-dark navbar-dark ">
             <a class="navbar-brand" th:href="@{/}">
-                <h2>CareU</h2>
+                <h1>CareU</h1>
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar">
                 <span class="navbar-toggler-icon"></span>
             </button>
+            <div class="collapse navbar-collapse" id="topNavbar">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown"
+                           sec:authentication="principal.fullname"></a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" id="logoutLink" href="">Logout</a>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
         </nav>
     </div>
     <div>
@@ -98,7 +113,7 @@
 
                         <div class="text-center">
                             <input type="submit" value="Pay" class="btn btn-primary m-3" />
-                            <input type="button" value="Cancel" class="btn btn-secondary" id="buttonCancel" />
+                            <a type="button" class="btn btn-secondary" th:href="@{/patienthomepage}">Cancel</a>
                         </div>
                     </div>
                 </div>
@@ -151,6 +166,29 @@
     $(document).ready(function(){
         $('#checkout_card_number').creditCardTypeDetector({ 'credit_card_logos' : '.card_logos' });
     });
+
+    $(document).ready(function() {
+        $("#logoutLink").on("click", function(e) {
+            e.preventDefault();
+            document.logoutForm.submit();
+        })
+        customizeDropDownMenu();
+    });
+
+    function customizeDropDownMenu() {
+        $(".navbar .dropdown").hover(
+            function () {
+                $(this).find('.dropdown-menu').first().stop(true, true).delay(250).slideDown();
+            },
+            function () {
+                $(this).find('.dropdown-menu').first().stop(true, true).delay(100).slideUp();
+            }
+        );
+
+        $(".dropdown > a").click(function () {
+            location.href = this.href;
+        });
+    }
 
 </script>
 </body>

@@ -23,6 +23,9 @@ public class DoctorServiceImpl implements DoctorService{
     @Autowired
     DoctorRepository doctorProfileRepository;
 
+    @Autowired
+    UserRepository userRepository;
+
     @Override
     public List<User> getAllDoctor() {
         return (List<User>) doctorRepository.getAllDoctor("doctor");
@@ -41,17 +44,23 @@ public class DoctorServiceImpl implements DoctorService{
     @Override
     public void saveDoctorInformation(Doctor doctor){
         Doctor d=new Doctor();
-
         CareuUserDetails userDetails= (CareuUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        doctor.setDoctor_id(userDetails.getId());
-        System.out.println(userDetails.getId());
+        User user = userRepository.getUserByDoctorId(userDetails.getId());
+        doctor.setDoctor_id(user.getDoctor().getDoctor_id());
+        System.out.println(doctor);
 
         d = doctorProfileRepository.save(doctor);
+        System.out.println(d + "updated doctor");
     }
 
     @Override
     public Optional<Doctor> getDoctorDetailsById(Integer id) {
         return doctorProfileRepository.findById(id);
+    }
+
+    @Override
+    public User getUserByDoctor(Integer doctor_id) {
+        return userRepository.getUserByDoctor(doctor_id);
     }
 
 
