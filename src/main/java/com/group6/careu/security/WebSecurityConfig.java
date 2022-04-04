@@ -52,10 +52,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .successHandler(loginSuccessHandler)
                 .permitAll().and()
                 .logout().permitAll()
-                .invalidateHttpSession(true)
-                .clearAuthentication(true)
-                .logoutSuccessUrl("/");
-
+                .and()
+                .rememberMe()
+                .key("ABBfwowrupncmoh_496241767433")
+                .tokenValiditySeconds(7 * 24 * 60 * 60);
+        http.csrf().disable();
 
         http.authorizeRequests().antMatchers("/","/index.html","/login","/register/users","/oauth/**")
                 .permitAll().and().oauth2Login()
@@ -82,7 +83,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         response.sendRedirect(redirectURL);
                     }
                 })
-                .permitAll();
+                .permitAll().and().logout().permitAll()
+                .and()
+                .rememberMe()
+                .key("ABBfwowrupncmoh_496241767433")
+                .tokenValiditySeconds(7 * 24 * 60 * 60);;
     }
 
     public DaoAuthenticationProvider authenticationProvider() {
