@@ -1,16 +1,18 @@
 package com.group6.careu.service;
 
+import com.group6.careu.entity.AMEXResponse;
 import com.group6.careu.entity.Transactions;
+import com.group6.careu.entity.VISAResponse;
 import com.group6.careu.model.Request.AMEXRequestModel;
 import com.group6.careu.model.Request.VISARequestModel;
 import com.group6.careu.model.Response.AMEXResponseModel;
 import com.group6.careu.model.Response.GenericResponseModel;
 import com.group6.careu.model.Response.VISAResponseModel;
 import com.group6.careu.model.TransactionsModel;
+import com.group6.careu.repository.BankRepository;
 import com.group6.careu.repository.TransactionsRepository;
 import com.group6.careu.security.CareuUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -93,7 +95,7 @@ public class BankServiceImpl implements BankService{
             System.out.println("Debug Generic Response Model " + genericResponseModel.getResponseId());
             //System.out.println(response);
             System.out.println("Response Id: "+genericResponseModel.getResponseId());
-            if(genericResponseModel.getStatusCode() == HttpStatus.OK.value()){
+            if(genericResponseModel.getStatusCode() == 200){
                 status=true;
             }else{
                 status=false;
@@ -125,7 +127,7 @@ public class BankServiceImpl implements BankService{
             genericResponseModel=amexPaymentService.makePayment(amexRequestModel);
             //System.out.println(response);
             System.out.println("Response Id: "+genericResponseModel.getResponseId());
-            if(genericResponseModel.getStatusCode() == HttpStatus.OK.value()){
+            if(genericResponseModel.getStatusCode() == 200){
                 status=true;
             }else{
                 status=false;
@@ -164,13 +166,8 @@ public class BankServiceImpl implements BankService{
     }
 
     @Override
-    public void updateTransaction(Transactions transactions, GenericResponseModel response) {
-
-    }
-
-    @Override
-    public void updateTransaction(Transactions transaction, VISAResponseModel response){
-        if(response.getStatusCode()==HttpStatus.OK.value()){
+    public void updateTransaction(Transactions transaction,GenericResponseModel response ){
+        if(response.getStatusCode()==200){
             transaction.setTransactionStatus("Completed");
         }else{
             transaction.setTransactionStatus("Failure");
@@ -189,7 +186,7 @@ public class BankServiceImpl implements BankService{
 
     //    @Override
     public void updateTransaction(Transactions transaction, AMEXResponseModel response ){
-        if(response.getStatusCode()==HttpStatus.OK.value()){
+        if(response.getStatusCode()==200){
             transaction.setTransactionStatus("Completed");
         }else{
             transaction.setTransactionStatus("Failure");

@@ -66,10 +66,10 @@
                 </div>
                 <div class="col-6">
                     <h5 class="card-title">Name - [[${selectedDoctor.firstName}]] [[${selectedDoctor.lastName}]]</h5>
-                    <p class="mb-1"><b>Specialization</b> : [[${selectedDoctor.doctor?.specialization}]]
+                    <p class="mb-1"><b>Specialization</b> : [[${selectedDoctor.doctor?.doctorSpel}]]
                     </p>
                     <p class="mb-1">
-                        <b>Contact</b> : [[${selectedDoctor.doctor.doctorContact}]]
+                        <b>Contact</b> : [[${selectedDoctor.phone}]]
                     </p>
                     <form th:object="${appointment}" th:action="@{/book}" method="post">
                         <div class="form-group">

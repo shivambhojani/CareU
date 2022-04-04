@@ -10,7 +10,6 @@ import com.group6.careu.repository.TransactionsRepository;
 import com.group6.careu.repository.VISARequestRepository;
 import com.group6.careu.repository.VISAResponseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -54,7 +53,7 @@ public class VISAPaymentServiceImpl implements PaymentService<VISARequestModel, 
         VISAResponse visaResponse=new VISAResponse();
         VISAResponseModel visaResponseModel=new VISAResponseModel();
         if(status){
-            visaResponseModel.setStatusCode(HttpStatus.OK.value());
+            visaResponseModel.setStatusCode(200);
             visaResponseModel.setStatusDescription("Success");
             visaResponseModel.setTransactionId(visaRequest.getBankTransactionId());
 
@@ -66,7 +65,7 @@ public class VISAPaymentServiceImpl implements PaymentService<VISARequestModel, 
             visaResponseModel.setResponseId(visaResponse.getResponseId());
 
         }else{
-            visaResponseModel.setStatusCode(HttpStatus.BAD_REQUEST.value());
+            visaResponseModel.setStatusCode(400);
             visaResponseModel.setStatusDescription("Failure");
             visaResponseModel.setTransactionId(visaRequest.getBankTransactionId()); // Foreign Key from request
             System.out.println("In line 63; "+visaResponseModel);

@@ -17,7 +17,5 @@ public interface BankService {
     GenericResponseModel processPayment(TransactionsModel transactionsModel);
     Transactions saveTransaction(Transactions transaction);
     void updateTransaction(Transactions transactions, GenericResponseModel response );
-
-    void updateTransaction(Transactions transaction, VISAResponseModel response);
 //    void updateTransaction(Transactions transactions, AMEXResponseModel response );
 }

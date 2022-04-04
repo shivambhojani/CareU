@@ -7,7 +7,6 @@ import com.group6.careu.repository.AMEXRequestRepository;
 import com.group6.careu.repository.AMEXResponseRepository;
 import com.group6.careu.repository.BankRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -44,7 +43,7 @@ public class AMEXPaymentServiceImpl implements PaymentService<AMEXRequestModel, 
         AMEXResponse amexResponse=new AMEXResponse();
         AMEXResponseModel amexResponseModel=new AMEXResponseModel();
         if(status){
-            amexResponseModel.setStatusCode(HttpStatus.OK.value());
+            amexResponseModel.setStatusCode(200);
             amexResponseModel.setStatusDescription("Success");
             amexResponseModel.setTransactionId(amexRequest.getBankTransactionId());
 
@@ -56,7 +55,7 @@ public class AMEXPaymentServiceImpl implements PaymentService<AMEXRequestModel, 
             amexResponseModel.setResponseId(amexResponse.getResponseId());
 
         }else{
-            amexResponseModel.setStatusCode(HttpStatus.BAD_REQUEST.value());
+            amexResponseModel.setStatusCode(400);
             amexResponseModel.setStatusDescription("Failure");
             amexResponseModel.setTransactionId(amexRequest.getBankTransactionId()); // Foreign Key from request
             System.out.println("In line 63; "+amexResponseModel);
@@ -82,6 +81,7 @@ public class AMEXPaymentServiceImpl implements PaymentService<AMEXRequestModel, 
 
         int id;
 
+        System.out.println(userByCardNumber);
 
         Date date = new Date();
         LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
