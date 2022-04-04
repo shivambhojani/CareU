@@ -8,6 +8,10 @@ import java.sql.Date;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Created by Sai Chinthirla on 03, 2022
+ */
+
 public interface AppointmentService {
 
     Appointment pushPatientAppointment(AppointmentModel appointment);

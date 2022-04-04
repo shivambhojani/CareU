@@ -33,7 +33,9 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
+/**
+ * Created by Bijitashya on 03, 2022
+ */
 @ContextConfiguration(classes = {UserServiceImpl.class})
 @ExtendWith(SpringExtension.class)
 @PropertySource("classpath:application-test.properties")

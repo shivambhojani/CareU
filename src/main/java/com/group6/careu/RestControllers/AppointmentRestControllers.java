@@ -18,7 +18,11 @@ public class AppointmentRestControllers {
     @Autowired
     AppointmentServiceImpl appointmentServiceImpl;
 
-//    @GetMapping("/searchDoctors")
+    public AppointmentRestControllers(AppointmentServiceImpl appointmentServiceImpl) {
+        this.appointmentServiceImpl = appointmentServiceImpl;
+    }
+
+    //    @GetMapping("/searchDoctors")
 //    public List<User> getAllDoctors(Model model) {
 //        List<User> doctorList = doctorService.getAllDoctor();
 //        System.out.println("printing doctor 1" + doctorList.get(0).getDoctor().getLicense_number());

@@ -19,6 +19,10 @@ import java.sql.Time;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Created by Sai Chinthirla on 03, 2022
+ */
+
 @Service
 @Transactional
 public class AppointmentServiceImpl implements AppointmentService {
@@ -39,7 +43,6 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     private Appointment getAppointmentDTO(AppointmentModel appointmentModel,Integer patientId) {
-        //CareuUserDetails u = (CareuUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Patient patient = new Patient();
         patient.setPatient_id(patientId);
         Appointment appointment = new Appointment();
@@ -103,8 +106,6 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public Appointment deleteAppointmentBasedOnId(String apptId) {
         Appointment appointment = appointmentRepository.getAppointmentBasedOnApptId(apptId);
-        System.out.println(appointment + "is ");
-//        appointmentRepository.deleteAppointmentBasedOnId(apptId);
         appointmentRepository.delete(appointment);
         return appointment;
     }

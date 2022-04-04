@@ -108,15 +108,15 @@ public class VISAPaymentServiceImpl implements PaymentService<VISARequestModel, 
         && visaRequestModel.getExpiryYear()== userByCardNumber.getExpiryYear()
         && visaRequestModel.getExpiryMonth() == userByCardNumber.getExpiryMonth()){
             if(visaRequestModel.getExpiryYear()== year ){
-                if(visaRequestModel.getExpiryMonth() <= month &&
+                if(visaRequestModel.getExpiryMonth() >= month &&
                         visaRequestModel.getAmount() <= userByCardNumber.getAmount()){
                     accountCheck= true;
                     id=userByCardNumber.getId();
                     customerAccount=userByCardNumber;
                 }
             }else{
-                if(visaRequestModel.getExpiryMonth()<= month &&
-                        visaRequestModel.getExpiryYear()<= year &&
+                if(visaRequestModel.getExpiryMonth() >= month &&
+                        visaRequestModel.getExpiryYear() >= year &&
                         visaRequestModel.getAmount() <= userByCardNumber.getAmount()){
                     accountCheck= true;
                     id=userByCardNumber.getId();

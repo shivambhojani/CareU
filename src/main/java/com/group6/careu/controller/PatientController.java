@@ -194,9 +194,10 @@ public class PatientController {
         for (int i = 0; i < appointments.size(); i++) {
             PatientAppointmentModel p = new PatientAppointmentModel();
             int doctorId = appointments.get(i).getDoctor().getDoctor_id();
-            User u = repository.getUserByDoctorId(doctorId);
+            User u = repository.getUserByDoctor(doctorId);
             p.setAppointment_id(appointments.get(i).getAppointmentId());
             p.setDoctorName(u.getFirstName() + " " + u.getLastName());
+            p.setDoctorContact(u.getPhone());
             p.setMedications(appointments.get(i).getMedications());
             p.setConsultationType(appointments.get(i).getConsulationType());
             p.setDate(appointments.get(i).getAppointment_date());
