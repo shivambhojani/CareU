@@ -103,23 +103,25 @@ public class VISAPaymentServiceImpl implements PaymentService<VISARequestModel, 
         int month=localDate.getMonthValue();
         int year=localDate.getYear()%100;
 
-        if(visaRequestModel.getCvv() == userByCardNumber.getCvv()
-        && visaRequestModel.getExpiryYear()== userByCardNumber.getExpiryYear()
-        && visaRequestModel.getExpiryMonth() == userByCardNumber.getExpiryMonth()){
-            if(visaRequestModel.getExpiryYear()== year ){
-                if(visaRequestModel.getExpiryMonth() >= month &&
-                        visaRequestModel.getAmount() <= userByCardNumber.getAmount()){
-                    accountCheck= true;
-                    id=userByCardNumber.getId();
-                    customerAccount=userByCardNumber;
-                }
-            }else{
-                if(visaRequestModel.getExpiryMonth() >= month &&
-                        visaRequestModel.getExpiryYear() >= year &&
-                        visaRequestModel.getAmount() <= userByCardNumber.getAmount()){
-                    accountCheck= true;
-                    id=userByCardNumber.getId();
-                    customerAccount=userByCardNumber;
+        if(userByCardNumber!=null){
+            if(visaRequestModel.getCvv() == userByCardNumber.getCvv()
+                    && visaRequestModel.getExpiryYear()== userByCardNumber.getExpiryYear()
+                    && visaRequestModel.getExpiryMonth() == userByCardNumber.getExpiryMonth()){
+                if(visaRequestModel.getExpiryYear()== year ){
+                    if(visaRequestModel.getExpiryMonth() >= month &&
+                            visaRequestModel.getAmount() <= userByCardNumber.getAmount()){
+                        accountCheck= true;
+                        id=userByCardNumber.getId();
+                        customerAccount=userByCardNumber;
+                    }
+                }else{
+                    if(visaRequestModel.getExpiryMonth() >= month &&
+                            visaRequestModel.getExpiryYear() >= year &&
+                            visaRequestModel.getAmount() <= userByCardNumber.getAmount()){
+                        accountCheck= true;
+                        id=userByCardNumber.getId();
+                        customerAccount=userByCardNumber;
+                    }
                 }
             }
         }
