@@ -122,7 +122,7 @@ Deploy Staging Server:
       --data "{\"SPRING_PROFILES_ACTIVE\": \"test\"}" 
       --header "Content-Type: application/json" 
       --header "Accept: application/vnd.heroku+json; version=3" 
-      --header "Authorization: Bearer $HEROKU_API_KEY
+      --header "Authorization: Bearer $HEROKU_API_KEY"
     - dpl --provider=heroku --app=$STAGING_SERVER_HEROKU_APP_NAME --api-key=$HEROKU_API_KEY --cleanup
   only:
     - test
@@ -142,7 +142,7 @@ Deploy Production Server:
       --data "{\"SPRING_PROFILES_ACTIVE\": \"prod\"}" 
       --header "Content-Type: application/json" 
       --header "Accept: application/vnd.heroku+json; version=3" 
-      --header "Authorization: Bearer $HEROKU_API_KEY
+      --header "Authorization: Bearer $HEROKU_API_KEY"
     - dpl --provider=heroku --app=$PRODUCTION_HEROKU_APP_NAME --api-key=$HEROKU_API_KEY --cleanup
   only:
     - master
