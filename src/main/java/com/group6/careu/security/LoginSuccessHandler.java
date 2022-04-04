@@ -24,7 +24,7 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
         } else if(userDetails.getRole().equalsIgnoreCase("admin")) {
             redirectURL = "/admin";
         } else{
-            redirectURL = "/patient";
+            redirectURL = "/patienthomepage";
         }
         response.sendRedirect(redirectURL);
 

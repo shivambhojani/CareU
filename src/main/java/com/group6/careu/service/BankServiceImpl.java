@@ -1,15 +1,12 @@
 package com.group6.careu.service;
 
-import com.group6.careu.entity.AMEXResponse;
 import com.group6.careu.entity.Transactions;
-import com.group6.careu.entity.VISAResponse;
 import com.group6.careu.model.Request.AMEXRequestModel;
 import com.group6.careu.model.Request.VISARequestModel;
 import com.group6.careu.model.Response.AMEXResponseModel;
 import com.group6.careu.model.Response.GenericResponseModel;
 import com.group6.careu.model.Response.VISAResponseModel;
 import com.group6.careu.model.TransactionsModel;
-import com.group6.careu.repository.BankRepository;
 import com.group6.careu.repository.TransactionsRepository;
 import com.group6.careu.security.CareuUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,8 +90,8 @@ public class BankServiceImpl implements BankService{
             genericResponseModel = visaPaymentService.makePayment(visaRequestModel);;
             System.out.println("Debug Generic Response Model " + genericResponseModel.getResponseId());
             //System.out.println(response);
-            System.out.println("Response Id: "+visaResponseModel.getResponseId());
-            if(visaResponseModel.getStatusCode() == HttpStatus.OK.value()){
+            System.out.println("Response Id: "+genericResponseModel.getResponseId());
+            if(genericResponseModel.getStatusCode() == HttpStatus.OK.value()){
                 status=true;
             }else{
                 status=false;
@@ -125,8 +122,8 @@ public class BankServiceImpl implements BankService{
 //            AMEXResponseModel amexResponseModel= amexPaymentService.makePayment(amexRequestModel);
             genericResponseModel=amexPaymentService.makePayment(amexRequestModel);
             //System.out.println(response);
-            System.out.println("Response Id: "+amexResponseModel.getResponseId());
-            if(amexResponseModel.getStatusCode() == HttpStatus.OK.value()){
+            System.out.println("Response Id: "+genericResponseModel.getResponseId());
+            if(genericResponseModel.getStatusCode() == HttpStatus.OK.value()){
                 status=true;
             }else{
                 status=false;
@@ -157,7 +154,12 @@ public class BankServiceImpl implements BankService{
     }
 
     @Override
-    public void updateTransaction(Transactions transaction,VISAResponseModel response ){
+    public void updateTransaction(Transactions transactions, GenericResponseModel response) {
+
+    }
+
+    @Override
+    public void updateTransaction(Transactions transaction, VISAResponseModel response){
         if(response.getStatusCode()==HttpStatus.OK.value()){
             transaction.setTransactionStatus("Completed");
         }else{
