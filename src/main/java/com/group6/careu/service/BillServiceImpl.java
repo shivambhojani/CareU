@@ -1,5 +1,6 @@
 package com.group6.careu.service;
 
+import com.group6.careu.constants.ApplicationConstants;
 import com.group6.careu.entity.User;
 import com.group6.careu.entity.UserDocument;
 import com.group6.careu.model.BillModel;
@@ -41,104 +42,19 @@ public class BillServiceImpl implements BillService{
         PDDocument bill=b.getBill();
         PDPage page = bill.getPage(0);
 
-        Double cost=40.0;
-        Double tax=15.0;
-        Double total=40.0+(0.15*40.0);
+
+        Double total = ApplicationConstants.CONSULTATION_FEE + (ApplicationConstants.TAX * ApplicationConstants.CONSULTATION_FEE);
 
         try {
             PDPageContentStream cs = new PDPageContentStream(bill, page);
 
-            cs.beginText();
-            cs.setFont(PDType1Font.HELVETICA, 28);
-            cs.newLineAtOffset(60, 750);
-            cs.showText("CareU");
-            cs.endText();
+            billPdfHeadings(cs);
 
-            cs.beginText();
-            cs.setFont(PDType1Font.HELVETICA, 18);
-            cs.setLeading(20f);
-            cs.newLineAtOffset(60, 690);
-            cs.showText("6056 University Ave,");
-            cs.newLine();
-            cs.showText("Halifax,");
-            cs.newLine();
-            cs.showText("NS B3H 1W5");
-            cs.endText();
+            billPdfAddress(u, cs);
 
-            cs.beginText();
-            cs.setFont(PDType1Font.HELVETICA_BOLD, 14);
-            cs.setLeading(20f);
-            cs.newLineAtOffset(60, 610);
-            cs.showText("Billing Questions ?");
-            cs.newLine();
-            cs.showText("Please call us at 902-412-7150,");
-            cs.newLine();
-            cs.showText("Monday-Friday 9am-5pm");
-            cs.newLine();
-            cs.showText("Saturday 11am-3pm");
-            cs.endText();
+            billPdfHospitalStatement(cs);
 
-            cs.beginText();
-            cs.setFont(PDType1Font.HELVETICA_BOLD, 14);
-            cs.setLeading(20f);
-            cs.newLineAtOffset(60, 510);
-            cs.showText("ADDRESSEE");
-            cs.newLine();
-            cs.showText(u.getFirstName()+" "+u.getLastName());
-            cs.newLine();
-            cs.showText(u.getPhone());
-            cs.endText();
-
-            cs.beginText();
-            cs.setFont(PDType1Font.HELVETICA_BOLD, 14);
-            cs.setLeading(20f);
-            cs.newLineAtOffset(140, 350);
-            cs.showText("HOSPITAL STATEMENT");
-            cs.endText();
-
-            cs.beginText();
-            cs.setFont(PDType1Font.HELVETICA_BOLD, 14);
-            cs.newLineAtOffset(80, 300);
-            cs.showText("Services");
-            cs.endText();
-
-            cs.beginText();
-            cs.setFont(PDType1Font.HELVETICA_BOLD, 14);
-            cs.newLineAtOffset(200, 300);
-            cs.showText("Charges/Description");
-            cs.endText();
-
-            cs.beginText();
-            cs.setFont(PDType1Font.HELVETICA, 12);
-            cs.setLeading(20f);
-            cs.newLineAtOffset(80, 280);
-            cs.showText("Consultation");
-            cs.endText();
-
-            cs.beginText();
-            cs.setFont(PDType1Font.HELVETICA, 14);
-            cs.newLineAtOffset(200, 280);
-            cs.showText(cost.toString());
-            cs.endText();
-
-            cs.beginText();
-            cs.setFont(PDType1Font.HELVETICA, 12);
-            cs.setLeading(20f);
-            cs.newLineAtOffset(80, 260);
-            cs.showText("Tax");
-            cs.endText();
-
-            cs.beginText();
-            cs.setFont(PDType1Font.HELVETICA, 14);
-            cs.newLineAtOffset(200, 260);
-            cs.showText(tax.toString());
-            cs.endText();
-
-            cs.beginText();
-            cs.setFont(PDType1Font.HELVETICA_BOLD, 14);
-            cs.newLineAtOffset(80, 210);
-            cs.showText("Total");
-            cs.endText();
+            billPDFDoctorConsutationCost(cs);
 
             cs.beginText();
             cs.setFont(PDType1Font.HELVETICA_BOLD, 14);
@@ -177,5 +93,106 @@ public class BillServiceImpl implements BillService{
             e.printStackTrace();
         }
         return null;
+    }
+
+    private void billPDFDoctorConsutationCost(PDPageContentStream cs) throws IOException {
+
+        cs.beginText();
+        cs.setFont(PDType1Font.HELVETICA, 12);
+        cs.setLeading(20f);
+        cs.newLineAtOffset(80, 280);
+        cs.showText("Consultation");
+        cs.endText();
+
+        cs.beginText();
+        cs.setFont(PDType1Font.HELVETICA, 14);
+        cs.newLineAtOffset(200, 280);
+        cs.showText(ApplicationConstants.CONSULTATION_FEE.toString());
+        cs.endText();
+
+        cs.beginText();
+        cs.setFont(PDType1Font.HELVETICA, 12);
+        cs.setLeading(20f);
+        cs.newLineAtOffset(80, 260);
+        cs.showText("Tax");
+        cs.endText();
+
+        cs.beginText();
+        cs.setFont(PDType1Font.HELVETICA, 14);
+        cs.newLineAtOffset(200, 260);
+        cs.showText(ApplicationConstants.TAX.toString());
+        cs.endText();
+
+        cs.beginText();
+        cs.setFont(PDType1Font.HELVETICA_BOLD, 14);
+        cs.newLineAtOffset(80, 210);
+        cs.showText("Total");
+        cs.endText();
+    }
+
+    private void billPdfHospitalStatement(PDPageContentStream cs) throws IOException {
+        cs.beginText();
+        cs.setFont(PDType1Font.HELVETICA_BOLD, 14);
+        cs.setLeading(20f);
+        cs.newLineAtOffset(140, 350);
+        cs.showText("HOSPITAL STATEMENT");
+        cs.endText();
+
+        cs.beginText();
+        cs.setFont(PDType1Font.HELVETICA_BOLD, 14);
+        cs.newLineAtOffset(80, 300);
+        cs.showText("Services");
+        cs.endText();
+
+        cs.beginText();
+        cs.setFont(PDType1Font.HELVETICA_BOLD, 14);
+        cs.newLineAtOffset(200, 300);
+        cs.showText("Charges/Description");
+        cs.endText();
+    }
+
+    private void billPdfAddress(User u, PDPageContentStream cs) throws IOException {
+        cs.beginText();
+        cs.setFont(PDType1Font.HELVETICA_BOLD, 14);
+        cs.setLeading(20f);
+        cs.newLineAtOffset(60, 510);
+        cs.showText("ADDRESSEE");
+        cs.newLine();
+        cs.showText(u.getFirstName()+" "+ u.getLastName());
+        cs.newLine();
+        cs.showText(u.getPhone());
+        cs.endText();
+    }
+
+    private void billPdfHeadings(PDPageContentStream cs) throws IOException {
+        cs.beginText();
+        cs.setFont(PDType1Font.HELVETICA, 28);
+        cs.newLineAtOffset(60, 750);
+        cs.showText("CareU");
+        cs.endText();
+
+        cs.beginText();
+        cs.setFont(PDType1Font.HELVETICA, 18);
+        cs.setLeading(20f);
+        cs.newLineAtOffset(60, 690);
+        cs.showText("6056 University Ave,");
+        cs.newLine();
+        cs.showText("Halifax,");
+        cs.newLine();
+        cs.showText("NS B3H 1W5");
+        cs.endText();
+
+        cs.beginText();
+        cs.setFont(PDType1Font.HELVETICA_BOLD, 14);
+        cs.setLeading(20f);
+        cs.newLineAtOffset(60, 610);
+        cs.showText("Billing Questions ?");
+        cs.newLine();
+        cs.showText("Please call us at 902-412-7150,");
+        cs.newLine();
+        cs.showText("Monday-Friday 9am-5pm");
+        cs.newLine();
+        cs.showText("Saturday 11am-3pm");
+        cs.endText();
     }
 }

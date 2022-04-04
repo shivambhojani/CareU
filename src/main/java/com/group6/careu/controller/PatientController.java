@@ -48,9 +48,11 @@ public class PatientController {
     @Autowired
     AppointmentServiceImpl appointmentServiceImpl;
 
+    //Used for fetching information for patient homepage.
+    //It extracts patient basic details and also the appointment details for the logged in patient
     @GetMapping(path = "/patienthomepage")
-    public String getAllPatients(Model model, Integer id, @AuthenticationPrincipal CareuUserDetails loggedUser) {
-        //List<BookAppointment> appointments = bookAppointmentService.getAppointmentsByPatientId(id);
+    public String getPatient(Model model, Integer id, @AuthenticationPrincipal CareuUserDetails loggedUser) {
+
         String email = loggedUser.getUsername();
         User user = userServiceImpl.getByEmail(email);
         Integer userId = user.getId();
@@ -75,6 +77,9 @@ public class PatientController {
         return "patient";
     }
 
+
+    //Controller used for getting the patient details on patient profile page
+    //It displays various types of information for patient which they can edit from the UI
     @GetMapping(path = "/patientProfile")
     public String getPatientDetails(Model model, @AuthenticationPrincipal CareuUserDetails loggedUser) {
         String email = loggedUser.getUsername();
@@ -96,6 +101,8 @@ public class PatientController {
     }
 
 
+    //This controller is used to save the latest edits done by the patients on patient profile page
+    //This controller is called from the patientprofile.html
     @PostMapping("/updatePatient")
     public String updatePatient(@AuthenticationPrincipal CareuUserDetails loggedUser, PatientSettingsModel patientSettingsModel,
                                 RedirectAttributes redirectAttributes) {
@@ -120,6 +127,7 @@ public class PatientController {
         return "redirect:/patientProfile";
     }
 
+
     @PostMapping("/updatePatientFeedback/{appointment_id}")
     public String postPatientFeedback(@PathVariable(name = "appointment_id") UUID appointment_id, PatientAppointmentModel patientAppointmentModel,
                                       RedirectAttributes redirectAttributes) {
@@ -133,6 +141,8 @@ public class PatientController {
 
     }
 
+    //This controller gets all the appointment related details on the UI.
+    //These details are displayed when patient clicks on feed back button
     @GetMapping(path = "/patientFeedback/{appointment_id}")
     public String getAppointmentDetails(@PathVariable(name = "appointment_id") UUID appointment_id, Model model) {
         PatientAppointmentModel patientAppointmentModelsByID = new PatientAppointmentModel();
@@ -177,14 +187,17 @@ public class PatientController {
         return patientFurtureAppointmentModels;
     }
 
+    //This method transforms the appointment details from the appointment List to PatientAppointmentModel.
+    //PatientAppointmentModel is passed to UI, using which the patient appointment details are shown in the UI
     public List<PatientAppointmentModel> fetchAppointmentDetails(List<Appointment> appointments) {
         List<PatientAppointmentModel> patientAppointmentModels = new ArrayList<>();
         for (int i = 0; i < appointments.size(); i++) {
             PatientAppointmentModel p = new PatientAppointmentModel();
             int doctorId = appointments.get(i).getDoctor().getDoctor_id();
-            User u = repository.getUserByDoctorId(doctorId);
+            User u = repository.getUserByDoctor(doctorId);
             p.setAppointment_id(appointments.get(i).getAppointmentId());
             p.setDoctorName(u.getFirstName() + " " + u.getLastName());
+            p.setDoctorContact(u.getPhone());
             p.setMedications(appointments.get(i).getMedications());
             p.setConsultationType(appointments.get(i).getConsulationType());
             p.setDate(appointments.get(i).getAppointment_date());
@@ -195,32 +208,5 @@ public class PatientController {
         }
         return patientAppointmentModels;
     }
-
-
-//    @GetMapping(path = "/getAppointmentbyPatientId/")
-//    public List<PatientAppointmentModel> getAppointmentByPatientId(Model model, @AuthenticationPrincipal CareuUserDetails loggedUser) {
-//        String email = loggedUser.getUsername();
-//        User user = userServiceImpl.getByEmail(email);
-//        Integer userId = user.getId();
-//
-//        List<PatientAppointmentModel> patientAppointmentModels = new ArrayList<>();
-//        List<Appointment> appointments = appointmentServiceImpl.getTodaysPatientAppointments(userId);
-//        for (int i = 0 ; i< appointments.size(); i++){
-//            PatientAppointmentModel p = new PatientAppointmentModel();
-//            int doctorId = appointments.get(i).getDoctor().getDoctor_id();
-//            User u  = repository.getUserByDoctorId(doctorId);
-//            p.setDoctorName(u.getFirstName() + " " + u.getLastName());
-//            p.setMedications(appointments.get(i).getMedications());
-//            p.setConsultationType(appointments.get(i).getConsulationType());
-//            p.setDate(appointments.get(i).getAppointment_date());
-//            p.setEnd_time(appointments.get(i).getEndTime());
-//            p.setStart_time(appointments.get(i).getStartTime());
-//            p.setPatient_id(appointments.get(i).getPatient().getPatient_id());
-//            patientAppointmentModels.add(p);
-//        }
-//
-//        model.addAttribute("patientAppointments", patientAppointmentModels);
-//        return patientAppointmentModels;
-//    }
 
 }

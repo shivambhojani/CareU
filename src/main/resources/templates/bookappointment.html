@@ -27,7 +27,7 @@
     </form>
     <div>
         <nav class="navbar navbar-expand-lg bg-dark navbar-dark ">
-            <a class="navbar-brand" th:href="@{/}">
+            <a class="navbar-brand" th:href="@{/patienthomepage}">
                 <h1>CareU</h1>
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar">
@@ -128,6 +128,21 @@ $(document).ready(function() {
         })
         customizeDropDownMenu();
     });
+
+    function customizeDropDownMenu() {
+        $(".navbar .dropdown").hover(
+            function () {
+                $(this).find('.dropdown-menu').first().stop(true, true).delay(250).slideDown();
+            },
+            function () {
+                $(this).find('.dropdown-menu').first().stop(true, true).delay(100).slideUp();
+            }
+        );
+
+        $(".dropdown > a").click(function () {
+            location.href = this.href;
+        });
+    }
 
 $(document).ready(function() {
         $("#logoutLink").on("click", function(e) {

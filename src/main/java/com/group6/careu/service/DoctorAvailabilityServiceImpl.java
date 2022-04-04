@@ -2,9 +2,12 @@ package com.group6.careu.service;
 
 import com.group6.careu.entity.Doctor;
 import com.group6.careu.entity.DoctorAvailability;
+import com.group6.careu.entity.User;
 import com.group6.careu.model.AppointmentModel;
 import com.group6.careu.model.DoctorAvailabilityModel;
 import com.group6.careu.repository.DoctorAvailabilityRepository;
+import com.group6.careu.repository.DoctorRepository;
+import com.group6.careu.repository.UserRepository;
 import com.group6.careu.security.CareuUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,6 +21,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -25,6 +29,12 @@ public class DoctorAvailabilityServiceImpl implements DoctorAvailabilityService{
 
     @Autowired
     DoctorAvailabilityRepository doctorAvailabilityRepository;
+
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    DoctorRepository doctorRepository;
 
     @Override
     public List<DoctorAvailability> getAllTimes(Integer doctor_id) {
@@ -34,8 +44,10 @@ public class DoctorAvailabilityServiceImpl implements DoctorAvailabilityService{
     @Override
     public void saveAvailability(DoctorAvailabilityModel model){
         CareuUserDetails userDetails= (CareuUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        model.setDoctorId(userDetails.getId());
-        System.out.println(userDetails.getId());
+        User user = userRepository.getUserByDoctorId(userDetails.getId());
+        Optional<Doctor> doctorOptional = doctorRepository.findById(user.getDoctor().getDoctor_id());
+        model.setDoctorId(doctorOptional.get().getDoctor_id());
+        System.out.println(doctorOptional.get().getDoctor_id());
         List<DoctorAvailability> list=getEntites(model);
         System.out.println("In line 25");
         doctorAvailabilityRepository.saveAll(list);
