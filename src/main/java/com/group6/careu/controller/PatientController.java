@@ -127,7 +127,7 @@ public class PatientController {
         return "redirect:/patientProfile";
     }
 
-
+    //this controller is called from UI when patient updates the feedback of one of the pasts appointment
     @PostMapping("/updatePatientFeedback/{appointment_id}")
     public String postPatientFeedback(@PathVariable(name = "appointment_id") UUID appointment_id, PatientAppointmentModel patientAppointmentModel,
                                       RedirectAttributes redirectAttributes) {
@@ -166,24 +166,34 @@ public class PatientController {
         return "appointmentfeedback";
     }
 
+    //extracts information of today's appointment for logged in patient based on the system's current date
     public List<PatientAppointmentModel> getTodaysAppointments(User user, Integer patientId, Date todaysDate) {
         List<PatientAppointmentModel> patientTodaysAppointmentModels = new ArrayList<>();
         List<Appointment> appointments = appointmentServiceImpl.getTodaysPatientAppointments(user.getPatient().getPatient_id(), todaysDate);
-        patientTodaysAppointmentModels = fetchAppointmentDetails(appointments);
+        if (appointments.size() > 0) {
+            patientTodaysAppointmentModels = fetchAppointmentDetails(appointments);
+
+        }
         return patientTodaysAppointmentModels;
     }
 
+    //extracts information of past appointment for logged in patient based on the system's current date
     public List<PatientAppointmentModel> getPastAppointments(User user, Integer patientId, Date todaysDate) {
         List<PatientAppointmentModel> patientPastAppointmentModels = new ArrayList<>();
         List<Appointment> appointments = appointmentServiceImpl.getPatientPastAppointments(user.getPatient().getPatient_id(), todaysDate);
-        patientPastAppointmentModels = fetchAppointmentDetails(appointments);
+        if(appointments.size()>0) {
+            patientPastAppointmentModels = fetchAppointmentDetails(appointments);
+        }
         return patientPastAppointmentModels;
     }
 
+    //extracts information of future appointment for logged in patient based on the system's current date
     public List<PatientAppointmentModel> getFutureAppointments(User user, Integer patientId, Date todaysDate) {
         List<PatientAppointmentModel> patientFurtureAppointmentModels = new ArrayList<>();
         List<Appointment> appointments = appointmentServiceImpl.getPatientFutureAppointments(user.getPatient().getPatient_id(), todaysDate);
-        patientFurtureAppointmentModels = fetchAppointmentDetails(appointments);
+        if(appointments.size()>0) {
+            patientFurtureAppointmentModels = fetchAppointmentDetails(appointments);
+        }
         return patientFurtureAppointmentModels;
     }
 

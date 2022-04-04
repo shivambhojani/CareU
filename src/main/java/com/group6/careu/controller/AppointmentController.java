@@ -59,9 +59,11 @@ public class AppointmentController {
     @Autowired
     EmailService emailService;
 
+
+    //Controller for searching doctor based on various filter
+    //The keyword is entered from UI
     public AppointmentController(AppointmentService appointmentService) {
     }
-
     @GetMapping("/searchDoctors")
     public String getAllDoctors(Model model, String keyword) {
         List<User> doctorList = new ArrayList<>();
@@ -155,7 +157,7 @@ public class AppointmentController {
             PatientAppointmentModel p = new PatientAppointmentModel();
             p.setAppointment_id(appointments.get(i).getAppointmentId());
             int doctorId = appointments.get(i).getDoctor().getDoctor_id();
-            User u = repository.getUserByDoctorId(doctorId);
+            User u = repository.getUserByDoctor(doctorId);
             p.setDoctorName(u.getFirstName() + " " + u.getLastName());
             p.setMedications(appointments.get(i).getMedications());
             p.setConsultationType(appointments.get(i).getConsulationType());
