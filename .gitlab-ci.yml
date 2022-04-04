@@ -1,0 +1,136 @@
+image: ubuntu:latest
+
+cache:
+  paths:
+    - .m2/repository/
+    - target/
+
+before_script:
+  - ln -snf /usr/share/zoneinfo/$CONTAINER_TIMEZONE /etc/localtime && echo $CONTAINER_TIMEZONE > /etc/timezone
+  - apt-get update
+  - apt-get --yes --force-yes install wget curl maven git
+
+stages:
+  - build
+  - test
+  - code_quality
+  - deploy-staging
+  - deploy-production
+
+# test stage will compile the code and run all the unit tests present in the
+# test folder.
+Test:
+  stage: test
+  tags:
+    - dalfcs_docker_autoscale
+  script:
+    - mvn clean verify
+  artifacts:
+    when: always
+    reports:
+      junit:
+        - target/surefire-reports/TEST-*.xml
+        - target/failsafe-reports/TEST-*.xml
+
+# build stage will just build the codebase without running
+# any tests or creating any jar file.
+Build Dev:
+  stage: build
+  tags:
+    - dalfcs_docker_autoscale
+  script:
+    - mvn clean install -DskipTests=true
+  artifacts:
+    paths:
+      - target/*.jar
+  only:
+    - develop
+
+Build Test:
+  stage: build
+  tags:
+    - dalfcs_docker_autoscale
+  script:
+    - mvn clean install -DskipTests=true -Ptest
+  artifacts:
+    paths:
+      - target/*.jar
+  only:
+    - test
+
+Build Prod:
+  stage: build
+  tags:
+    - dalfcs_docker_autoscale
+  script:
+    - mvn clean install -DskipTests=true -Pprod
+  artifacts:
+    paths:
+      - target/*.jar
+  only:
+    - master
+
+code_quality:
+  stage: code_quality
+  tags:
+    - dalfcs_docker_autoscale
+  variables:
+    UPLOAD_QUALITY_REPORT: 'curl -X PUT -H "Authorization: Token $QSCORED_API_KEY" -H "repository-link: $CI_PROJECT_URL"+ -H "username:pavan.srivathsav@gmail.com" -H "Content-Type: multipart/form-data" --url "https://qscored.com/api/upload/file.xml?is_open_access=off&version=$CI_PIPELINE_IID&project_name=careu-project" -F "file=@Designite_output/DesigniteAnalysis.xml"'
+
+  script:
+    - wget -O DesigniteJava.jar https://www.dropbox.com/s/mwizkj8uhplz4x3/DesigniteJava.jar?dl=1
+    - java -jar DesigniteJava.jar -ci -repo 'csci-5308/group6' -pat $PAT -host "git.cs.dal.ca/courses/2022-winter/" -k $D_KEY
+    - echo $CI_PROJECT_PATH
+    - echo $PAT
+    - echo $D_KEY
+    - eval "$UPLOAD_QUALITY_REPORT"
+    - echo $UPLOAD_QUALITY_REPORT
+
+  only:
+    - develop
+
+
+## deploy stage will create package the jar and keep it in the target folder.
+## The success of deploy stage will mark the pipeline as passed.
+#Deploy Staging Client:
+#  stage: deploy-staging
+#  image: ruby:latest
+#  tags:
+#    - dalfcs_docker_autoscale
+#  before_script:
+#    - apt-get update -qy
+#    - apt-get install -y ruby-dev
+#    - gem install dpl
+#  script:
+#    - cd client
+#    - dpl --provider=heroku --app=$STAGING_CLIENT_HEROKU_APP_NAME --api-key=$HARSH_HEROKU_API_KEY --cleanup
+#  only:
+#    - /^feature-.*/
+
+Deploy Staging Server:
+  stage: deploy-staging
+  image: ruby:latest
+  tags:
+    - dalfcs_docker_autoscale
+  before_script:
+    - apt-get update -qy
+    - apt-get install -y ruby-dev
+    - gem install dpl
+  script:
+    - dpl --provider=heroku --app=$STAGING_SERVER_HEROKU_APP_NAME --api-key=$HEROKU_API_KEY --cleanup
+  only:
+    - test
+
+Deploy Production Server:
+  stage: deploy-production
+  image: ruby:latest
+  tags:
+    - dalfcs_docker_autoscale
+  before_script:
+    - apt-get update -qy
+    - apt-get install -y ruby-dev
+    - gem install dpl
+  script:
+    - dpl --provider=heroku --app=$PRODUCTION_HEROKU_APP_NAME --api-key=$HEROKU_API_KEY --cleanup
+  only:
+    - master
