@@ -21,6 +21,7 @@ public class AdminController {
     @Autowired
     private UserServiceImpl userServiceImpl;
 
+    //Controller when an admin logs in to the system.
     @GetMapping("/admin")
     public String redirectToAdmin(Model model) {
 
@@ -29,6 +30,7 @@ public class AdminController {
         return "admin";
     }
 
+    //Controller for enabling the patients and doctors for
     @GetMapping("/users/{id}/enabled/{status}")
     public String updateUserEnabledStatus(@PathVariable("id") Integer id,
                                           @PathVariable("status") boolean enabled, RedirectAttributes redirectAttributes) {
@@ -40,6 +42,7 @@ public class AdminController {
         return "redirect:/admin";
     }
 
+    //controller for deleting the user from admin side of the portal
     @GetMapping("/users/delete/{id}")
     public String deleteUser(@PathVariable(name = "id") Integer id,
                              Model model,

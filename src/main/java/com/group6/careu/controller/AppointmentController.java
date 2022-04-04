@@ -54,6 +54,8 @@ public class AppointmentController {
     @Autowired
     EmailService emailService;
 
+    //Controller for searching doctor based on various filter
+    //The keyword is entered from UI
     @GetMapping("/searchDoctors")
     public String getAllDoctors(Model model, String keyword) {
         List<User> doctorList = new ArrayList<>();
