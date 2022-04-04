@@ -46,34 +46,6 @@ class AppointmentServiceImplTest {
     private UserRepository userRepository;
 
     @Test
-    @Disabled("TODO: Complete this test")
-    void testPushPatientAppointment() {
-        // TODO: Complete this test.
-        //   Reason: R013 No inputs found that don't throw a trivial exception.
-        //   Diffblue Cover tried to run the arrange/act section, but the method under
-        //   test threw
-        //   java.lang.NullPointerException
-        //       at com.group6.careu.service.AppointmentServiceImpl.pushPatientAppointment(AppointmentServiceImpl.java:34)
-        //   In order to prevent pushPatientAppointment(AppointmentModel)
-        //   from throwing NullPointerException, add constructors or factory
-        //   methods that make it easier to construct fully initialized objects used in
-        //   pushPatientAppointment(AppointmentModel).
-        //   See https://diff.blue/R013 to resolve this issue.
-
-        Patient patient = new Patient();
-        patient.setDisease("Disease");
-        patient.setPatient_id(1);
-
-        AppointmentModel appointmentModel = new AppointmentModel();
-        appointmentModel.setAppointment_date(mock(Date.class));
-        appointmentModel.setConsulationType("Consulation Type");
-        appointmentModel.setDoctor_id(1);
-        appointmentModel.setPatient_id(patient);
-        appointmentModel.setTime("Time");
-        this.appointmentServiceImpl.pushPatientAppointment(appointmentModel);
-    }
-
-    @Test
     void testGetTodaysPatientAppointments() {
         ArrayList<Appointment> appointmentList = new ArrayList<>();
         when(this.appointmentRepository.getTodaysAppointmentByPatientId((Integer) any(), (Date) any()))

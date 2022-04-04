@@ -86,6 +86,12 @@ class AppointmentControllerTest {
     @MockBean
     private UserRepository userRepository;
 
+    @MockBean
+    private UserServiceImpl userService;
+
+    @MockBean
+    private PatientServiceImpl patientService;
+
 
     @Test
     void testBookAnAppointment() throws Exception {
@@ -126,6 +132,59 @@ class AppointmentControllerTest {
                 .andExpect(MockMvcResultMatchers.model().attributeExists("appointment", "availTimes", "selectedDoctor"))
                 .andExpect(MockMvcResultMatchers.view().name("bookappointment"))
                 .andExpect(MockMvcResultMatchers.forwardedUrl("bookappointment"));
+    }
+
+    @Test
+    void testBookAppointment() throws Exception {
+        doNothing().when(this.doctorAvailabilityService)
+                .updateBookedAppointment((com.group6.careu.model.AppointmentModel) any(), anyBoolean());
+
+        Doctor doctor = new Doctor();
+        doctor.setDoctorAge(1);
+        doctor.setDoctorExperience("Doctor Experience");
+        doctor.setDoctorLocation("Doctor Location");
+        doctor.setDoctorOverview("Doctor Overview");
+        doctor.setDoctorQualification("Doctor Qualification");
+        doctor.setDoctorRegNumber("42");
+        doctor.setDoctorSpel("Doctor Spel");
+        doctor.setDoctor_id(1);
+
+        Patient patient = new Patient();
+        patient.setDisease("Disease");
+        patient.setPatient_id(1);
+
+        Appointment appointment = new Appointment();
+        appointment.setAppointmentId(UUID.randomUUID());
+        appointment.setAppointment_date(mock(Date.class));
+        appointment.setConsulationType("Consulation Type");
+        appointment.setDoctor(doctor);
+        appointment.setEndTime(mock(Time.class));
+        appointment.setMedications("Medications");
+        appointment.setPatient(patient);
+        appointment.setPatientFeedback("Patient Feedback");
+        appointment.setStartTime(mock(Time.class));
+        when(this.appointmentService.pushPatientAppointment((com.group6.careu.model.AppointmentModel) any())).thenReturn(appointment);
+        SecurityMockMvcRequestBuilders.FormLoginRequestBuilder requestBuilder = SecurityMockMvcRequestBuilders.formLogin();
+        ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(this.appointmentController)
+                .build()
+                .perform(requestBuilder);
+        actualPerformResult.andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
+    void testGetCancelAppointment() throws Exception {
+        User u = new User();
+        u.setId(1);
+        u.setFirstName("Jane");
+        u.setEmail("jane@mail.org");
+        u.setLastName("Doe");
+        SecurityMockMvcRequestBuilders.FormLoginRequestBuilder requestBuilder = SecurityMockMvcRequestBuilders.formLogin();
+        when(this.userService.getByEmail("jane@mail.org")).thenReturn(u);
+        when(this.patientService.getPatientbyID(u.getId())).thenReturn(u);
+        ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(this.appointmentController)
+                .build()
+                .perform(requestBuilder);
+        actualPerformResult.andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
     @Test
