@@ -53,8 +53,8 @@ class AMEXPaymentServiceImplTest {
         bank.setCity("Oxford");
         bank.setCvv(1);
         bank.setEmail("jane.doe@example.org");
-        bank.setExpiryMonth(1);
-        bank.setExpiryYear(1);
+        bank.setExpiryMonth(04);
+        bank.setExpiryYear(22);
         bank.setFullName("Dr Jane Doe");
         bank.setId(1);
         bank.setState("MD");
@@ -106,8 +106,8 @@ class AMEXPaymentServiceImplTest {
         amexRequestModel.setCurrency("GBP");
         amexRequestModel.setCvv(1);
         amexRequestModel.setEmail("jane.doe@example.org");
-        amexRequestModel.setExpiryMonth(1);
-        amexRequestModel.setExpiryYear(1);
+        amexRequestModel.setExpiryMonth(04);
+        amexRequestModel.setExpiryYear(22);
         amexRequestModel.setNameOnCard("Name On Card");
         amexRequestModel.setTransactionId(123);
         amexRequestModel.setTypeOfCard("Type Of Card");
@@ -288,8 +288,8 @@ class AMEXPaymentServiceImplTest {
         bank.setCity("Oxford");
         bank.setCvv(1);
         bank.setEmail("jane.doe@example.org");
-        bank.setExpiryMonth(1);
-        bank.setExpiryYear(200);
+        bank.setExpiryMonth(04);
+        bank.setExpiryYear(22);
         bank.setFullName("Dr Jane Doe");
         bank.setId(1);
         bank.setState("MD");
@@ -302,8 +302,8 @@ class AMEXPaymentServiceImplTest {
         bank1.setCity("Oxford");
         bank1.setCvv(1);
         bank1.setEmail("jane.doe@example.org");
-        bank1.setExpiryMonth(1);
-        bank1.setExpiryYear(1);
+        bank1.setExpiryMonth(04);
+        bank1.setExpiryYear(22);
         bank1.setFullName("Dr Jane Doe");
         bank1.setId(1);
         bank1.setState("MD");
@@ -341,8 +341,8 @@ class AMEXPaymentServiceImplTest {
         amexRequestModel.setCurrency("GBP");
         amexRequestModel.setCvv(1);
         amexRequestModel.setEmail("jane.doe@example.org");
-        amexRequestModel.setExpiryMonth(1);
-        amexRequestModel.setExpiryYear(1);
+        amexRequestModel.setExpiryMonth(04);
+        amexRequestModel.setExpiryYear(22);
         amexRequestModel.setNameOnCard("Name On Card");
         amexRequestModel.setTransactionId(123);
         amexRequestModel.setTypeOfCard("Type Of Card");
@@ -445,8 +445,8 @@ class AMEXPaymentServiceImplTest {
         bank.setCity("Oxford");
         bank.setCvv(1);
         bank.setEmail("jane.doe@example.org");
-        bank.setExpiryMonth(1);
-        bank.setExpiryYear(1);
+        bank.setExpiryMonth(04);
+        bank.setExpiryYear(22);
         bank.setFullName("Dr Jane Doe");
         bank.setId(1);
         bank.setState("MD");
@@ -477,8 +477,8 @@ class AMEXPaymentServiceImplTest {
         amexRequestModel.setCurrency("GBP");
         amexRequestModel.setCvv(1);
         amexRequestModel.setEmail("jane.doe@example.org");
-        amexRequestModel.setExpiryMonth(1);
-        amexRequestModel.setExpiryYear(1);
+        amexRequestModel.setExpiryMonth(04);
+        amexRequestModel.setExpiryYear(22);
         amexRequestModel.setNameOnCard("Name On Card");
         amexRequestModel.setTransactionId(123);
         amexRequestModel.setTypeOfCard("Type Of Card");
@@ -654,8 +654,8 @@ class AMEXPaymentServiceImplTest {
         bank.setCity("Oxford");
         bank.setCvv(1);
         bank.setEmail("jane.doe@example.org");
-        bank.setExpiryMonth(1);
-        bank.setExpiryYear(1);
+        bank.setExpiryMonth(04);
+        bank.setExpiryYear(22);
         bank.setFullName("Dr Jane Doe");
         bank.setId(1);
         bank.setState("MD");
@@ -686,8 +686,8 @@ class AMEXPaymentServiceImplTest {
         amexRequestModel.setCurrency("GBP");
         amexRequestModel.setCvv(1);
         amexRequestModel.setEmail("jane.doe@example.org");
-        amexRequestModel.setExpiryMonth(1);
-        amexRequestModel.setExpiryYear(0);
+        amexRequestModel.setExpiryMonth(04);
+        amexRequestModel.setExpiryYear(22);
         amexRequestModel.setNameOnCard("Name On Card");
         amexRequestModel.setTransactionId(123);
         amexRequestModel.setTypeOfCard("Type Of Card");
