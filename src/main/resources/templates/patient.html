@@ -87,7 +87,7 @@
         <td th:text="${patientTodaysAppointments.start_time}"></td>
         <td th:text="${patientTodaysAppointments.end_time}"></td>
         <td th:text="${patientTodaysAppointments.doctorName}"></td>
-        <td th:text="${patientFutureAppointments.doctorContact}"></td>
+        <td th:text="${patientTodaysAppointments.doctorContact}"></td>
         <td th:text="${patientTodaysAppointments.consultationType}"></td>
     </tr>
 </table>
@@ -134,7 +134,7 @@
         <td th:text="${patientPastAppointments.start_time}"></td>
         <td th:text="${patientPastAppointments.end_time}"></td>
         <td th:text="${patientPastAppointments.doctorName}"></td>
-        <td th:text="${patientFutureAppointments.doctorContact}"></td>
+        <td th:text="${patientPastAppointments.doctorContact}"></td>
         <td th:text="${patientPastAppointments.consultationType}"></td>
         <td>
             <a th:href="@{'/patientFeedback/' + ${patientPastAppointments.appointment_id}}">Feedback</a>
