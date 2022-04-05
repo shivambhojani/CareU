@@ -17,12 +17,12 @@ class AMEXRequestTest {
 
         assertEquals(10.0f, actualAmexRequest.getAmount());
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        assertEquals("1969-12-31", simpleDateFormat.format(actualAmexRequest.getUpdatedOn()));
+        assertEquals("1970-01-01", simpleDateFormat.format(actualAmexRequest.getUpdatedOn()));
         assertEquals(1, actualAmexRequest.getCvv().intValue());
         assertNull(actualAmexRequest.getCreditorName());
         assertNull(actualAmexRequest.getCreditorId());
         SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
-        assertEquals("1969-12-31", simpleDateFormat1.format(actualAmexRequest.getCreatedOn()));
+        assertEquals("1970-01-01", simpleDateFormat1.format(actualAmexRequest.getCreatedOn()));
         assertEquals("Card Type", actualAmexRequest.getCardType());
         assertEquals("42", actualAmexRequest.getCardNumber());
         assertEquals(123, actualAmexRequest.getBankTransactionId().intValue());

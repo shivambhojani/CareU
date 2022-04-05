@@ -15,9 +15,9 @@ class VISAResponseTest {
                 mock(Timestamp.class));
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        assertEquals("1969-12-31", simpleDateFormat.format(actualVisaResponse.getCreatedOn()));
+        assertEquals("1970-01-01", simpleDateFormat.format(actualVisaResponse.getCreatedOn()));
         SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
-        assertEquals("1969-12-31", simpleDateFormat1.format(actualVisaResponse.getUpdatedOn()));
+        assertEquals("1970-01-01", simpleDateFormat1.format(actualVisaResponse.getUpdatedOn()));
         assertEquals(123, actualVisaResponse.getTransactionId().intValue());
         assertEquals("Status Description", actualVisaResponse.getStatusDescription());
         assertEquals(1, actualVisaResponse.getStatusCode().intValue());

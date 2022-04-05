@@ -15,9 +15,9 @@ class AMEXResponseTest {
                 mock(Timestamp.class));
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        assertEquals("1969-12-31", simpleDateFormat.format(actualAmexResponse.getCreatedOn()));
+        assertEquals("1970-01-01", simpleDateFormat.format(actualAmexResponse.getCreatedOn()));
         SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
-        assertEquals("1969-12-31", simpleDateFormat1.format(actualAmexResponse.getUpdatedOn()));
+        assertEquals("1970-01-01", simpleDateFormat1.format(actualAmexResponse.getUpdatedOn()));
         assertEquals(123, actualAmexResponse.getTransactionId().intValue());
         assertEquals("Status Description", actualAmexResponse.getStatusDescription());
         assertEquals(1, actualAmexResponse.getStatusCode().intValue());
