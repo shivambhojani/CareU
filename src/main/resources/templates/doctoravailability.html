@@ -39,7 +39,7 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown"
                            sec:authentication="principal.fullname"></a>
-                        <div class="dropdown-menu">
+                        <div class="dropdown-menu  dropdown-menu-right">
                             <a class="dropdown-item" id="profileSettings" th:href="@{/doctorProfile}">Profile
                                 Settings</a>
                             <a class="dropdown-item" id="logoutLink" href="">Logout</a>
@@ -90,7 +90,7 @@
             </div>
             <input class="btn btn-primary mr-3 mt-2" type="button" onclick="saveAvailability()" value="Add">
             <button id="saveTimes" class="btn btn-primary mt-2" type="submit">Save Availability</button>
-            <table class="table">
+            <table class="table table-responsive w-100 d-block d-md-table">
                 <thead>
                 <tr>
                     <th>Availability Date</th>

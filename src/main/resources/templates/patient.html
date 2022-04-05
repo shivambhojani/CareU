@@ -31,30 +31,28 @@
                 <ul class="navbar-nav ml-auto">
 
                     <li class="nav-item dropdown">
-                        <div class="dropdown-menu">
+                        <div class="dropdown-menu  dropdown-menu-right">
                             <a class="dropdown-item" id="profile-link" href="">Profile</a>
                         </div>
                     </li>
 
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown">Appointments</a>
-                        <div class="dropdown-menu">
+                        <div class="dropdown-menu  dropdown-menu-right">
                             <a class="dropdown-item" th:href="@{/cancelAppointment}">Cancel Appointment</a>
                         </div>
                     </li>
 
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown">[[${patient.firstName}]] [[${patient.lastName}]]</a>
-                        <div class="dropdown-menu">
+                        <div class="dropdown-menu  dropdown-menu-right">
                             <a class="dropdown-item" id="profileSettings" th:href="@{/patientProfile}">Profile
                                 Settings</a>
                             <a class="dropdown-item" id="logoutLink" href="">Logout</a>
                         </div>
                     </li>
-
                 </ul>
             </div>
-
         </nav>
     </div>
 </div>
@@ -71,7 +69,7 @@
             <tr th:if="${#lists.isEmpty(patientTodaysAppointments)}">
                 <td>No Appointments.</td>
             </tr>
-            <table class="table" th:if="${not #lists.isEmpty(patientTodaysAppointments)}">
+            <table class="table table-responsive w-100 d-block d-md-table" th:if="${not #lists.isEmpty(patientTodaysAppointments)}">
                 <thead>
                 <tr>
                     <th scope="row">Date</th>
@@ -79,6 +77,7 @@
                     <th scope="row">End Time</th>
                     <th scope="row">Doctor</th>
                     <th scope="row">Consultation Type</th>
+                    <th scope="row">#</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -89,6 +88,11 @@
                     <td th:text="${patientTodaysAppointments.end_time}"></td>
                     <td th:text="${patientTodaysAppointments.doctorName}"></td>
                     <td th:text="${patientTodaysAppointments.consultationType}"></td>
+<!--                    <td><div th:if="${#patientTodaysAppointments.consultationType == 'online'}">-->
+<!--                        <a href="tel:+916767676767">+91 6767676767</a>&nbsp;-->
+<!--                        <a href="mailto:test@gmail.com">test@gmail.com</a>-->
+<!--                        </div>-->
+<!--                    </td>-->
                 </tr>
                 </tbody>
             </table>
@@ -105,7 +109,7 @@
             <tr th:if="${#lists.isEmpty(patientFutureAppointments)}">
                 <td>No Appointments.</td>
             </tr>
-            <table class="table" th:if="${not #lists.isEmpty(patientFutureAppointments)}">
+            <table class="table table-responsive w-100 d-block d-md-table" th:if="${not #lists.isEmpty(patientFutureAppointments)}">
                 <thead>
                 <tr>
                     <th scope="row">Date</th>
@@ -139,7 +143,7 @@
             <tr th:if="${#lists.isEmpty(patientPastAppointments)}">
                 <td>No Appointments.</td>
             </tr>
-            <table class="table" th:if="${not #lists.isEmpty(patientPastAppointments)}">
+            <table class="table table-responsive w-100 d-block d-md-table" th:if="${not #lists.isEmpty(patientPastAppointments)}">
                 <thead>
                 <tr>
                     <th scope="row">Date</th>

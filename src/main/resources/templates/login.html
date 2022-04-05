@@ -45,11 +45,15 @@
                             <input type="checkbox" name="remember-me" class="form-check-input" id="check1">
                             <label class="form-check-label" for="check1">&nbsp;Remember Me</label>
                         </div>
-                        <div class="text-center">
+                        <div class="text-center mb-2">
                             <input type="submit" class="btn btn-primary btn-md active mt-3 mb-3 mr-2" value="Login"  />
                             <a  class="btn btn-outline-secondary btn-md google-login mt-3 mb-3" th:href="@{/oauth2/authorization/google}">
                                 <b>Login with Google</b>
                             </a>
+                        </div>
+                        <div class="test-center">
+                            <h6>Not a member? <a th:href="@{/register}">Create Account</a></h6>
+                            <h6><a th:href="@{/forgot_password}">Forgot Password</a></h6>
                         </div>
                     </form>
 

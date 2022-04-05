@@ -20,6 +20,6 @@ public class CareuApplication implements WebMvcConfigurer {
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		// Register resource handler for images
 		registry.addResourceHandler("/**")
-				.addResourceLocations("classpath:/static/","classpath:/images/","classpath:/doctorPrescription/images/");
+				.addResourceLocations("classpath:/static/","classpath:/static/images/","classpath:/images/","classpath:/doctorPrescription/images/");
 	}
 }
