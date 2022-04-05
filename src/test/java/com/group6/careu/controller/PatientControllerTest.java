@@ -164,7 +164,7 @@ class PatientControllerTest {
         user.setGender("Gender");
         user.setId(1);
         user.setLastName("Doe");
-        user.setPassword("iloveyou");
+        user.setPassword("4455");
         user.setPatient(patient);
         user.setPhone("4105551212");
         user.setResetPasswordToken("ABC123");
@@ -290,7 +290,7 @@ class PatientControllerTest {
         user.setGender("Gender");
         user.setId(1);
         user.setLastName("Doe");
-        user.setPassword("iloveyou");
+        user.setPassword("44556");
         user.setPatient(patient);
         user.setPhone("4105551212");
         user.setResetPasswordToken("ABC123");

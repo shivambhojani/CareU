@@ -35,7 +35,6 @@
             </button>
             <div class="collapse navbar-collapse" id="topNavbar">
                 <ul class="navbar-nav ml-auto">
-
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown"
                            sec:authentication="principal.fullname"></a>
@@ -89,7 +88,8 @@
                 </div>
             </div>
             <input class="btn btn-primary mr-3 mt-2" type="button" onclick="saveAvailability()" value="Add">
-            <button id="saveTimes" class="btn btn-primary mt-2" type="submit">Save Availability</button>
+            <button id="saveTimes" class="btn btn-primary mt-2 mr-2" type="submit">Save Availability</button>
+            <a class="btn btn-secondary" th:href="@{/doctorhomepage}">Cancel</a>
             <table class="table table-responsive w-100 d-block d-md-table">
                 <thead>
                 <tr>
@@ -182,20 +182,20 @@
         var starttime = document.getElementById('starttime');
         var endtime = document.getElementById('endtime');
         var availabilitydate = document.getElementById('availabilitydate');
-        start_time_arr.push(starttime.value);
-        end_time_arr.push(endtime.value);
-        available_date_arr.push(availabilitydate.value);
-        starttime.value = '';
-        endtime.value = '';
-
-        var table_row = "";
-        for (var i = 0; i < available_date_arr.length; i++) {
-            table_row += "<tr>";
-            table_row += "<td>" + available_date_arr[i] + "</td>" + "<td>" + start_time_arr[i] + "</td>" + "<td>" + end_time_arr[i] + "</td>";
-            table_row += "<td><input id=\"delete_btn\" class=\"btn btn-danger\" type=\"button\" value=\"Delete\"></td>";
-            table_row += "</tr>";
-        }
-        document.getElementById("table_body").innerHTML = table_row;
+        // start_time_arr.push(starttime.value);
+        // end_time_arr.push(endtime.value);
+        // available_date_arr.push(availabilitydate.value);
+        // starttime.value = '';
+        // endtime.value = '';
+        //
+        // var table_row = "";
+        // for (var i = 0; i < available_date_arr.length; i++) {
+        //     table_row += "<tr>";
+        //     table_row += "<td>" + available_date_arr[i] + "</td>" + "<td>" + start_time_arr[i] + "</td>" + "<td>" + end_time_arr[i] + "</td>";
+        //     table_row += "<td><input id=\"delete_btn\" class=\"btn btn-danger\" type=\"button\" value=\"Delete\"></td>";
+        //     table_row += "</tr>";
+        // }
+        // document.getElementById("table_body").innerHTML = table_row;
 
         if(starttime.value.toString().length > 0 && endtime.value.toString().length>0 && availabilitydate.value.toString().length>0){
             start_time_arr.push(starttime.value);

@@ -16,6 +16,7 @@ import org.springframework.test.context.TestPropertySource;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -75,14 +76,15 @@ public class UserRepositoryITest {
     @Test
     void getAllDoctor() {
         User doctorUser = new User("Doctor", "doctor ", "male", "236541789","test@mail.com","12344", true, "doctor");
-        User doctorUser1 = new User("Doctor1", "doctor 1", "male", "236541789","test1@mail.com","12344", true, "doctor");
+        User doctorUser1 = new User("Doctor1", "doctor1", "male", "236541789","test43@mail.com","1245344", true, "doctor");
         List<User> doctors = new ArrayList<>();
         doctors.add(doctorUser1);
         doctors.add(doctorUser);
-        repo.saveAll(doctors);
+        Iterable <User> doc = repo.saveAll(doctors);
         String role = "doctor";
         List<User> fetchedUsers = repo.getAllDoctor(role);
         assertThat(fetchedUsers).isNotNull();
+        repo.deleteAll(fetchedUsers);
     }
 
     @Test

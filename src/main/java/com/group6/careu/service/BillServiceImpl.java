@@ -43,7 +43,7 @@ public class BillServiceImpl implements BillService{
         PDPage page = bill.getPage(0);
 
 
-        Double total = ApplicationConstants.CONSULTATION_FEE + (ApplicationConstants.TAX * ApplicationConstants.CONSULTATION_FEE);
+        Double total = ApplicationConstants.CONSULTATION_FEE + ((ApplicationConstants.TAX/100) * ApplicationConstants.CONSULTATION_FEE);
 
         try {
             PDPageContentStream cs = new PDPageContentStream(bill, page);

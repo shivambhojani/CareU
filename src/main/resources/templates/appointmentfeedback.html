@@ -99,19 +99,8 @@
             </form>
         </div>
     </div>
-        <!--    <h2>Patient Feedback</h2>-->
-        <!--    [[${appointmentModel.appointment_id}]]-->
-        <!--    [[${appointmentModel.doctorName}]]-->
-        <!--    [[${appointmentModel.patient_id}]]-->
-        <!--    [[${appointmentModel.date}]]-->
-        <!--    [[${appointmentModel.start_time}]]-->
-        <!--    [[${appointmentModel.end_time}]]-->
-        <!--    [[${appointmentModel.consultationType}]]-->
-        <!--    [[${appointmentModel.medications}]]-->
-
-        <!--        <h1 class="fw-bold text-center mt-5">CareU Landing</h1>-->
 </div>
-    <script type="text/javascript">
+<script type="text/javascript">
 
     function checkFeedBackValue() {
         var a = `[[${appointmentModel.patientFeedback}]]`;
@@ -152,7 +141,13 @@
         });
     }
 
+    $(document).ready(function() {
+        $("#buttonCancel").on("click", function() {
+            window.location = "[[@{/patienthomepage}]]";
+        });
+    });
 
-    </script>
+
+</script>
 </body>
 </html>
