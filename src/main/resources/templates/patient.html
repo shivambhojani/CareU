@@ -78,6 +78,7 @@
     <th scope="row">End Time</th>
     <th scope="row">Doctor</th>
     <th scope="row">Doctor Contact</th>
+    <th scope="row">Doctor Email</th>
     <th scope="row">Consulation Type</th>
     </thead>
 
@@ -88,6 +89,7 @@
         <td th:text="${patientTodaysAppointments.end_time}"></td>
         <td th:text="${patientTodaysAppointments.doctorName}"></td>
         <td th:text="${patientTodaysAppointments.doctorContact}"></td>
+        <td th:text="${patientTodaysAppointments.doctorEmail}"></td>
         <td th:text="${patientTodaysAppointments.consultationType}"></td>
     </tr>
 </table>
@@ -101,6 +103,7 @@
     <th scope="row">End Time</th>
     <th scope="row">Doctor</th>
     <th scope="row">Doctor Contact</th>
+    <th scope="row">Doctor Email</th>
     <th scope="row">Consulation Type</th>
     </thead>
 
@@ -111,6 +114,7 @@
         <td th:text="${patientFutureAppointments.end_time}"></td>
         <td th:text="${patientFutureAppointments.doctorName}"></td>
         <td th:text="${patientFutureAppointments.doctorContact}"></td>
+        <td th:text="${patientFutureAppointments.doctorEmail}"></td>
         <td th:text="${patientFutureAppointments.consultationType}"></td>
     </tr>
 </table>
@@ -124,6 +128,7 @@
     <th scope="row">End Time</th>
     <th scope="row">Doctor</th>
     <th scope="row">Doctor Contact</th>
+    <th scope="row">Doctor Email</th>
     <th scope="row">Consulation Type</th>
     <th scope="row">Feedback</th>
     </thead>
@@ -135,6 +140,7 @@
         <td th:text="${patientPastAppointments.end_time}"></td>
         <td th:text="${patientPastAppointments.doctorName}"></td>
         <td th:text="${patientPastAppointments.doctorContact}"></td>
+        <td th:text="${patientPastAppointments.doctorEmail}"></td>
         <td th:text="${patientPastAppointments.consultationType}"></td>
         <td>
             <a th:href="@{'/patientFeedback/' + ${patientPastAppointments.appointment_id}}">Feedback</a>
