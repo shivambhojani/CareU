@@ -31,13 +31,13 @@ class DoctorAvailabilityTest {
                 true);
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        assertEquals("1969-12-31", simpleDateFormat.format(actualDoctorAvailability.getAvailableDate()));
+        assertEquals("1970-01-01", simpleDateFormat.format(actualDoctorAvailability.getAvailableDate()));
         assertTrue(actualDoctorAvailability.isAppointmentBooked());
         SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
-        assertEquals("1969-12-31", simpleDateFormat1.format(actualDoctorAvailability.getStartTime()));
+        assertEquals("1970-01-01", simpleDateFormat1.format(actualDoctorAvailability.getStartTime()));
         assertEquals(1, actualDoctorAvailability.getId().intValue());
         SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("yyyy-MM-dd");
-        assertEquals("1969-12-31", simpleDateFormat2.format(actualDoctorAvailability.getEndTime()));
+        assertEquals("1970-01-01", simpleDateFormat2.format(actualDoctorAvailability.getEndTime()));
         Doctor doctor1 = actualDoctorAvailability.getDoctor();
         assertSame(doctor, doctor1);
         assertEquals(1, doctor1.getDoctorAge().intValue());

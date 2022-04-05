@@ -17,14 +17,14 @@ class TransactionsTest {
 
         assertEquals(10.0f, actualTransactions.getAmount());
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        assertEquals("1969-12-31", simpleDateFormat.format(actualTransactions.getUpdatedOn()));
+        assertEquals("1970-01-01", simpleDateFormat.format(actualTransactions.getUpdatedOn()));
         assertNull(actualTransactions.getTransaction_id());
         assertEquals("Transaction Status", actualTransactions.getTransactionStatus());
         assertEquals("Status Description", actualTransactions.getStatusDescription());
         assertEquals(1, actualTransactions.getStatusCode().intValue());
         assertEquals("Dr Jane Doe", actualTransactions.getFullName());
         SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
-        assertEquals("1969-12-31", simpleDateFormat1.format(actualTransactions.getCreatedOn()));
+        assertEquals("1970-01-01", simpleDateFormat1.format(actualTransactions.getCreatedOn()));
         assertEquals("Card Type", actualTransactions.getCardType());
         assertEquals("42", actualTransactions.getCardNumber());
         assertEquals(1, actualTransactions.getBankReferenceCode().intValue());

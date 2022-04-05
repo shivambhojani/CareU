@@ -16,10 +16,10 @@ class VISARequestTest {
 
         assertEquals(10.0f, actualVisaRequest.getAmount());
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        assertEquals("1969-12-31", simpleDateFormat.format(actualVisaRequest.getUpdatedOn()));
+        assertEquals("1970-01-01", simpleDateFormat.format(actualVisaRequest.getUpdatedOn()));
         assertEquals(1, actualVisaRequest.getCvv().intValue());
         SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
-        assertEquals("1969-12-31", simpleDateFormat1.format(actualVisaRequest.getCreatedOn()));
+        assertEquals("1970-01-01", simpleDateFormat1.format(actualVisaRequest.getCreatedOn()));
         assertEquals("Card Type", actualVisaRequest.getCardType());
         assertEquals("42", actualVisaRequest.getCardNumber());
         assertEquals(123, actualVisaRequest.getBankTransactionId().intValue());

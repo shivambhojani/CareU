@@ -32,17 +32,17 @@ class AppointmentTest {
 
         assertNull(actualAppointment.getAppointmentId());
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        assertEquals("1969-12-31", simpleDateFormat.format(actualAppointment.getStartTime()));
+        assertEquals("1970-01-01", simpleDateFormat.format(actualAppointment.getStartTime()));
         assertNull(actualAppointment.getPatientFeedback());
         Patient patient1 = actualAppointment.getPatient();
         assertSame(patient, patient1);
         assertEquals("Medications", actualAppointment.getMedications());
         SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
-        assertEquals("1969-12-31", simpleDateFormat1.format(actualAppointment.getAppointment_date()));
+        assertEquals("1970-01-01", simpleDateFormat1.format(actualAppointment.getAppointment_date()));
         Doctor doctor1 = actualAppointment.getDoctor();
         assertSame(doctor, doctor1);
         SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("yyyy-MM-dd");
-        assertEquals("1969-12-31", simpleDateFormat2.format(actualAppointment.getEndTime()));
+        assertEquals("1970-01-01", simpleDateFormat2.format(actualAppointment.getEndTime()));
         assertEquals("Consulation Type", actualAppointment.getConsulationType());
         assertEquals("Doctor Spel", doctor1.getDoctorSpel());
         assertEquals("42", doctor1.getDoctorRegNumber());
