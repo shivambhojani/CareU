@@ -182,20 +182,20 @@
         var starttime = document.getElementById('starttime');
         var endtime = document.getElementById('endtime');
         var availabilitydate = document.getElementById('availabilitydate');
-        start_time_arr.push(starttime.value);
-        end_time_arr.push(endtime.value);
-        available_date_arr.push(availabilitydate.value);
-        starttime.value = '';
-        endtime.value = '';
-
-        var table_row = "";
-        for (var i = 0; i < available_date_arr.length; i++) {
-            table_row += "<tr>";
-            table_row += "<td>" + available_date_arr[i] + "</td>" + "<td>" + start_time_arr[i] + "</td>" + "<td>" + end_time_arr[i] + "</td>";
-            table_row += "<td><input id=\"delete_btn\" class=\"btn btn-danger\" type=\"button\" value=\"Delete\"></td>";
-            table_row += "</tr>";
-        }
-        document.getElementById("table_body").innerHTML = table_row;
+        // start_time_arr.push(starttime.value);
+        // end_time_arr.push(endtime.value);
+        // available_date_arr.push(availabilitydate.value);
+        // starttime.value = '';
+        // endtime.value = '';
+        //
+        // var table_row = "";
+        // for (var i = 0; i < available_date_arr.length; i++) {
+        //     table_row += "<tr>";
+        //     table_row += "<td>" + available_date_arr[i] + "</td>" + "<td>" + start_time_arr[i] + "</td>" + "<td>" + end_time_arr[i] + "</td>";
+        //     table_row += "<td><input id=\"delete_btn\" class=\"btn btn-danger\" type=\"button\" value=\"Delete\"></td>";
+        //     table_row += "</tr>";
+        // }
+        // document.getElementById("table_body").innerHTML = table_row;
 
         if(starttime.value.toString().length > 0 && endtime.value.toString().length>0 && availabilitydate.value.toString().length>0){
             start_time_arr.push(starttime.value);

@@ -44,7 +44,8 @@
                     </li>
 
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown">[[${patient.firstName}]] [[${patient.lastName}]]</a>
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown">[[${patient.firstName}]]
+                            [[${patient.lastName}]]</a>
                         <div class="dropdown-menu  dropdown-menu-right">
                             <a class="dropdown-item" id="profileSettings" th:href="@{/patientProfile}">Profile
                                 Settings</a>
@@ -57,7 +58,8 @@
     </div>
 </div>
 <div class="container-fluid p-3">
-    <a id="HomePage" class="btn btn-primary mb-3" th:href="@{/searchDoctors}"><i class="fa-solid fa-magnifying-glass mr-2"></i>Search Doctors</a>
+    <a id="HomePage" class="btn btn-primary mb-3" th:href="@{/searchDoctors}"><i
+            class="fa-solid fa-magnifying-glass mr-2"></i>Search Doctors</a>
     <div class="card card-custom mb-3">
         <div class="card-header  p-0 pl-3">
             <div class="card-title">
@@ -69,15 +71,18 @@
             <tr th:if="${#lists.isEmpty(patientTodaysAppointments)}">
                 <td>No Appointments.</td>
             </tr>
-            <table class="table table-responsive w-100 d-block d-md-table" th:if="${not #lists.isEmpty(patientTodaysAppointments)}">
+            <table class="table table-responsive w-100 d-block d-md-table"
+                   th:if="${not #lists.isEmpty(patientTodaysAppointments)}">
                 <thead>
                 <tr>
                     <th scope="row">Date</th>
                     <th scope="row">Start Time</th>
                     <th scope="row">End Time</th>
+                    <th scope="row">Prescription</th>
                     <th scope="row">Doctor</th>
                     <th scope="row">Consultation Type</th>
-                    <th scope="row">#</th>
+                    <th scope="row">Doctor Email</th>
+                    <th id="contactColumn" scope="row">Doctor Contact</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -86,13 +91,20 @@
                     <td th:text="${patientTodaysAppointments.date}"></td>
                     <td th:text="${patientTodaysAppointments.start_time}"></td>
                     <td th:text="${patientTodaysAppointments.end_time}"></td>
+                    <td th:text="${patientTodaysAppointments.medications}"></td>
                     <td th:text="${patientTodaysAppointments.doctorName}"></td>
                     <td th:text="${patientTodaysAppointments.consultationType}"></td>
-                   <td><div th:if="${patientTodaysAppointments.consultationType == 'online'}">
-                       <a href="${patientTodaysAppointments.doctorContact}">${patientTodaysAppointments.doctorContact}</a>&nbsp;
-                       <a href="${patientTodaysAppointments.doctorEmail}">${patientTodaysAppointments.doctorEmail}</a>
-                       </div>
-                 </td>
+                    <!--                    <td>-->
+                    <!--                        <div th:if="${patientTodaysAppointments.consultationType == 'online'}">-->
+                    <!--                            <a href="${patientTodaysAppointments.doctorEmail}">[[${patientTodaysAppointments.doctorEmail}]]</a>-->
+                    <!--                        </div>-->
+                    <!--                    </td>-->
+                    <td th:text="${patientTodaysAppointments.doctorEmail}"></td>
+                    <td id="contactDisplay" >
+                        <div th:if="${patientTodaysAppointments.consultationType == 'online'}">
+                            <a href="${patientTodaysAppointments.doctorContact}">[[${patientTodaysAppointments.doctorContact}]]</a>&nbsp;
+                        </div>
+                    </td>
                 </tr>
                 </tbody>
             </table>
@@ -109,7 +121,8 @@
             <tr th:if="${#lists.isEmpty(patientFutureAppointments)}">
                 <td>No Appointments.</td>
             </tr>
-            <table class="table table-responsive w-100 d-block d-md-table" th:if="${not #lists.isEmpty(patientFutureAppointments)}">
+            <table class="table table-responsive w-100 d-block d-md-table"
+                   th:if="${not #lists.isEmpty(patientFutureAppointments)}">
                 <thead>
                 <tr>
                     <th scope="row">Date</th>
@@ -143,12 +156,14 @@
             <tr th:if="${#lists.isEmpty(patientPastAppointments)}">
                 <td>No Appointments.</td>
             </tr>
-            <table class="table table-responsive w-100 d-block d-md-table" th:if="${not #lists.isEmpty(patientPastAppointments)}">
+            <table class="table table-responsive w-100 d-block d-md-table"
+                   th:if="${not #lists.isEmpty(patientPastAppointments)}">
                 <thead>
                 <tr>
                     <th scope="row">Date</th>
                     <th scope="row">Start Time</th>
                     <th scope="row">End Time</th>
+                    <th scope="row">Prescription</th>
                     <th scope="row">Doctor</th>
                     <th scope="row">Consulation Type</th>
                     <th scope="row">Feedback</th>
@@ -160,6 +175,7 @@
                     <td th:text="${patientPastAppointments.date}"></td>
                     <td th:text="${patientPastAppointments.start_time}"></td>
                     <td th:text="${patientPastAppointments.end_time}"></td>
+                    <td th:text="${patientPastAppointments.medications}"></td>
                     <td th:text="${patientPastAppointments.doctorName}"></td>
                     <td th:text="${patientPastAppointments.consultationType}"></td>
                     <td>
@@ -171,3 +187,70 @@
         </div>
     </div>
 </div>
+
+<style>
+
+    /*@media screen and (max-width: 768px) {*/
+    /*    #contactDisplay{*/
+    /*        display: block;*/
+    /*    }*/
+    /*    #contactColumn{*/
+    /*        display: block;*/
+    /*    }*/
+    /*}*/
+    /*#contactDisplay{*/
+    /*    display: none;*/
+    /*}*/
+    /*#contactColumn{*/
+    /*    display: none;*/
+    /*}*/
+
+    @media screen and (max-width : 1920px){
+        #contactDisplay{
+            visibility:hidden;
+        }
+        #contactColumn{
+            visibility:hidden;
+        }
+    }
+    @media screen and (max-width : 906px){
+        #contactDisplay{
+            visibility: visible;
+        }
+        #contactColumn{
+            visibility:visible;
+        }
+    }
+
+</style>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#logoutLink").on("click", function (e) {
+            e.preventDefault();
+            document.logoutForm.submit();
+        });
+
+        customizeDropDownMenu();
+    });
+
+    function customizeDropDownMenu() {
+        $(".navbar .dropdown").hover(
+            function () {
+                $(this).find('.dropdown-menu').first().stop(true, true).delay(250).slideDown();
+            },
+            function () {
+                $(this).find('.dropdown-menu').first().stop(true, true).delay(100).slideUp();
+            }
+        );
+
+        $(".dropdown > a").click(function () {
+            location.href = this.href;
+        });
+    }
+
+
+</script>
+
+</body>
+</html>
