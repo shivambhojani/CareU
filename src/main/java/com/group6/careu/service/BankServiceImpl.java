@@ -48,6 +48,8 @@ public class BankServiceImpl implements BankService{
             cardType="VISA";
         }else if(cardNumber.matches("^3$|^3[47][0-9]{0,13}$")){
             cardType="AMEX";
+        }else{
+            cardType="UNSUPPORTED";
         }
 
         // What to do if cardType is null
@@ -132,6 +134,14 @@ public class BankServiceImpl implements BankService{
             }
 
             updateTransaction(transaction,genericResponseModel);
+        }else if(cardType.equals("UNSUPPORTED")){
+            Transactions transactionById= transactionsRepository.getTransactionById(transaction.getTransaction_id());
+
+            transactionById.setStatusCode(500);
+            transactionById.setBankReferenceCode(000);
+            transactionById.setStatusDescription("Unsupported Card");
+            transactionById.setTransactionStatus("Failure");
+            transactionsRepository.save(transactionById);
         }
 
         return genericResponseModel;

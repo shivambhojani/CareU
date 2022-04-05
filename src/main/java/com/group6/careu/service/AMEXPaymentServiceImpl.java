@@ -9,6 +9,10 @@ import com.group6.careu.repository.BankRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
+
 @Service
 public class AMEXPaymentServiceImpl implements PaymentService<AMEXRequestModel, AMEXResponseModel> {
     @Autowired
@@ -48,6 +52,7 @@ public class AMEXPaymentServiceImpl implements PaymentService<AMEXRequestModel, 
             amexResponse.setTransactionId(amexResponseModel.getTransactionId());
 
             amexResponse=amexResponseRepository.save(amexResponse);
+            amexResponseModel.setResponseId(amexResponse.getResponseId());
 
         }else{
             amexResponseModel.setStatusCode(400);
@@ -78,19 +83,33 @@ public class AMEXPaymentServiceImpl implements PaymentService<AMEXRequestModel, 
 
         System.out.println(userByCardNumber);
 
-        if(amexRequestModel.getCvv() == userByCardNumber.getCvv()){
-            if(amexRequestModel.getExpiryYear()== userByCardNumber.getExpiryYear()){
-                if(amexRequestModel.getExpiryMonth() <= userByCardNumber.getExpiryMonth()){
-                    accountCheck= true;
-                    id=userByCardNumber.getId();
-                    customerAccount=userByCardNumber;
-                }
-            }else{
-                if(amexRequestModel.getExpiryMonth()<= userByCardNumber.getExpiryMonth() &&
-                        amexRequestModel.getExpiryYear()<= userByCardNumber.getExpiryYear()){
-                    accountCheck= true;
-                    id=userByCardNumber.getId();
-                    customerAccount=userByCardNumber;
+        Date date = new Date();
+        LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        System.out.println("Date Today Month--------------------->"+localDate.getMonthValue());
+        System.out.println("Date Today Year---------------------->"+localDate.getYear());
+
+        int month=localDate.getMonthValue();
+        int year=localDate.getYear()%100;
+
+        if(userByCardNumber!=null){
+            if(amexRequestModel.getCvv() == userByCardNumber.getCvv()
+                    && amexRequestModel.getExpiryYear()== userByCardNumber.getExpiryYear()
+                    && amexRequestModel.getExpiryMonth() == userByCardNumber.getExpiryMonth()){
+                if(amexRequestModel.getExpiryYear()== year ){
+                    if(amexRequestModel.getExpiryMonth() >= month &&
+                            amexRequestModel.getAmount() <= userByCardNumber.getAmount()){
+                        accountCheck= true;
+                        id=userByCardNumber.getId();
+                        customerAccount=userByCardNumber;
+                    }
+                }else{
+                    if(amexRequestModel.getExpiryMonth() >= month &&
+                            amexRequestModel.getExpiryYear() >= year &&
+                            amexRequestModel.getAmount() <= userByCardNumber.getAmount()){
+                        accountCheck= true;
+                        id=userByCardNumber.getId();
+                        customerAccount=userByCardNumber;
+                    }
                 }
             }
         }

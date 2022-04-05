@@ -308,8 +308,9 @@ class AppointmentControllerTest {
         user1.setPatient(patient2);
         user1.setPhone("4105551212");
         user1.setResetPasswordToken("ABC123");
+        when(userRepository.getUserByDoctor(anyInt())).thenReturn(user);
         assertEquals(1, this.appointmentController.getFutureAppointments(user1, 123, mock(Date.class)).size());
-        verify(this.userRepository).getUserByDoctorId(anyInt());
+        verify(this.userRepository).getUserByDoctor(anyInt());
         verify(this.appointmentService).getPatientFutureAppointments((Integer) any(), (Date) any());
     }
 
@@ -375,8 +376,9 @@ class AppointmentControllerTest {
 
         ArrayList<Appointment> appointmentList = new ArrayList<>();
         appointmentList.add(appointment);
+        when(userRepository.getUserByDoctor(anyInt())).thenReturn(user);
         assertEquals(1, this.appointmentController.fetchAppointmentDetails(appointmentList).size());
-        verify(this.userRepository).getUserByDoctorId(anyInt());
+        verify(this.userRepository).getUserByDoctor(anyInt());
     }
 
     @Test
