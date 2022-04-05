@@ -3,77 +3,64 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0">
-
     <title>Login</title>
-
-    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/navigationStyles.css}"/>
 </head>
-<body>
-<div class="container-fluid text-center">
+<body style="background: #3362cc;">
+<div class="container container-fluid p-0">
+    <div class="card border-none">
+        <div class="card-body p-1">
+            <div class="row m-0">
+                <div class="col-6 col-md-6 col-lg-6 col-sm-none">
+                    <img src="login-page-image.svg" class="img img-fluid mt-4"
+                         alt="Login page image" height="500" width="500">
+                </div>
+                <div class="col-6 col-md-6 col-lg-6 col-sm-none align-items-center  p-3">
+                    <div>
+                        <h2 class="text-center mt-5">Login</h2>
+                    </div>
+                    <div th:if="${message != null}" class="alert alert-success text-center">
+                        [[${message}]]
+                    </div>
 
-    <div>
-        <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
-            <a class="navbar-brand" th:href="@{/}">
-                <h2>CareU</h2>
-            </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="topNavbar">
-                <ul class="navbar-nav mr-sm-2  ml-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/register}">Register</a>
-                    </li>
-                </ul>
+                    <form th:action="@{/login}" method="post" style="max-width: 350px; margin: 0 auto" class="mt-3">
+                        <div th:if="${param.error}">
+                            <p class="text-danger">[[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]</p>
+                        </div>
+                        <div th:if="${param.logout}">
+                            <p class="text-warning">You have been logged out.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email address</label>
+                            <input type="email" name="email" class="form-control" id="email" placeholder="name@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" name="password" class="form-control" placeholder="Password" id="password"
+                            >
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" name="remember-me" class="form-check-input" id="check1">
+                            <label class="form-check-label" for="check1">&nbsp;Remember Me</label>
+                        </div>
+                        <div class="text-center mb-2">
+                            <input type="submit" class="btn btn-primary btn-md active mt-3 mb-3 mr-2" value="Login"  />
+                            <a  class="btn btn-outline-secondary btn-md google-login mt-3 mb-3" th:href="@{/oauth2/authorization/google}">
+                                <b>Login with Google</b>
+                            </a>
+                        </div>
+                        <div class="test-center">
+                            <h6>Not a member? <a th:href="@{/register}">Create Account</a></h6>
+                            <h6><a th:href="@{/forgot_password}">Forgot Password</a></h6>
+                        </div>
+                    </form>
+
+                </div>
             </div>
-
-        </nav>
-    </div>
-
-    <div>
-        <h1 class="text-center mt-5">Login</h1>
-    </div>
-
-    <div th:if="${message != null}" class="alert alert-success text-center">
-        [[${message}]]
-    </div>
-
-    <form th:action="@{/login}" method="post" style="max-width: 350px; margin: 0 auto">
-        <div th:if="${param.error}">
-            <p class="text-danger">[[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]</p>
         </div>
-        <div th:if="${param.logout}">
-            <p class="text-warning">You have been logged out.</p>
-        </div>
-
-        <div class="border border-secondary rounded p-3">
-            <p>
-                <input type="email" name="email" class="form-control" placeholder="E-mail" required />
-            </p>
-            <p>
-                <input type="password" name="password" class="form-control" placeholder="Password" required />
-            </p>
-            <p>
-                <input type="checkbox" name="remember-me" />&nbsp;Remember Me
-            </p>
-            <p>
-                <input type="submit" value="Login" class="btn btn-primary" />
-            </p>
-        </div>
-    </form>
-
-    <div>&nbsp;</div>
-    <div>
-        or <a th:href="@{/forgot_password}">Forgot Password</a>
     </div>
-    <div>
-        Don't have an account? <a th:href="@{/register}"><b>Sign up</b></a>
-    </div>
-    <div>&nbsp;</div>
-    <div class="text-center fixed-bottom">
-        <p>CareU - Copyright &copy; CareU</p>
-    </div>
-
 </div>
 </body>
 </html>

@@ -1,25 +1,26 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-		xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0">
 
     <title>Doctor Profile</title>
-
-    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
-    <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}" ></script>
-    <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}" ></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/navigationStyles.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+    <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
 </head>
-<body>
-<div class="container-fluid">
+<body style="background: #EEF0F8;">
+<div class="container-fluid p-0">
     <form th:action="@{/logout}" method="post" th:hidden="true" name="logoutForm">
-        <input type="submit" />
+        <input type="submit"/>
     </form>
     <div>
-        <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
-            <a class="navbar-brand" th:href="@{/doctorhomepage}">
-                <h1>CareU</h1>
+        <nav class="navbar navbar-expand-lg bg-navbar text-light">
+            <a class="navbar-brand text-light m-0" th:href="@{/doctorhomepage}">
+                <img th:src="@{/images/careu_white_png.png}" alt="App logo" height="50" width="150">
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar">
                 <span class="navbar-toggler-icon"></span>
@@ -30,108 +31,91 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown"
                            sec:authentication="principal.fullname"></a>
-                        <div class="dropdown-menu">
+                        <div class="dropdown-menu  dropdown-menu-right">
                             <a class="dropdown-item" id="HomePage" th:href="@{/doctorhomepage}">HomePage</a>
                             <a class="dropdown-item" id="logoutLink" href="">Logout</a>
                         </div>
                     </li>
-
                 </ul>
             </div>
-
         </nav>
     </div>
-    <div>
-        <h2 class="text-center mt-5">Profile Information</h2>
-    </div>
-
-    <form th:action="@{/doctorProfile}" method="post" style="max-width: 700px; margin: 0 auto"
-          th:object="${doctor}">
-        <div class="border border-secondary rounded p-3">
-
-            <div class="form-group row">
-                <label class="col-sm-4 col-form-label">Overview</label>
-                <div class="col-sm-8">
-                    <input type="text" class="form-control" th:field="*{doctorOverview}" />
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <label class="col-sm-4 col-form-label">Specialization</label>
-                <div class="col-sm-8">
-                    <input type="text" class="form-control" th:field="*{doctorSpel}" required/>
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <label class="col-sm-4 col-form-label">Age</label>
-                <div class="col-sm-8">
-                    <input type="text" class="form-control" th:field="*{doctorAge}"  />
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <label class="col-sm-4 col-form-label">Doctor Registration Number</label>
-                <div class="col-sm-8">
-                    <input type="text" class="form-control" th:field="*{doctorRegNumber}" required />
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <label class="col-sm-4 col-form-label">Doctor Experience</label>
-                <div class="col-sm-8">
-                    <input type="text" class="form-control" th:field="*{doctorExperience}" />
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <label class="col-sm-4 col-form-label">Doctor Qualification</label>
-                <div class="col-sm-8">
-                    <input type="text" class="form-control" th:field="*{doctorQualification}" />
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <label class="col-sm-4 col-form-label">Doctor Location</label>
-                <div class="col-sm-8">
-                    <input type="text" class="form-control" th:field="*{doctorLocation}" />
-                </div>
-            </div>
-
-            <div class="text-center">
-                <input type="submit" value="Save" class="btn btn-primary m-3" />
-                <a class="btn btn-secondary" th:href="@{/doctorhomepage}">Cancel</a>
+</div>
+<div class="container-fluid p-3">
+    <div class="card card-custom mb-3">
+        <div class="card-header  p-0 pl-3">
+            <div class="card-title">
+                <h3 class="card-label">Profile Information</h3>
             </div>
         </div>
-    </form>
+        <!--begin::Body-->
+        <div class="card-body">
+            <form th:action="@{/doctorProfile}" method="post"
+                  style="max-width: 55em;margin: 0 auto;min-width: fit-content;"
+                  th:object="${doctor}">
+                <div class="form-group row">
+                    <div class="col-6">
+                        <label class="col-form-label">Overview</label>
+                        <input type="text" class="form-control" th:field="*{doctorOverview}"/>
+                    </div>
+                    <div class="col-6">
+                        <label class="col-form-label">Specialization</label>
+                        <input type="text" class="form-control" th:field="*{doctorSpel}" required/>
+                    </div>
 
-    <div class="text-center fixed-bottom">
-        <p>CareU - Copyright &copy; CareU</p>
+                </div>
+                <div class="form-group row">
+                    <div class="col-6">
+                        <label class="col-form-label">Age</label>
+                        <input type="text" class="form-control" th:field="*{doctorAge}"/>
+                    </div>
+                    <div class="col-6">
+                        <label class="col-form-label">Doctor Registration Number</label>
+                        <input type="text" class="form-control" th:field="*{doctorRegNumber}" required/>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-6">
+                        <label class="col-form-label">Doctor Experience</label>
+                        <input type="text" class="form-control" th:field="*{doctorExperience}"/>
+                    </div>
+                    <div class="col-6">
+                        <label class="col-form-label">Doctor Qualification</label>
+                        <input type="text" class="form-control" th:field="*{doctorQualification}"/>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-6">
+                        <label class="col-form-label">Doctor Location</label>
+                        <input type="text" class="form-control" th:field="*{doctorLocation}"/>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <input type="submit" value="Save" class="btn btn-primary m-3"/>
+                    <a class="btn btn-secondary" th:href="@{/doctorhomepage}">Cancel</a>
+                </div>
+            </form>
+        </div>
     </div>
+</div>
+<div class="modal fade text-center" id="modalDialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalTitle">Warning</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
 
-    <div class="modal fade text-center" id="modalDialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="modalTitle">Warning</h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
+            <div class="modal-body">
+                <span id="modalBody"></span>
+            </div>
 
-                <div class="modal-body">
-                    <span id="modalBody"></span>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
-    <!--
-    <div class="text-center fixed-bottom">
-        <p>CareU - Copyright &copy; CareU</p>
-    </div>
-    -->
 </div>
 <script type="text/javascript">
     $(document).ready(function() {
@@ -169,6 +153,9 @@
             location.href = this.href;
         });
     }
+
+
+
 
 </script>
 </body>

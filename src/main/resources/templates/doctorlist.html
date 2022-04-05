@@ -6,22 +6,23 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0">
 
     <title>Doctors</title>
-
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/navigationStyles.css}"/>
     <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
     <link rel="stylesheet" type="text/css" th:href="@{/fontawesome/all.css}"/>
     <link rel="stylesheet" type="text/css" th:href="@{/style.css}"/>
     <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
     <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
 </head>
-<body>
-<div class="container-fluid">
+<body style="background: #EEF0F8;">
+<div class="container-fluid p-0">
     <form th:action="@{/logout}" method="post" th:hidden="true" name="logoutForm">
         <input type="submit" />
     </form>
     <div>
-        <nav class="navbar navbar-expand-lg bg-dark navbar-dark ">
-            <a class="navbar-brand" th:href="@{/patienthomepage}">
-                <h1>CareU</h1>
+        <nav class="navbar navbar-expand-lg bg-navbar text-light">
+            <a class="navbar-brand text-light m-0" href="/">
+                <img th:src="@{careu_white.svg}" alt="App logo" height="50" width="200">
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar">
                 <span class="navbar-toggler-icon"></span>
@@ -31,7 +32,7 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown"
                            sec:authentication="principal.fullname"></a>
-                        <div class="dropdown-menu">
+                        <div class="dropdown-menu  dropdown-menu-right">
                             <a class="dropdown-item" id="logoutLink" href="">Logout</a>
                         </div>
                     </li>
@@ -40,46 +41,47 @@
             </div>
         </nav>
     </div>
-    <br>
-    <h4>Search Doctor</h4>
-    <form th:action="@{/searchDoctors}" method="get">
-        <input id="txtSearch" type="text" name="keyword">
-        <button type="submit">Go</button>
-    </form>
-    
-    <div>
-        <div>
-            <br>
-            <br>
-            <h4 style="margin-left: 30px">
-                Available doctors
-            </h4>
-            <br>
+</div>
+<div class="container-fluid p-3">
+    <div class="card card-custom text-center m-2">
+        <div class="card-header  p-0 pl-3">
+            <div class="card-title">
+                <h3 class="card-label"> Available doctors</h3>
+            </div>
         </div>
-        <div>
+        <div class="card-body">
+            <form th:action="@{/searchDoctors}" method="get" class="mb-3 ml-4">
+                <div class="row">
+                    <div class="col-6">
+                        <input style="width: 100%;" type="text" name="txtSearch" class="form-control m-0" id="txtSearch" placeholder="Enter search phrase"/>
+                    </div>
+                    <div class="col-6 text-left">
+                        <button type="submit" class="btn btn-primary m-0 ">Search Doctor</button>
+                    </div>
+                </div>
+            </form>
             <table>
                 <tr th:each="doctor : ${doctorList}">
-                    <div class="card custom-card text-center mr-2 mt-2 ml-2 mb-2"
-                         style="width: 17rem; display: inline-block">
+                    <div class="card card-custom  text-center m-2"
+                         style="width: 17rem; display: inline-block; border: 1.5px solid #086ad86b;">
+                        <div class="card-header  p-0 pl-3">
+                            <div class="card-title" style="flex-direction: column;">
+                                <h3 class="card-label">[[${doctor.firstName}]] [[${doctor.lastName}]]</h3>
+                            </div>
+                        </div>
                         <div class="card-body">
-<!--                            <img class="card-img-top" th:src="@{/images/Picture.png}" alt="Card image cap">-->
-                            <h5 class="card-title">[[${doctor.firstName}]] [[${doctor.lastName}]]</h5>
-                            <label class="card-text"><b>Specialization : </b>[[${doctor.doctor?.doctorSpel}]]</label>
-                            <label class="card-text"><b>License : </b>[[${doctor.doctor?.doctorRegNumber}]]</label>
-                            <label class="card-text"><b>Contact : </b>[[${doctor.phone}]]</label>
-                            <a th:href="@{'/searchDoctors/'+${doctor.doctor?.doctor_id}}" class="btn btn-primary">Book Appointment</a>
+                            <label class="card-text"><b>Specialization : </b>[[${doctor.doctor?.doctorSpel}]]</label><br>
+                            <label class="card-text"><b>License : </b>[[${doctor.doctor?.doctorRegNumber}]]</label><br>
+                            <label class="card-text"><b>Contact : </b>[[${doctor.phone}]]</label><br>
+                        </div>
+                        <div class="card-footer d-flex justify-content-between pr-4">
+                            <a th:href="@{'/searchDoctors/'+${doctor.doctor?.doctor_id}}" class="btn btn-sm btn-info">Book Appointment</a>
                         </div>
                     </div>
                 </tr>
-
             </table>
         </div>
     </div>
-
-    <div class="text-center fixed-bottom">
-        <p>CareU - Copyright &copy; CareU</p>
-    </div>
-
 </div>
 <script type="text/javascript">
     $(document).ready(function() {
