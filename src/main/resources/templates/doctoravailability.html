@@ -171,11 +171,13 @@
         "showTodayButton": true,
         "format": "HH:mm:ss",
     });
-
+    var date = new Date();
+    var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
     $('#availabilitydate').datepicker({
         format: 'dd/mm/yyyy',
         weekStart: 1,
-        autoclose: true
+        autoclose: true,
+        startDate: date
     });
 
     function saveAvailability() {
