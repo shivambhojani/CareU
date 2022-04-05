@@ -32,7 +32,7 @@ class AppointmentTest {
 
         assertNull(actualAppointment.getAppointmentId());
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        assertEquals("1969-12-31", simpleDateFormat.format(actualAppointment.getStartTime()));
+        assertEquals("1970-01-01", simpleDateFormat.format(actualAppointment.getStartTime()));
         assertNull(actualAppointment.getPatientFeedback());
         Patient patient1 = actualAppointment.getPatient();
         assertSame(patient, patient1);
