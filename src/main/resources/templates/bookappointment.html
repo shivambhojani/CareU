@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0">
+    <title>Book Appointment</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+    <link th:rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"/>
+    <link th:rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.standalone.min.css"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/fontawesome/all.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/navigationStyles.css}"/>
+    <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
+    <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.1/js/bootstrap-datepicker.min.js"
+            crossorigin="anonymous"></script>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.15.0/js/mdb.min.js"></script>
+</head>
+<body style="background: #EEF0F8;">
+<div class="container-fluid p-0">
+    <form th:action="@{/logout}" method="post" th:hidden="true" name="logoutForm">
+        <input type="submit"/>
+    </form>
+    <div>
+        <nav class="navbar navbar-expand-lg bg-navbar text-light">
+            <a class="navbar-brand text-light m-0" th:href="@{/patienthomepage}">
+                <img th:src="@{/images/careu_white_png.png}" alt="App logo" height="50" width="150">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="topNavbar">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown"
+                           sec:authentication="principal.fullname"></a>
+                        <div class="dropdown-menu  dropdown-menu-right">
+                            <a class="dropdown-item" id="logoutLink" href="">Logout</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+</div>
+<div class="container-fluid p-3">
+    <div class="card card-custom text-center m-2">
+        <div class="card-header  p-0 pl-3">
+            <div class="card-title">
+                <h3 class="card-label">Book Appointment</h3>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-5">
+                    <img th:src="@{/images/img.png}" class="img-fluid img-thumbnail m-2" alt="RandomPIC" height="300" width="300"/>
+                </div>
+                <div class="col-6">
+                    <h5 class="card-title">Name - [[${selectedDoctor.firstName}]] [[${selectedDoctor.lastName}]]</h5>
+                    <p class="mb-1"><b>Specialization</b> : [[${selectedDoctor.doctor?.doctorSpel}]]
+                    </p>
+                    <p class="mb-1">
+                        <b>Contact</b> : [[${selectedDoctor.phone}]]
+                    </p>
+                    <form th:object="${appointment}" th:action="@{/book}" method="post">
+                        <div class="form-group">
+                            <label for="date1">Appointment Date</label>
+                            <input type="date" class="form-control" id="date1" autocomplete="off"
+                                   th:field="*{appointment_date}" placeholder="Select Date"/>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="appointmentType">Appointment Type</label><br>
+                                    <select th:field="*{consulationType}" id="appointmentType" class="form-control">
+                                        <option th:value="online" th:text="online"></option>
+                                        <option th:value="inPerson" th:text="inPerson"></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="apptList">Appointment Time</label><br>
+                                    <select th:field="*{time}" id="apptList" class="form-control">
+                                        <option value="0">Select Appointment Time</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <input type="hidden" id="doctor_id" name="doctor_id"
+                               th:value="${selectedDoctor.doctor?.doctor_id}">
+                        <input type="submit" value="Book" class="btn btn-primary m-3"/>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    No Appointments Available for selected Date. Please select another date.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+        $("#logoutLink").on("click", function(e) {
+            e.preventDefault();
+            document.logoutForm.submit();
+        })
+        customizeDropDownMenu();
+    });
+
+    function customizeDropDownMenu() {
+        $(".navbar .dropdown").hover(
+            function () {
+                $(this).find('.dropdown-menu').first().stop(true, true).delay(250).slideDown();
+            },
+            function () {
+                $(this).find('.dropdown-menu').first().stop(true, true).delay(100).slideUp();
+            }
+        );
+
+        $(".dropdown > a").click(function () {
+            location.href = this.href;
+        });
+    }
+
+$(document).ready(function() {
+        $("#logoutLink").on("click", function(e) {
+            e.preventDefault();
+            document.logoutForm.submit();
+        })
+        customizeDropDownMenu();
+    });
+
+    $('#date1').on('blur', function(){
+            var date = document.getElementById('date1').value;
+            console.log(date);
+            var available_date_arr=[];
+            available_date_arr.push(date);
+            console.log(available_date_arr);
+            var doctorId = document.getElementById('doctor_id').value;
+            console.log(doctor_id)
+            var dateToSend = JSON.stringify({
+                    "availableDate": available_date_arr,
+                    "doctorId": doctorId,
+                    "startTime": null,
+                    "endTime": null
+            })
+
+            $.ajax({
+            url: "get-times",
+            type: "POST",
+            contentType: "application/json",
+            dataType: "json",
+            data: dateToSend,
+            complete: function( response ) {
+                var arr = response.responseJSON;
+                if(arr.length == 0) {
+                    $('#exampleModalLong').modal('show');
+                } else {
+                    $.each(arr, function(index, value) {
+                     $('#apptList').append($('<option/>', {
+                       value: value.startTime + " to " + value.endTime,
+                         text : value.startTime + " to " + value.endTime
+                      }));
+                    });
+                }
+            },
+            error: function( jqXHR, textStatus, errorThrown ) {
+
+            }
+        });
+
+        });
+
+
+
+</script>
+</body>
+</html>

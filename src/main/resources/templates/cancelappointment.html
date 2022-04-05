@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0">
+
+    <title>Cancel Appointment</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/navigationStyles.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}"/>
+    <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+</head>
+<body style="background: #EEF0F8;">
+<div class="container-fluid p-0">
+
+    <form th:action="@{/logout}" method="post" th:hidden="true" name="logoutForm">
+        <input type="submit"/>
+    </form>
+    <div>
+        <nav class="navbar navbar-expand-lg bg-navbar text-light">
+            <a class="navbar-brand text-light m-0" th:href="@{/patienthomepage}">
+                <img src="careu_white.svg" alt="App logo" height="50" width="200">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="topNavbar">
+                <ul class="navbar-nav ml-auto">
+
+                    <li class="nav-item dropdown">
+                        <div class="dropdown-menu  dropdown-menu-right">
+                            <a class="dropdown-item" id="profile-link" href="">Profile</a>
+                        </div>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown"
+                           sec:authentication="principal.fullname"></a>
+                        <div class="dropdown-menu  dropdown-menu-right">
+                            <a class="dropdown-item" id="profileSettings" th:href="@{/patientProfile}">Profile
+                                Settings</a>
+                            <a class="dropdown-item" id="logoutLink" href="">Logout</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+</div>
+<div class="container-fluid p-3">
+    <div class="card card-custom mb-3">
+        <div class="card-header  p-0 pl-3">
+            <div class="card-title">
+                <h3 class="card-label">Upcoming Appointments</h3>
+            </div>
+        </div>
+        <!--begin::Body-->
+        <div class="card-body">
+            <tr th:if="${#lists.isEmpty(patientFutureAppointments)}">
+                <td>No Appointments.</td>
+            </tr>
+            <table class="table table-responsive w-100 d-block d-md-table" th:if="${not #lists.isEmpty(patientFutureAppointments)}">
+                <thead>
+                <tr>
+                    <th scope="row">Date</th>
+                    <th scope="row">Start Time</th>
+                    <th scope="row">End Time</th>
+                    <th scope="row">Doctor</th>
+                    <th scope="row">Consulation Type</th>
+                    <th scope="row">Cancel Appointment</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <tr th:each="patientFutureAppointments: ${patientFutureAppointments}">
+                    <td th:text="${patientFutureAppointments.date}"></td>
+                    <td th:text="${patientFutureAppointments.start_time}"></td>
+                    <td th:text="${patientFutureAppointments.end_time}"></td>
+                    <td th:text="${patientFutureAppointments.doctorName}"></td>
+                    <td th:text="${patientFutureAppointments.consultationType}"></td>
+                    <td>&nbsp;
+                        <input type="hidden" id="appointmentId" name="appointmentId" th:value="${patientFutureAppointments.appointment_id}">
+                        <a type="button" class="btn btn-primary" id="cancelAppointment" th:href="@{'/cancelAppointment/' + ${patientFutureAppointments.appointment_id} + '/' + ${patientFutureAppointments.date} + '/' + ${patientFutureAppointments.start_time} + '/' + ${patientFutureAppointments.end_time}}"><span class="fa-solid fa-trash-can"></span> Cancel</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Cancel Appointment?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to cancel the appointment?.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="cancel">Yes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#logoutLink").on("click", function(e) {
+            e.preventDefault();
+            document.logoutForm.submit();
+        })
+        customizeDropDownMenu();
+    });
+
+    $(document).ready(function() {
+        $('#cancelAppointment').on('click', function(e){
+            date = document.getElementById('date1').value;
+            console.log(date)
+            $('#exampleModalLong').modal('show');
+        });
+    });
+
+    function customizeDropDownMenu() {
+        $(".navbar .dropdown").hover(
+            function () {
+                $(this).find('.dropdown-menu').first().stop(true, true).delay(250).slideDown();
+            },
+            function () {
+                $(this).find('.dropdown-menu').first().stop(true, true).delay(100).slideUp();
+            }
+        );
+
+        $(".dropdown > a").click(function () {
+            location.href = this.href;
+        });
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0">
+    <title>Doctor Licence</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/navigationStyles.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+    <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+</head>
+<body style="background: #EEF0F8;">
+<div class="container-fluid p-0">
+    <form th:action="@{/logout}" method="post" th:hidden="true" name="logoutForm">
+        <img th:src="@{/images/careu_white_png.png}" alt="App logo" height="50" width="150">
+    </form>
+    <div>
+        <nav class="navbar navbar-expand-lg bg-navbar text-light">
+            <a class="navbar-brand text-light m-0" th:href="@{/doctorhomepage}">
+                <img src="careu_white.svg" alt="App logo" height="50" width="200">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="topNavbar">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown"
+                           sec:authentication="principal.fullname"></a>
+                        <div class="dropdown-menu  dropdown-menu-right">
+                            <a class="dropdown-item" id="HomePage" th:href="@{/doctorhomepage}">HomePage</a>
+                            <a class="dropdown-item" id="logoutLink" href="">Logout</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+</div>
+<div class="container-fluid p-3">
+    <div class="card card-custom mb-3">
+        <div class="card-header  p-0 pl-3">
+            <div class="card-title">
+                <h3 class="card-label">Doctor License Upload</h3>
+            </div>
+        </div>
+        <div class="card-body">
+            <form th:action="@{/uploadDocument/file}" enctype="multipart/form-data" method="post"
+                  style="max-width: 55em;margin: 0 auto;min-width: fit-content;"
+                  th:object="${file}">
+                <div class="form-group row">
+                    <label class="col-form-label">Select Document to upload</label>
+                    <input type="file" name="file" required/>
+                </div>
+                <div class="text-center">
+                    <input type="submit" value="Save" class="btn btn-primary m-3"/>
+                    <a class="btn btn-secondary" th:href="@{/doctorhomepage}">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade text-center" id="modalDialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalTitle">Warning</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <span id="modalBody"></span>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#buttonCancel").on("click", function() {
+            window.location = "[[@{/}]]";
+        });
+    });
+
+    function showModalDialog(title, message) {
+        $("#modalTitle").text(title);
+        $("#modalBody").text(message);
+        $("#modalDialog").modal();
+
+    }
+
+    $(document).ready(function() {
+        $("#logoutLink").on("click", function(e) {
+            e.preventDefault();
+            document.logoutForm.submit();
+        })
+        customizeDropDownMenu();
+    });
+
+    function customizeDropDownMenu() {
+        $(".navbar .dropdown").hover(
+            function () {
+                $(this).find('.dropdown-menu').first().stop(true, true).delay(250).slideDown();
+            },
+            function () {
+                $(this).find('.dropdown-menu').first().stop(true, true).delay(100).slideUp();
+            }
+        );
+
+        $(".dropdown > a").click(function () {
+            location.href = this.href;
+        });
+    }
+
+
+
+</script>
+</body>
+</html>
