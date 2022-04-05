@@ -34,8 +34,8 @@ public class PatientRepositoryITest {
         p.setPatient_id(1);
         user.setPatient(p);
         User savedPatient = userRepository.save(user);
-        User getUser = patientRepository.findPatient(1);
-        assertThat(getUser.getId()).isEqualTo(savedPatient.getPatient().getPatient_id());
+        User getUser = patientRepository.findPatient(savedPatient.getId());
+        assertThat(getUser.getPatient().getPatient_id()).isEqualTo(savedPatient.getPatient().getPatient_id());
     }
 
     @Test

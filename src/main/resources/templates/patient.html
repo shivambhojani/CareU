@@ -187,6 +187,7 @@
         </div>
     </div>
 </div>
+<<<<<<< HEAD
 
 <style>
 
@@ -231,6 +232,27 @@
             document.logoutForm.submit();
         });
 
+=======
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#buttonCancel").on("click", function() {
+            window.location = "[[@{/}]]";
+        });
+    });
+
+    function showModalDialog(title, message) {
+        $("#modalTitle").text(title);
+        $("#modalBody").text(message);
+        $("#modalDialog").modal();
+
+    }
+
+    $(document).ready(function() {
+        $("#logoutLink").on("click", function(e) {
+            e.preventDefault();
+            document.logoutForm.submit();
+        })
+>>>>>>> 286369d3b0c47a8c5acf8cffe7c5f5c3135a0de2
         customizeDropDownMenu();
     });
 
@@ -248,9 +270,14 @@
             location.href = this.href;
         });
     }
+<<<<<<< HEAD
 
 
 </script>
 
 </body>
 </html>
+=======
+</script>
+</body>
+>>>>>>> 286369d3b0c47a8c5acf8cffe7c5f5c3135a0de2

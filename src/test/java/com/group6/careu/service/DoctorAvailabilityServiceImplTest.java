@@ -59,15 +59,6 @@ class DoctorAvailabilityServiceImplTest {
 
 
     @Test
-    @Disabled("TODO: Complete this test")
-    void testGetEntites() {
-        DoctorAvailability da = new DoctorAvailability();
-        Doctor d = new Doctor();
-        d.setDoctor_id(1);
-
-    }
-
-    @Test
     void testGetEntites2() {
         DoctorAvailabilityModel doctorAvailabilityModel = new DoctorAvailabilityModel();
         doctorAvailabilityModel.setAvailableDate(new ArrayList<>());
