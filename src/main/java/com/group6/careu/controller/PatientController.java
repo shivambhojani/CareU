@@ -208,6 +208,7 @@ public class PatientController {
             p.setAppointment_id(appointments.get(i).getAppointmentId());
             p.setDoctorName(u.getFirstName() + " " + u.getLastName());
             p.setDoctorContact(u.getPhone());
+            p.setDoctorEmail(u.getEmail());
             p.setMedications(appointments.get(i).getMedications());
             p.setConsultationType(appointments.get(i).getConsulationType());
             p.setDate(appointments.get(i).getAppointment_date());
