@@ -13,6 +13,42 @@
     <link rel="stylesheet" type="text/css" th:href="@{/style.css}"/>
     <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
     <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+    <style>
+
+    /*@media screen and (max-width: 768px) {*/
+    /*    #contactDisplay{*/
+    /*        display: block;*/
+    /*    }*/
+    /*    #contactColumn{*/
+    /*        display: block;*/
+    /*    }*/
+    /*}*/
+    /*#contactDisplay{*/
+    /*    display: none;*/
+    /*}*/
+    /*#contactColumn{*/
+    /*    display: none;*/
+    /*}*/
+
+    @media screen and (max-width : 1920px){
+        #contactDisplay{
+            visibility:hidden;
+        }
+        #contactColumn{
+            visibility:hidden;
+        }
+    }
+    @media screen and (max-width : 906px){
+        #contactDisplay{
+            visibility: visible;
+        }
+        #contactColumn{
+            visibility:visible;
+        }
+    }
+
+
+    </style>
 </head>
 <body style="background: #EEF0F8;">
 <div class="container-fluid p-0">
@@ -100,9 +136,9 @@
                     <!--                        </div>-->
                     <!--                    </td>-->
                     <td th:text="${patientTodaysAppointments.doctorEmail}"></td>
-                    <td id="contactDisplay" >
+                    <td id="contactDisplay">
                         <div th:if="${patientTodaysAppointments.consultationType == 'online'}">
-                            <a href="${patientTodaysAppointments.doctorContact}">[[${patientTodaysAppointments.doctorContact}]]</a>&nbsp;
+                            <a href="tel:${patientTodaysAppointments.doctorContact}">[[${patientTodaysAppointments.doctorContact}]]</a>&nbsp;
                         </div>
                     </td>
                 </tr>
@@ -187,53 +223,14 @@
         </div>
     </div>
 </div>
-<<<<<<< HEAD
-
-<style>
-
-    /*@media screen and (max-width: 768px) {*/
-    /*    #contactDisplay{*/
-    /*        display: block;*/
-    /*    }*/
-    /*    #contactColumn{*/
-    /*        display: block;*/
-    /*    }*/
-    /*}*/
-    /*#contactDisplay{*/
-    /*    display: none;*/
-    /*}*/
-    /*#contactColumn{*/
-    /*    display: none;*/
-    /*}*/
-
-    @media screen and (max-width : 1920px){
-        #contactDisplay{
-            visibility:hidden;
-        }
-        #contactColumn{
-            visibility:hidden;
-        }
-    }
-    @media screen and (max-width : 906px){
-        #contactDisplay{
-            visibility: visible;
-        }
-        #contactColumn{
-            visibility:visible;
-        }
-    }
-
-</style>
-
 <script type="text/javascript">
     $(document).ready(function () {
-        $("#logoutLink").on("click", function (e) {
-            e.preventDefault();
-            document.logoutForm.submit();
-        });
-
-=======
-<script type="text/javascript">
+      $("#logoutLink").on("click", function (e) {
+        e.preventDefault();
+        document.logoutForm.submit();
+      });
+      customizeDropDownMenu();
+    });
     $(document).ready(function() {
         $("#buttonCancel").on("click", function() {
             window.location = "[[@{/}]]";
@@ -244,17 +241,7 @@
         $("#modalTitle").text(title);
         $("#modalBody").text(message);
         $("#modalDialog").modal();
-
     }
-
-    $(document).ready(function() {
-        $("#logoutLink").on("click", function(e) {
-            e.preventDefault();
-            document.logoutForm.submit();
-        })
->>>>>>> 286369d3b0c47a8c5acf8cffe7c5f5c3135a0de2
-        customizeDropDownMenu();
-    });
 
     function customizeDropDownMenu() {
         $(".navbar .dropdown").hover(
@@ -270,14 +257,9 @@
             location.href = this.href;
         });
     }
-<<<<<<< HEAD
-
 
 </script>
-
 </body>
 </html>
-=======
-</script>
 </body>
->>>>>>> 286369d3b0c47a8c5acf8cffe7c5f5c3135a0de2
+
