@@ -139,7 +139,7 @@ class PatientRestControllersTest {
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
                 .andExpect(MockMvcResultMatchers.content()
                         .string(
-                                "[{\"appointment_id\":null,\"doctorContact\":null,\"doctorName\":\"Jane Doe\",\"patient_id\":1,\"date\":10,\"start"
+                                "[{\"appointment_id\":null,\"doctorContact\":null,\"doctorEmail\":null,\"doctorName\":\"Jane Doe\",\"patient_id\":1,\"date\":10,\"start"
                                         + "_time\":10,\"end_time\":10,\"consultationType\":\"?\",\"medications\":\"?\",\"patientFeedback\":null}]"));
     }
 
@@ -231,7 +231,7 @@ class PatientRestControllersTest {
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
                 .andExpect(MockMvcResultMatchers.content()
                         .string(
-                                "[{\"appointment_id\":null,\"doctorContact\":null,\"doctorName\":\"Jane Doe\",\"patient_id\":1,\"date\":10,\"start"
+                                "[{\"appointment_id\":null,\"doctorContact\":null,\"doctorEmail\":null,\"doctorName\":\"Jane Doe\",\"patient_id\":1,\"date\":10,\"start"
                                         + "_time\":10,\"end_time\":10,\"consultationType\":\"?\",\"medications\":\"?\",\"patientFeedback\":null}]"));
     }
 
@@ -323,7 +323,7 @@ class PatientRestControllersTest {
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
                 .andExpect(MockMvcResultMatchers.content()
                         .string(
-                                "[{\"appointment_id\":null,\"doctorContact\":null,\"doctorName\":\"Jane Doe\",\"patient_id\":1,\"date\":10,\"start"
+                                "[{\"appointment_id\":null,\"doctorContact\":null,\"doctorEmail\":null,\"doctorName\":\"Jane Doe\",\"patient_id\":1,\"date\":10,\"start"
                                         + "_time\":10,\"end_time\":10,\"consultationType\":\"?\",\"medications\":\"?\",\"patientFeedback\":null}]"));
     }
 

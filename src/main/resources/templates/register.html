@@ -6,119 +6,109 @@
 
     <title>Register</title>
 
-    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
-    <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}" ></script>
-    <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}" ></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}"/>
+    <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
 </head>
 <body>
-<div class="container-fluid">
-    <div>
-        <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
-            <a class="navbar-brand" th:href="@{/}">
-                <h2>CareU</h2>
-            </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="topNavbar">
-                <ul class="navbar-nav  ml-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/login}">Login</a>
-                    </li>
-                </ul>
-            </div>
+<div class="container-fluid p-0 ">
+    <div class="row m-0">
+        <div class="col-5 registration-form-bg p-5">
+            <img src="sign-up.svg" class="img img-fluid mt-4"
+                 alt="Sign up image" height="500" width="500">
+        </div>
+        <div class="col-7 p-5">
+            <h2 class="text-center mt-4 mb-3">Register</h2>
+            <form th:action="@{/register/user}" method="post" style="max-width: 700px; margin: 0 auto"
+                  th:object="${user}" onsubmit="return checkEmailUnique(this);">
+                <div class="form-group row">
+                    <div class="col-6">
+                        <label for="firstName">First Name</label>
+                        <input type="text" name="firstName" id="firstName" class="form-control" th:field="*{firstName}"
+                               required minlength="2" maxlength="45"/>
+                    </div>
 
-        </nav>
+                    <div class="col-6">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" name="lastName" id="lastName" class="form-control" th:field="*{lastName}"
+                               required minlength="2" maxlength="45"/>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-6">
+                        <label for="email">Email</label>
+                        <input type="email" name="email" id="email" class="form-control" th:field="*{email}" required
+                               minlength="8" maxlength="128"/>
+                    </div>
+
+                    <div class="col-6">
+                        <label for="phone">Phone</label>
+                        <input type="text" name="phone" id="phone" class="form-control" th:field="*{phone}" required
+                               minlength="8" maxlength="128"/>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-6">
+                        <label>Gender</label><br>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" th:field="*{gender}" value="Male" required
+                                   name="inlineRadioOptions" id="inlineRadio1">
+                            <label class="form-check-label" for="inlineRadio1">Male</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" th:field="*{gender}" value="Female"
+                                   name="inlineRadioOptions" id="inlineRadio2">
+                            <label class="form-check-label" for="inlineRadio2">Female</label>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <label for="password">Password</label>
+                        <input type="password" name="phone" id="password" class="form-control" th:field="*{password}"
+                               required minlength="6" maxlength="20"/>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-6">
+                        <label>User Type</label><br>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" th:field="*{role}" value="doctor" required
+                                   name="inlineRadioOptions" id="inlineRadioUT">
+                            <label class="form-check-label" for="inlineRadioUT">Doctor</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" th:field="*{role}" value="patient"
+                                   name="inlineRadioOptions" id="inlineRadioUT1">
+                            <label class="form-check-label" for="inlineRadioUT1">Patient</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <input type="submit" value="Save" class="btn btn-primary btn-md m-3"/>
+                    <input type="button" value="Cancel" class="btn btn-secondary btn-md" id="buttonCancel"/>
+                </div>
+            </form>
+        </div>
     </div>
-    <div>
-        <h2 class="text-center mt-5">Register</h2>
-    </div>
+</div>
 
-    <form th:action="@{/register/user}" method="post" style="max-width: 700px; margin: 0 auto"
-          th:object="${user}" onsubmit="return checkEmailUnique(this);">
-        <div class="border border-secondary rounded p-3">
-
-            <div class="form-group row">
-                <label class="col-sm-4 col-form-label">First Name:</label>
-                <div class="col-sm-8">
-                    <input type="text" class="form-control" th:field="*{firstName}" required minlength="2" maxlength="45"  />
-                </div>
+<div class="modal fade text-center" id="modalDialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalTitle">Warning</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
 
-            <div class="form-group row">
-                <label class="col-sm-4 col-form-label">Last Name:</label>
-                <div class="col-sm-8">
-                    <input type="text" class="form-control" th:field="*{lastName}" required minlength="2" maxlength="45"  />
-                </div>
+            <div class="modal-body">
+                <span id="modalBody"></span>
             </div>
 
-            <div class="form-group row">
-                <label class="col-sm-4 col-form-label">E-mail:</label>
-                <div class="col-sm-8">
-                    <input type="email" class="form-control" th:field="*{email}" required minlength="8" maxlength="128"  />
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <label class="col-sm-4 col-form-label">Phone:</label>
-                <div class="col-sm-8">
-                    <input type="text" class="form-control" th:field="*{phone}" required minlength="8" maxlength="128"  />
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <label class="col-sm-4 col-form-label">Gender:</label>
-                <div class="col-sm-8">
-                    <input type="radio"  th:field="*{gender}" value="Male"  required/> Male
-                    <input type="radio"  th:field="*{gender}" value="Female"  /> Female
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <label class="col-sm-4 col-form-label">Password:</label>
-                <div class="col-sm-8">
-                    <input type="password" class="form-control" th:field="*{password}" required minlength="6" maxlength="20"  />
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <label class="col-sm-4 col-form-label">User Type:</label>
-                <div class="col-sm-8">
-                    <input type="radio"  th:field="*{role}" value="doctor"  required/> Doctor
-                    <input type="radio"  th:field="*{role}" value="patient"  /> Patient
-                </div>
-            </div>
-
-            <div class="text-center">
-                <input type="submit" value="Save" class="btn btn-primary m-3" />
-                <input type="button" value="Cancel" class="btn btn-secondary" id="buttonCancel" />
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
             </div>
         </div>
-    </form>
-
-<!--    <div class="modal fade text-center" id="modalDialog">-->
-<!--        <div class="modal-dialog">-->
-<!--            <div class="modal-content">-->
-<!--                <div class="modal-header">-->
-<!--                    <h4 class="modal-title" id="modalTitle">Warning</h4>-->
-<!--                    <button type="button" class="close" data-dismiss="modal">&times;</button>-->
-<!--                </div>-->
-
-<!--                <div class="modal-body">-->
-<!--                    <span id="modalBody"></span>-->
-<!--                </div>-->
-
-<!--                <div class="modal-footer">-->
-<!--                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-
-    <div class="text-center fixed-bottom">
-        <p>CareU - Copyright &copy; CareU</p>
     </div>
-
 </div>
 <script type="text/javascript">
 	$(document).ready(function() {
@@ -154,6 +144,7 @@
 		$("#modalDialog").modal();
 
 	}
+
 
 </script>
 </body>

@@ -5,21 +5,22 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0">
 
-    <title>Doctor Profile</title>
-
-    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
-    <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}" ></script>
-    <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}" ></script>
+    <title>Upload Failure</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/navigationStyles.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+    <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
 </head>
-<body>
-<div class="container-fluid">
+<body style="background: #EEF0F8;">
+<div class="container-fluid p-0">
     <form th:action="@{/logout}" method="post" th:hidden="true" name="logoutForm">
-        <input type="submit" />
+        <input type="submit"/>
     </form>
     <div>
         <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
-            <a class="navbar-brand" th:href="@{/doctorhomepage}">
-                <h1>CareU</h1>
+            <a class="navbar-brand text-light m-0" th:href="@{/doctorhomepage}">
+                <img src="careu_white.svg" alt="App logo" height="50" width="200">
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar">
                 <span class="navbar-toggler-icon"></span>
@@ -30,45 +31,48 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown"
                            sec:authentication="principal.fullname"></a>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" id="profileSettings" th:href="@{/doctorProfile}">Profile Settings</a>
+                        <div class="dropdown-menu  dropdown-menu-right">
+                            <a class="dropdown-item" id="profileSettings" th:href="@{/doctorProfile}">Profile
+                                Settings</a>
                             <a class="dropdown-item" id="logoutLink" href="">Logout</a>
                         </div>
                     </li>
-
                 </ul>
             </div>
-
         </nav>
     </div>
-    <div>
-        <h2 class="text-center mt-5">Doctor License Upload</h2>
+</div>
+<div class="container-fluid p-3">
+    <div class="card card-custom mb-3">
+        <div class="card-body text-center">
+            <img src="fail.png" height="300" width="300" class="mt-3 mb-3">
+            <h3 class="mb-3">There was an error while uploading the document.</h3>
+            <p>It seems there is some issue with the payment. If your money is deducted please wait for 24hrs to reflect
+                back.</p>
+            <a class="btn btn-outline-primary" th:href="@{/patienthomepage}"><span
+                    class="glyphicon glyphicon-home"></span>
+                Return To Home Page</a>
+        </div>
     </div>
+</div>
+<div class="modal fade text-center" id="modalDialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalTitle">Warning</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
 
-    <h3> There was an error while uploading the document. </h3>
+            <div class="modal-body">
+                <span id="modalBody"></span>
+            </div>
 
-    <div class="text-center fixed-bottom">
-        <p>CareU - Copyright &copy; CareU</p>
-    </div>
-
-    <div class="modal fade text-center" id="modalDialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="modalTitle">Warning</h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
-
-                <div class="modal-body">
-                    <span id="modalBody"></span>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
+</div>
 </div>
 <script type="text/javascript">
     $(document).ready(function() {
@@ -106,6 +110,7 @@
             location.href = this.href;
         });
     }
+
 
 </script>
 </body>

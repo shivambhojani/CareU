@@ -27,6 +27,7 @@ public class PatientAppointmentModel {
     )
     private UUID appointment_id;
     private String doctorContact;
+    private String doctorEmail;
     private String doctorName;
     private Integer patient_id;
     private Date date;

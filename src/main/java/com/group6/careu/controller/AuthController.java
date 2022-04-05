@@ -8,12 +8,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
 /**
  * Created by Bijitashya on 03, 2022
  */
 @Controller
+
 public class AuthController {
     @Autowired
     private UserServiceImpl userServiceImpl;
@@ -35,10 +38,11 @@ public class AuthController {
     }
 
     @PostMapping("/register/user")
-    public String saveUser(User user, RedirectAttributes redirectAttributes) {
+    @ResponseBody
+    public RedirectView saveUser(User user, RedirectAttributes redirectAttributes) {
         userServiceImpl.save(user);
         redirectAttributes.addFlashAttribute("message", "Registration Successful, Please login to continue.");
-        return "redirect:/login";
+       return new RedirectView("/login", true);
     }
 
     @GetMapping("/login")
@@ -70,7 +74,6 @@ public class AuthController {
     public String uploadUserDocuments(@PathVariable(name = "id") Integer id,
                                       Model model,
                                       RedirectAttributes redirectAttributes) {
-        System.out.println("test page");
         return "redirect:/getUploadedDocuments/1";
     }
 }
