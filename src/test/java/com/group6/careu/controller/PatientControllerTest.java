@@ -97,7 +97,7 @@ class PatientControllerTest {
         user.setPatient(patient);
         user.setPhone("4105551212");
         user.setResetPasswordToken("ABC123");
-        when(this.userRepository.getUserByDoctorId(anyInt())).thenReturn(user);
+        when(this.userRepository.getUserByDoctor(anyInt())).thenReturn(user);
 
         Doctor doctor1 = new Doctor();
         doctor1.setDoctorAge(1);

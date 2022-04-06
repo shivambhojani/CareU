@@ -11,8 +11,9 @@ import org.junit.jupiter.api.Test;
 class VISAResponseTest {
     @Test
     void testConstructor() {
-        VISAResponse actualVisaResponse = new VISAResponse(123, 1, "Status Description", 123, mock(Timestamp.class),
-                mock(Timestamp.class));
+        java.sql.Timestamp timestamp = java.sql.Timestamp.valueOf("1970-01-01 10:10:10.0");
+        VISAResponse actualVisaResponse = new VISAResponse(123, 1, "Status Description", 123, timestamp,
+                timestamp);
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         assertEquals("1970-01-01", simpleDateFormat.format(actualVisaResponse.getCreatedOn()));

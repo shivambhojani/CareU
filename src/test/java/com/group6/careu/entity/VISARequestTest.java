@@ -11,8 +11,9 @@ import org.junit.jupiter.api.Test;
 class VISARequestTest {
     @Test
     void testConstructor() {
-        VISARequest actualVisaRequest = new VISARequest(123, "42", 10.0f, 1, "Card Type", mock(Timestamp.class),
-                mock(Timestamp.class));
+        java.sql.Timestamp timestamp = java.sql.Timestamp.valueOf("1970-01-01 10:10:10.0");
+        VISARequest actualVisaRequest = new VISARequest(123, "42", 10.0f, 1, "Card Type", timestamp,
+                timestamp);
 
         assertEquals(10.0f, actualVisaRequest.getAmount());
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");

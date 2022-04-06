@@ -152,7 +152,7 @@ public class PatientController {
         patientAppointmentModelsByID.setPatient_id(singleAppointmentbyID.getPatient().getPatient_id());
 
         int doctorId = singleAppointmentbyID.getDoctor().getDoctor_id();
-        User u = repository.getUserByDoctorId(doctorId);
+        User u = repository.getUserByDoctor(doctorId);
         patientAppointmentModelsByID.setDoctorName(u.getFirstName() + " " + u.getLastName());
 
         patientAppointmentModelsByID.setDate(singleAppointmentbyID.getAppointment_date());

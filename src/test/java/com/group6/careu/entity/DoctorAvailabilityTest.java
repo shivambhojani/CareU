@@ -8,16 +8,19 @@ import static org.mockito.Mockito.mock;
 import java.sql.Date;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import org.junit.jupiter.api.Test;
 
 class DoctorAvailabilityTest {
     @Test
     void testConstructor() {
-        Date availableDate = mock(Date.class);
-        Time startTime = mock(Time.class);
-        Time endTime = mock(Time.class);
-
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now();
+        Time startTime = Time.valueOf(dtf.format(now));
+        LocalDateTime endTime = now.plusHours(5);
+        Time endF = Time.valueOf(dtf.format(endTime));
         Doctor doctor = new Doctor();
         doctor.setDoctorAge(1);
         doctor.setDoctorExperience("Doctor Experience");
@@ -27,7 +30,7 @@ class DoctorAvailabilityTest {
         doctor.setDoctorRegNumber("42");
         doctor.setDoctorSpel("Doctor Spel");
         doctor.setDoctor_id(1);
-        DoctorAvailability actualDoctorAvailability = new DoctorAvailability(1, availableDate, startTime, endTime, doctor,
+        DoctorAvailability actualDoctorAvailability = new DoctorAvailability(1, Date.valueOf("1970-01-01"), startTime, endF, doctor,
                 true);
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
