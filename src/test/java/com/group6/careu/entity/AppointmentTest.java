@@ -8,6 +8,8 @@ import static org.mockito.Mockito.mock;
 import java.sql.Date;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import org.junit.jupiter.api.Test;
 
@@ -27,8 +29,11 @@ class AppointmentTest {
         Patient patient = new Patient();
         patient.setDisease("Disease");
         patient.setPatient_id(1);
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now();
+        Time time = Time.valueOf(dtf.format(now));
         Appointment actualAppointment = new Appointment("Medications", doctor, patient, "Consulation Type",
-                mock(Time.class), mock(Time.class), mock(Date.class));
+               time, time, Date.valueOf("1970-01-01"));
 
         assertNull(actualAppointment.getAppointmentId());
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");

@@ -2,7 +2,6 @@ package com.group6.careu.integration;
 
 import com.group6.careu.entity.Doctor;
 import com.group6.careu.entity.DoctorAvailability;
-import com.group6.careu.entity.Patient;
 import com.group6.careu.entity.User;
 import com.group6.careu.repository.DoctorAvailabilityRepository;
 import com.group6.careu.repository.UserRepository;
@@ -15,13 +14,12 @@ import org.springframework.test.annotation.Rollback;
 import java.sql.Date;
 import java.sql.Time;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+
 /**
  * Created by Bijitashya on 04, 2022
  */
@@ -29,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Rollback(true)
-public class DoctorAvailabilityRepositoryITest {
+public class DoctorAvailabilityITest {
     @Autowired
     private UserRepository userRepository;
     @Autowired
