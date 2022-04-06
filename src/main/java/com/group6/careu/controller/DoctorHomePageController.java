@@ -100,7 +100,7 @@ public class DoctorHomePageController {
         patientAppointmentModelsByID.setPatient_id(singleAppointmentbyID.getPatient().getPatient_id());
 
         int doctorId = singleAppointmentbyID.getDoctor().getDoctor_id();
-        User u = userRepository.getUserByDoctorId(doctorId);
+        User u = userRepository.getUserByDoctor(doctorId);
         patientAppointmentModelsByID.setDoctorName(u.getFirstName() + " " + u.getLastName());
 
         patientAppointmentModelsByID.setDate(singleAppointmentbyID.getAppointment_date());
@@ -124,7 +124,6 @@ public class DoctorHomePageController {
             redirectAttributes.addFlashAttribute("success", "Medications Submitted Successfully.");
         }
         return "redirect:/doctorPrescription/" + appointment_id;
-
     }
 
     public List<DoctorAppointmentModel> getTodaysAppointments(User user, Integer doctorId, Date todaysDate) {
