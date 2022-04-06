@@ -12,8 +12,9 @@ import org.junit.jupiter.api.Test;
 class TransactionsTest {
     @Test
     void testConstructor() {
+        java.sql.Timestamp timestamp = java.sql.Timestamp.valueOf("1970-01-01 10:10:10.0");
         Transactions actualTransactions = new Transactions("Dr Jane Doe", "42", "Card Type", "Transaction Status", 1, 1,
-                "Status Description", 10.0f, mock(Timestamp.class), mock(Timestamp.class));
+                "Status Description", 10.0f, timestamp, timestamp);
 
         assertEquals(10.0f, actualTransactions.getAmount());
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
