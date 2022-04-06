@@ -138,7 +138,7 @@
                     <td th:text="${patientTodaysAppointments.doctorEmail}"></td>
                     <td id="contactDisplay">
                         <div th:if="${patientTodaysAppointments.consultationType == 'online'}">
-                            <a href="tel:${patientTodaysAppointments.doctorContact}">[[${patientTodaysAppointments.doctorContact}]]</a>&nbsp;
+                            <a th:href="'tel:' + ${patientTodaysAppointments.doctorContact}" href="tel:${patientTodaysAppointments.doctorContact}">[[${patientTodaysAppointments.doctorContact}]]</a>&nbsp;
                         </div>
                     </td>
                 </tr>
